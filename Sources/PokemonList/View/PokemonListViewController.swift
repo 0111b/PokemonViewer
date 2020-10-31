@@ -36,6 +36,7 @@ final class PokemonListViewController: UIViewController {
   }
 
   private func setupUI() {
+    title = Strings.Screens.PokemonList.title
     collectionView.backgroundColor = Constants.backgroundColor
     collectionView.register(PokemonListItemCell.self)
     collectionView.dataSource = self
@@ -97,7 +98,7 @@ extension PokemonListViewController: UICollectionViewDataSource {
     static let lineItemHeight: CGFloat = 80
 
     static let itemStyle = PokemonListItemView.Style(titleColor: Colors.primaryColor,
-                                                     titleFont: Fonts.caption,
+                                                     titleFont: Fonts.title,
                                                      backgroundColor: Colors.sectionBackground)
   }
 }

@@ -8,5 +8,5 @@
 import UIKit.UIFont
 
 enum Fonts {
-  static let caption = UIFont.preferredFont(forTextStyle: .caption1)
+  static let title = UIFont.preferredFont(forTextStyle: .title2)
 }
