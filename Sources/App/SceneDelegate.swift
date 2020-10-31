@@ -11,10 +11,12 @@ import UIKit
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
   private var appCoordinator: AppCoordinator?
-  
+
   var window: UIWindow?
-  
-  func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+
+  func scene(_ scene: UIScene,
+             willConnectTo session: UISceneSession,
+             options connectionOptions: UIScene.ConnectionOptions) {
     if let windowScene = scene as? UIWindowScene {
       let window = UIWindow(windowScene: windowScene)
       appCoordinator = AppCoordinator(window: window)
@@ -23,6 +25,5 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
       self.window = window
     }
   }
-  
-}
 
+}
