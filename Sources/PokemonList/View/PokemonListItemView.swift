@@ -40,9 +40,15 @@ final class PokemonListItemView: UIView, Resetable {
     reflectTraitCollectionChange()
   }
 
-  func show() {
-    titleLabel.text = "Hello"
-    imageView.image = Images.defaultPlaceholder
+  func set(title: String, image: Observable<UIImage?>) {
+    titleLabel.text = title
+    imageSubscription = image.observe(on: .main) { [weak imageView] image in
+      guard let imageView = imageView else { return }
+      UIView.transition(with: imageView,
+                        duration: 0.5, options: .curveEaseIn) {
+        imageView.image = image ?? Images.defaultPlaceholder
+      }
+    }
   }
 
   func apply(style: Style) {
@@ -54,6 +60,7 @@ final class PokemonListItemView: UIView, Resetable {
   func resetToEmptyState() {
     titleLabel.text = nil
     imageView.image = nil
+    imageSubscription = nil
   }
 
   private func reflectTraitCollectionChange() {
@@ -91,4 +98,6 @@ final class PokemonListItemView: UIView, Resetable {
     stackView.spacing = 12
     return stackView
   }()
+
+  private var imageSubscription: Disposable?
 }

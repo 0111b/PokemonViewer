@@ -87,7 +87,7 @@ extension PokemonListViewController: UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell: PokemonListItemCell = collectionView.dequeue(forIndexPath: indexPath)
     cell.view.apply(style: Constants.itemStyle)
-    cell.view.show()
+    cell.view.set(title: "Hello", image: Observable(value: nil))
     return cell
   }
 
