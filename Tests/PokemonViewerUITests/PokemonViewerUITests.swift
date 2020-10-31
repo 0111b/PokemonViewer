@@ -1,13 +1,13 @@
 //
-//  PockemonViewerUITests.swift
-//  PockemonViewerUITests
+//  PokemonViewerUITests.swift
+//  PokemonViewerUITests
 //
 //  Created by Alexandr Goncharov on 31.10.2020.
 //
 
 import XCTest
 
-class PockemonViewerUITests: XCTestCase {
+class PokemonViewerUITests: XCTestCase {
 
   override func setUpWithError() throws {
     // Put setup code here. This method is called before the invocation of each test method in the class.

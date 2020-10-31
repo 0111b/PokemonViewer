@@ -2,8 +2,8 @@
 
 
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
-WORKSPACE_LOCATION := PockemonViewer.xcworkspace
-SCHEME_NAME := PockemonViewer
+WORKSPACE_LOCATION := PokemonViewer.xcworkspace
+SCHEME_NAME := PokemonViewer
 DERIVED_DATA := ${HOME}/Library/Developer/Xcode/DerivedData
 
 lint:

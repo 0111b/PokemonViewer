@@ -1,12 +1,12 @@
 //
-//  PockemonViewerTests.swift
-//  PockemonViewerTests
+//  PokemonViewerTests.swift
+//  PokemonViewerTests
 //
 //  Created by Alexandr Goncharov on 31.10.2020.
 //
 
 import XCTest
-@testable import PockemonViewer
+@testable import PokemonViewer
 
 final class DisposableTests: XCTestCase {
 

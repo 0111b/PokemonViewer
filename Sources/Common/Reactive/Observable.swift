@@ -1,6 +1,6 @@
 //
 //  Observable.swift
-//  PockemonViewer
+//  PokemonViewer
 //
 //  Created by Alexandr Goncharov on 31.10.2020.
 //
