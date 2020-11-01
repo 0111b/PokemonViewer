@@ -529,7 +529,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "make lint\n";
+			shellScript = "make lint || echo \"error: Lint failed\"\n";
 		};
 		E6EE96AF254DCD9E00AD6933 /* Lint */ = {
 			isa = PBXShellScriptBuildPhase;
