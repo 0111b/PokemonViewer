@@ -92,12 +92,12 @@ extension PokemonListViewController: UICollectionViewDataSource {
   }
 
   private enum Constants {
-    static let backgroundColor = Colors.backgroundColor
+    static let backgroundColor = Colors.background
     static let itemsPerRow = 4
     static let minItemWidth: CGFloat = 100
     static let lineItemHeight: CGFloat = 80
 
-    static let itemStyle = PokemonListItemView.Style(titleColor: Colors.primaryColor,
+    static let itemStyle = PokemonListItemView.Style(titleColor: Colors.accent,
                                                      titleFont: Fonts.title,
                                                      backgroundColor: Colors.sectionBackground)
   }
