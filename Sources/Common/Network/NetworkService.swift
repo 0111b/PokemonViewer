@@ -11,6 +11,7 @@ final class NetworkService {
   enum CachePolicy {
     case cacheFirst
     case networkFirst
+    case networkOnly
   }
 
   init(transport: HTTPTransport, cache: NetworkCache) {
@@ -18,90 +19,85 @@ final class NetworkService {
     self.cache = cache
   }
 
-  //swiftlint:disable:next function_body_length
   func fetch(request: URLRequestConvertible,
              cachePolicy: CachePolicy,
              completion: @escaping (NetworkResult<Data>) -> Void) -> Cancellable {
-    let fetchCached = FetchCacheOpetation(cache: cache, request: request)
-    let fetch = NetworkOperation(transport: transport, request: request)
-    let storeInCache = cacheResults(operation: fetch)
-    var didFetchCached: Operation!
-    var didFetchFromNetwork: Operation!
-    let scheduleCacheRequest = BlockOperation { [processingQueue, cachingQueue] in
-      didFetchCached.addDependency(fetchCached)
-      processingQueue.addOperation(didFetchCached)
-      cachingQueue.addOperation(fetchCached)
-    }
-    let scheduleNetworkRequest = BlockOperation { [processingQueue, cachingQueue] in
-      storeInCache.addDependency(fetch)
-      didFetchFromNetwork.addDependency(fetch)
-      processingQueue.addOperation(didFetchFromNetwork)
-      cachingQueue.addOperation(storeInCache)
-      processingQueue.addOperation(fetch)
-    }
-    didFetchCached = BlockOperation { [processingQueue, unowned fetchCached, unowned scheduleNetworkRequest] in
-      if let data = fetchCached.data {
-        completion(.success(data))
-        return
-      }
-      switch cachePolicy {
-      case .networkFirst: //network already executed
-        let result: NetworkResult<Data> = fetch.result?.map(\.data) ?? .failure(.canceled)
-        completion(result)
-      case .cacheFirst: // schedule network
-        processingQueue.addOperation(scheduleNetworkRequest)
-      }
-    }
-    didFetchFromNetwork = BlockOperation { [processingQueue, unowned fetch, unowned scheduleCacheRequest] in
-      guard let fetchResult = fetch.result?.map(\.data) else {
-        completion(.failure(.canceled))
-        return
-      }
-      if case .success(let data) = fetchResult {
-        completion(.success(data))
-        return
-      }
-      switch cachePolicy {
-      case .networkFirst: // schedule cache
-        processingQueue.addOperation(scheduleCacheRequest)
-      case .cacheFirst: // cache already executed
-        let result: NetworkResult<Data> = fetchCached.data.map { .success($0) } ?? fetchResult
-        completion(result)
-      }
-    }
+    let request = NetworkRequest(request)
     switch cachePolicy {
+    case .networkOnly:
+      fetchRemote(request: request, completion: completion)
     case .networkFirst:
-      processingQueue.addOperation(scheduleNetworkRequest)
+      fetchRemote(request: request) { [weak self] remoteResult in
+        switch remoteResult {
+        case .success:
+          completion(remoteResult)
+        case .failure(let remoteError):
+          self?.fetchCached(request: request, completion: { cachedResult in
+            let result = cachedResult.mapError { _ in remoteError }
+            completion(result)
+          })
+        }
+      }
     case .cacheFirst:
-      processingQueue.addOperation(scheduleCacheRequest)
+      fetchCached(request: request) { [weak self] result in
+        if case .success = result {
+          completion(result)
+        } else {
+          self?.fetchRemote(request: request, completion: completion)
+        }
+      }
     }
-    return OperationContainer(operations: [
-      fetchCached, didFetchCached,
-      fetch, storeInCache, didFetchFromNetwork,
-      scheduleCacheRequest, scheduleNetworkRequest
-    ])
+    return request
   }
 
-  private func cacheResults(operation: NetworkOperation) -> Operation {
-    BlockOperation { [cache] in
-      guard case .success(let response)? = operation.result else { return }
-      let cached = CachedURLResponse(response: response.httpResponse, data: response.data)
-      cache.set(cached, for: operation.request)
+  private func fetchRemote(request: NetworkRequest, completion: @escaping (NetworkResult<Data>) -> Void) {
+    request.networkToken = transport.obtain(request: request.urlRequest) { [weak self] fetchResult in
+      if case .success(let response) = fetchResult {
+        self?.cachingQueue.async {
+          let cached = CachedURLResponse(response: response.httpResponse, data: response.data)
+          self?.cache.set(cached, for: request.urlRequest)
+        }
+      }
+      guard !request.isCanceled else { return }
+      completion(fetchResult.map(\.data))
+    }
+  }
+
+  private func fetchCached(request: NetworkRequest, completion: @escaping (NetworkResult<Data>) -> Void) {
+    cachingQueue.async { [weak self] in
+      guard !request.isCanceled else { return }
+      guard let data = self?.cache.get(for: request.urlRequest)?.data else {
+        completion(.failure(.badRequest))
+        return
+      }
+      completion(.success(data))
     }
   }
 
   private let transport: HTTPTransport
   private let cache: NetworkCache
-  private let cachingQueue: OperationQueue = {
-    let queue = OperationQueue()
-    queue.maxConcurrentOperationCount = 1
-    queue.qualityOfService = .userInitiated
-    return queue
-  }()
-  private let processingQueue: OperationQueue = {
-    let queue = OperationQueue()
-    queue.maxConcurrentOperationCount = 4
-    queue.qualityOfService = .userInitiated
-    return queue
-  }()
+
+  private let cachingQueue = DispatchQueue(label: "com.0111b.PokemonViewer.cachingQueue",
+                                           qos: .userInitiated)
+}
+
+extension NetworkService {
+  private final class NetworkRequest: Cancellable {
+    init(_ request: URLRequestConvertible) {
+      urlRequest = request
+    }
+
+    let urlRequest: URLRequestConvertible
+
+    func cancel() {
+      isCanceled = true
+      networkToken?.cancel()
+    }
+
+    @Protected
+    var networkToken: Cancellable?
+
+    @Protected
+    private(set) var isCanceled = false
+  }
 }
