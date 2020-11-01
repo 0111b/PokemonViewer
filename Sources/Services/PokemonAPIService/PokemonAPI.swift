@@ -14,7 +14,7 @@ protocol PokemonAPIServiceProvider {
 protocol PokemonAPIService {
   typealias PockemonsPageResponse = NetworkResult<PokemonAPI.PageResponse<PokemonAPI.PokemonName>>
   func pokemons(page: PokemonAPI.Page,
-                completion: @escaping (PockemonsPageResponse) -> Void) -> Cancellable
+                completion: @escaping (PockemonsPageResponse) -> Void) -> Disposable
 }
 
 enum PokemonAPI {

@@ -14,19 +14,19 @@ final class PokemonAPIServiceImp: PokemonAPIService {
   }
 
   func pokemons(page: PokemonAPI.Page,
-                completion: @escaping (NetworkResult<[PokemonAPI.PokemonName]>) -> Void) -> Cancellable {
+                completion: @escaping (PokemonAPIService.PockemonsPageResponse) -> Void) -> Disposable {
     return obtain(location: .pokemons(page: page), completion: completion)
   }
 
   private func obtain<Object>(location: HTTPLocation,
                               decoder: JSONDecoder = HTTP.defaultDecoder,
-                              completion: @escaping (NetworkResult<Object>) -> Void) -> Cancellable
+                              completion: @escaping (NetworkResult<Object>) -> Void) -> Disposable
   where Object: Decodable {
     guard let request = requestBuilder.request(location) else {
       completion(.failure(.badRequest))
-      return AnyCancellable.empty
+      return Disposable.empty
     }
-    return transport.obtain(request: request) { result in
+    let token = transport.obtain(request: request) { result in
       switch result {
       case .failure(let error): completion(.failure(error))
       case .success(let response):
@@ -37,6 +37,9 @@ final class PokemonAPIServiceImp: PokemonAPIService {
           completion(.failure(.decodingError(decodingError)))
         }
       }
+    }
+    return Disposable {
+      token.cancel()
     }
   }
 

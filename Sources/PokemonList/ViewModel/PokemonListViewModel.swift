@@ -15,7 +15,7 @@ final class PokemonListViewModel {
   }
 
   private let pokemonAPIService: PokemonAPIService
-  private var pageRequest: Cancellable?
+  private var pageRequest: Disposable?
 
   }
 

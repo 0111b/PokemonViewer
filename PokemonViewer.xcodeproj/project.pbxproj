@@ -139,6 +139,7 @@
 		E6EE3EE7254E2D3B0002D155 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				E6EE3EE2254E2D1C0002D155 /* Cancellable.swift */,
 				E6EE3EF2254E2EBE0002D155 /* NetworkError.swift */,
 				E6EE3EE8254E2E2E0002D155 /* HTTPTransport.swift */,
 				E6EE3EED254E2E770002D155 /* URLSession+HTTPtransport.swift */,
@@ -266,9 +267,9 @@
 		E6EE9664254D9ED100AD6933 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				E6EE9694254DBC0D00AD6933 /* Reactive */,
 				E6EE3EE7254E2D3B0002D155 /* Network */,
 				E6EE972A254DE6B200AD6933 /* UIKit */,
-				E6EE9694254DBC0D00AD6933 /* Reactive */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -276,7 +277,6 @@
 		E6EE9694254DBC0D00AD6933 /* Reactive */ = {
 			isa = PBXGroup;
 			children = (
-				E6EE3EE2254E2D1C0002D155 /* Cancellable.swift */,
 				E6EE96A2254DBD7600AD6933 /* Disposable.swift */,
 				E6EE9695254DBC2E00AD6933 /* Observable.swift */,
 			);
