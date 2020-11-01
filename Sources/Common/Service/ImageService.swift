@@ -7,27 +7,27 @@
 
 import UIKit
 
+protocol ImageServiceProvider {
+  var imageService: ImageService { get }
+}
+
 protocol ImageService {
-  func image(location: HTTPLocation,
+  func image(url: URL,
              cachePolicy: RequestCachePolicy,
              adapter: RequestAdapter,
              completion: @escaping (NetworkResult<UIImage>) -> Void) -> Disposable
 }
 
-final class ImageServiceImp {
-  init(requestBuilder: RequestBuilder, network: NetworkService) {
-    self.requestBuilder = requestBuilder
+final class ImageServiceImp: ImageService {
+  init(network: NetworkService) {
     self.network = network
   }
 
-  func image(location: HTTPLocation,
+  func image(url: URL,
              cachePolicy: RequestCachePolicy = .cacheFirst,
              adapter: RequestAdapter = RequestAdapter(),
              completion: @escaping (NetworkResult<UIImage>) -> Void) -> Disposable {
-    guard let request = requestBuilder.request(location, adapter: adapter) else {
-      completion(.failure(.badRequest))
-      return Disposable.empty
-    }
+    let request = URLRequest(url: url)
     let processingQueue = imageTransformQueue
     let token = self.network.fetch(request: request, cachePolicy: .cacheFirst) { result in
       switch result {
@@ -49,7 +49,6 @@ final class ImageServiceImp {
   }
 
   private let network: NetworkService
-  private let requestBuilder: RequestBuilder
 
   private let imageTransformQueue = DispatchQueue(label: "com.0111b.PokemonViewer.imageTransform",
                                                   qos: .userInitiated,

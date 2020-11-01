@@ -22,10 +22,15 @@ final class PokemonListCoordinator {
   }
 }
 
-private struct Dependency: PokemonAPIServiceProvider {
+private final class Dependency: PokemonAPIServiceProvider, ImageServiceProvider {
+  lazy var networkService = NetworkServiceImp(transport: URLSession.shared,
+                                              cache: URLCache.shared)
+  var imageService: ImageService {
+    ImageServiceImp(network: networkService)
+  }
+
   var pokemonAPIService: PokemonAPIService {
     PokemonAPIServiceImp(requestBuilder: RequestBuilder(baseURL: "https://pokeapi.co/api/v2"),
-                         network: NetworkServiceImp(transport: URLSession.shared,
-                                                    cache: URLCache.shared))
+                         network: networkService)
   }
 }

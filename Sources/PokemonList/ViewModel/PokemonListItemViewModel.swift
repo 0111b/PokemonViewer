@@ -7,4 +7,6 @@
 
 import Foundation
 
-final class PokemonListItemViewModel
+final class PokemonListItemViewModel {
+
+}
