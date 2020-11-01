@@ -84,7 +84,7 @@ final class PokemonListItemView: UIView, Resetable {
   private lazy var imageView: UIImageView = {
     let image = UIImageView()
     image.translatesAutoresizingMaskIntoConstraints = false
-    image.contentMode = .scaleToFill
+    image.contentMode = .scaleAspectFit
     image.widthAnchor.constraint(equalTo: image.heightAnchor).isActive = true
     return image
   }()

@@ -8,13 +8,13 @@
 import Foundation
 
 final class PokemonListViewModel {
-  typealias Dependency = PokemonAPIServiceProvider
+  typealias Dependency = PokemonAPIServiceProvider & ImageServiceProvider
 
   init(dependency: Dependency) {
-    pokemonAPIService = dependency.pokemonAPIService
+    self.dependency = dependency
   }
 
-  private let pokemonAPIService: PokemonAPIService
+  private let dependency: Dependency
 
   private var state = PokemonListState.idle {
     didSet {
@@ -25,11 +25,10 @@ final class PokemonListViewModel {
   @Protected
   private var pageRequest: Disposable?
 
-
   private func fetch() {
     guard pageRequest == nil else { return }
     let page =  Page(limit: 5)
-    pageRequest = pokemonAPIService.list(page: page, cachePolicy: .cacheFirst) { [weak self] result in
+    pageRequest = dependency.pokemonAPIService.list(page: page, cachePolicy: .cacheFirst) { [weak self] result in
       guard let self = self else { return }
       self.pageRequest = nil
       switch result {
@@ -38,7 +37,7 @@ final class PokemonListViewModel {
       case .success(let pageData):
         // append
         // check page
-        let viewModels = pageData.items.map { PokemonListItemViewModel(id: $0) }
+        let viewModels = pageData.items.map { PokemonListItemViewModel(dependency: self.dependency, id: $0) }
         let listData = PokemonListState.ListData(items: viewModels,
                                                  count: pageData.count,
                                                  page: page)
@@ -47,13 +46,15 @@ final class PokemonListViewModel {
     }
   }
 
-// REMOVE
-  private var details: Disposable?
-
 
   // MARK: - Input -
+
   func viewDidLoad() {
     fetch()
+  }
+
+  func didSelect(item: PokemonListItemViewModel) {
+    
   }
 
   // MARK: - Output -

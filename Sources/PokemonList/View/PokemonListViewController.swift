@@ -40,6 +40,7 @@ final class PokemonListViewController: UIViewController {
     collectionView.backgroundColor = Constants.backgroundColor
     collectionView.register(PokemonListItemCell.self)
     collectionView.dataSource = self
+    collectionView.delegate = self
   }
 
   private func updateItemSize(contentSize: CGSize) {
@@ -73,6 +74,10 @@ final class PokemonListViewController: UIViewController {
     return collectionView
   }()
 
+  private func itemViewModel(at indexPath: IndexPath) -> PokemonListItemViewModel {
+    items[indexPath.row]
+  }
+
   private lazy var collectionViewLayout = UICollectionViewFlowLayout()
 
   private var items = [PokemonListItemViewModel]()
@@ -89,7 +94,7 @@ extension PokemonListViewController: UICollectionViewDataSource {
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell: PokemonListItemCell = collectionView.dequeue(forIndexPath: indexPath)
-    let viewModel = items[indexPath.row]
+    let viewModel = itemViewModel(at: indexPath)
     cell.view.apply(style: Constants.itemStyle)
     cell.view.set(title: viewModel.title, image: viewModel.image)
     return cell
@@ -104,5 +109,24 @@ extension PokemonListViewController: UICollectionViewDataSource {
     static let itemStyle = PokemonListItemView.Style(titleColor: Colors.accent,
                                                      titleFont: Fonts.title,
                                                      backgroundColor: Colors.sectionBackground)
+  }
+}
+
+extension PokemonListViewController: UICollectionViewDelegate {
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    collectionView.deselectItem(at: indexPath, animated: true)
+    viewModel.didSelect(item: itemViewModel(at: indexPath))
+  }
+
+  func collectionView(_ collectionView: UICollectionView,
+                      willDisplay cell: UICollectionViewCell,
+                      forItemAt indexPath: IndexPath) {
+    itemViewModel(at: indexPath).willDisplay()
+  }
+
+  func collectionView(_ collectionView: UICollectionView,
+                      didEndDisplaying cell: UICollectionViewCell,
+                      forItemAt indexPath: IndexPath) {
+    itemViewModel(at: indexPath).didEndDisplaying()
   }
 }

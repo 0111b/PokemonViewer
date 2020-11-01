@@ -8,11 +8,46 @@
 import UIKit
 
 final class PokemonListItemViewModel {
-  init(id: Identifier<Pokemon>) {
+  typealias Dependency = PokemonAPIServiceProvider & ImageServiceProvider
+
+  init(dependency: Dependency, id: Identifier<Pokemon>) {
    identifier = id
+    self.dependency = dependency
   }
+
+  private let dependency: Dependency
   private let identifier: Identifier<Pokemon>
 
+  private var detailsRequest: Disposable?
+  private var imageRequest: Disposable?
+
+  // MARK: - Input -
+
+  func willDisplay() {
+    guard imageRelay.value == nil else { return }
+    detailsRequest = dependency.pokemonAPIService
+      .details(for: identifier, cachePolicy: .cacheFirst) { [weak self] pokemonResult in
+        guard case .success(let pokemon) = pokemonResult,
+              let url = pokemon.sprites.first,
+              let self = self
+        else { return }
+        self.imageRequest = self.dependency.imageService.image(url: url,
+                                                               cachePolicy: .cacheFirst,
+                                                               adapter: RequestAdapter()) { [weak self] imageResult in
+          guard case .success(let image) = imageResult else { return }
+          self?.imageRelay.value = image
+        }
+    }
+  }
+
+  func didEndDisplaying() {
+    detailsRequest = nil
+    imageRequest = nil
+  }
+
+  // MARK: - Output -
+
   var title: String { identifier.rawValue }
-  let image = Observable<UIImage?>(value: nil)
+  private let imageRelay = MutableObservable<UIImage?>(value: nil)
+  var image: Observable<UIImage?> { imageRelay }
 }
