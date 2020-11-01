@@ -8,8 +8,14 @@
 import Foundation
 
 final class PokemonListViewModel {
+  typealias Dependency = PokemonAPIServiceProvider
 
-  init() {
+  init(dependency: Dependency) {
+    pokemonAPIService = dependency.pokemonAPIService
+  }
+
+  private let pokemonAPIService: PokemonAPIService
+  private var pageRequest: Cancellable?
 
   }
 

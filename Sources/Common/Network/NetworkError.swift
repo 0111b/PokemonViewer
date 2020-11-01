@@ -13,3 +13,5 @@ public enum NetworkError: Error {
   case decodingError(Error)
   case transportError(Error)
 }
+
+public typealias NetworkResult<Value> = Swift.Result<Value, NetworkError>

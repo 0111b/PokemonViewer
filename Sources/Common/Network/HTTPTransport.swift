@@ -15,8 +15,8 @@ public protocol URLRequestConvertible {
 }
 
 public protocol HTTPTransport {
-  typealias Response = (data: Data, response: HTTPURLResponse)
-  typealias Result = Swift.Result<Response, NetworkError>
+  typealias Response = (data: Data, httpResponse: HTTPURLResponse)
+  typealias Result = NetworkResult<Response>
 
   func obtain(request: URLRequestConvertible,
               completion: @escaping (HTTPTransport.Result) -> Void) -> Cancellable

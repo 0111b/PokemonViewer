@@ -16,7 +16,7 @@ final class PokemonListCoordinator {
   private let navigationController: UINavigationController
 
   func start() {
-    let viewModel = PokemonListViewModel()
+    let viewModel = PokemonListViewModel(dependency: Dependency())
     let viewController = PokemonListViewController(viewModel: viewModel)
     navigationController.setViewControllers([viewController], animated: true)
   }

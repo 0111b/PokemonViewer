@@ -9,4 +9,10 @@ import Foundation
 
 enum PokemonListViewState {
   case idle
+
+  var currentPage: PokemonAPI.Page? {
+    switch self {
+    case .idle: return nil
+    }
+  }
 }
