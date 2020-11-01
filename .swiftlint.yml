@@ -7,3 +7,5 @@ identifier_name:
     - id
     - x
     - y
+vertical_whitespace:
+  max_empty_lines: 2

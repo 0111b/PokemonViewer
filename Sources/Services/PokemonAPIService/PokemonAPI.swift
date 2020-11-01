@@ -42,4 +42,8 @@ enum PokemonAPI {
     let name: String
   }
 
+  struct PageResponse<Value: Decodable>: Decodable {
+    let count: Int
+    let results: [Value]
+  }
 }

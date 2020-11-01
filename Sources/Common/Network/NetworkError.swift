@@ -12,6 +12,7 @@ public enum NetworkError: Error {
   case invalidStatusCode
   case decodingError(Error)
   case transportError(Error)
+  case canceled
 }
 
 public typealias NetworkResult<Value> = Swift.Result<Value, NetworkError>
