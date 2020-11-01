@@ -20,12 +20,12 @@ final class NetworkOperation: AsyncOperation {
   private var cancelationToken: Cancellable?
 
   override func run() {
-    cancelationToken = transport.obtain(request: request, completion: { [weak self] result in
+    cancelationToken = transport.obtain(request: request) { [weak self] result in
       guard let self = self else { return }
       defer { self.state = .finished }
       guard !self.isCancelled else { return }
       self.result = result
-    })
+    }
   }
 
   override func cancel() {

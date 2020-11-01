@@ -24,14 +24,22 @@ final class NetworkService {
              completion: @escaping (NetworkResult<Data>) -> Void) -> Cancellable {
     let fetchCached = FetchCacheOpetation(cache: cache, request: request)
     let fetch = NetworkOperation(transport: transport, request: request)
-    let storeInCache = BlockOperation { [cache] in
-      guard case .success(let response)? = fetch.result else { return }
-      let cached = CachedURLResponse(response: response.httpResponse, data: response.data)
-      cache.set(cached, for: request)
+    let storeInCache = cacheResults(operation: fetch)
+    var didFetchCached: Operation!
+    var didFetchFromNetwork: Operation!
+    let scheduleCacheRequest = BlockOperation { [processingQueue, cachingQueue] in
+      didFetchCached.addDependency(fetchCached)
+      processingQueue.addOperation(didFetchCached)
+      cachingQueue.addOperation(fetchCached)
     }
-    var scheduleCacheRequest: Operation!
-    var scheduleNetworkRequest: Operation!
-    let didFetchCached = BlockOperation { [processingQueue] in
+    let scheduleNetworkRequest = BlockOperation { [processingQueue, cachingQueue] in
+      storeInCache.addDependency(fetch)
+      didFetchFromNetwork.addDependency(fetch)
+      processingQueue.addOperation(didFetchFromNetwork)
+      cachingQueue.addOperation(storeInCache)
+      processingQueue.addOperation(fetch)
+    }
+    didFetchCached = BlockOperation { [processingQueue, unowned fetchCached, unowned scheduleNetworkRequest] in
       if let data = fetchCached.data {
         completion(.success(data))
         return
@@ -44,7 +52,7 @@ final class NetworkService {
         processingQueue.addOperation(scheduleNetworkRequest)
       }
     }
-    let didFetchFromNetwork = BlockOperation { [processingQueue] in
+    didFetchFromNetwork = BlockOperation { [processingQueue, unowned fetch, unowned scheduleCacheRequest] in
       guard let fetchResult = fetch.result?.map(\.data) else {
         completion(.failure(.canceled))
         return
@@ -61,19 +69,6 @@ final class NetworkService {
         completion(result)
       }
     }
-    scheduleCacheRequest = BlockOperation { [processingQueue, cachingQueue] in
-      didFetchCached.addDependency(fetchCached)
-      processingQueue.addOperation(didFetchCached)
-      cachingQueue.addOperation(fetchCached)
-    }
-    scheduleNetworkRequest = BlockOperation { [processingQueue, cachingQueue] in
-      storeInCache.addDependency(fetch)
-      didFetchFromNetwork.addDependency(fetch)
-      processingQueue.addOperation(didFetchFromNetwork)
-      cachingQueue.addOperation(storeInCache)
-      processingQueue.addOperation(fetch)
-    }
-
     switch cachePolicy {
     case .networkFirst:
       processingQueue.addOperation(scheduleNetworkRequest)
@@ -85,6 +80,14 @@ final class NetworkService {
       fetch, storeInCache, didFetchFromNetwork,
       scheduleCacheRequest, scheduleNetworkRequest
     ])
+  }
+
+  private func cacheResults(operation: NetworkOperation) -> Operation {
+    BlockOperation { [cache] in
+      guard case .success(let response)? = operation.result else { return }
+      let cached = CachedURLResponse(response: response.httpResponse, data: response.data)
+      cache.set(cached, for: operation.request)
+    }
   }
 
   private let transport: HTTPTransport

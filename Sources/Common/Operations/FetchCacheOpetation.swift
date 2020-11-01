@@ -19,6 +19,7 @@ final class FetchCacheOpetation: AsyncOperation {
 
   override func run() {
     defer { self.state = .finished }
+    guard !isCancelled else { return }
     data = cache.get(for: request.urlRequest)?.data
   }
 }
