@@ -8,11 +8,18 @@
 import Foundation
 
 enum PokemonListViewState {
-  case idle
+  case empty
+  case list(List)
 
-  var currentPage: Page? {
-    switch self {
-    case .idle: return nil
+  struct List {
+    let items: [PokemonListItemViewModel]
+    let hasNext: Bool
+  }
+
+  var items: [PokemonListItemViewModel] {
+    if case .list(let list) = self {
+      return list.items
     }
+    return []
   }
 }

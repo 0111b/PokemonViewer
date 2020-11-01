@@ -27,14 +27,11 @@ final class PokemonAPIServiceImp: APIService, PokemonAPIService {
             cachePolicy: RequestCachePolicy,
             completion: @escaping (NetworkResult<PokemonAPI.PokemonPage>) -> Void) -> Disposable {
     return self.obtain(location: .list(page: page),
-                       cachePolicy: cachePolicy) { (dtoResult: PokemonAPI.DTO.PokemonList) -> Void in
-      let result = dtoResult.map { dto in
+                       cachePolicy: cachePolicy) { (result: PokemonAPI.DTO.PokemonList) -> Void in
+      completion(result.map { dto in
         PokemonAPI.PokemonPage(count: dto.count,
                                items: dto.results.map { .init(rawValue: $0.name) })
-      }
-      DispatchQueue.main.async {
-        completion(result)
-      }
+      })
     }
   }
 
@@ -42,11 +39,8 @@ final class PokemonAPIServiceImp: APIService, PokemonAPIService {
                cachePolicy: RequestCachePolicy,
                completion: @escaping (NetworkResult<Pokemon>) -> Void) -> Disposable {
     return self.obtain(location: .details(identifier: identifier),
-                       cachePolicy: cachePolicy) { (dtoResult: NetworkResult<PokemonAPI.DTO.PokemonDetails>) -> Void in
-      let result = dtoResult.map { Pokemon(dto: $0) }
-      DispatchQueue.main.async {
-        completion(result)
-      }
+                       cachePolicy: cachePolicy) { (result: NetworkResult<PokemonAPI.DTO.PokemonDetails>) -> Void in
+      completion(result.map { Pokemon(dto: $0) })
     }
   }
 }

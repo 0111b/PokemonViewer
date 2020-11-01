@@ -63,6 +63,7 @@ final class PokemonListViewController: UIViewController {
   }
 
   private func didUpdate(state: PokemonListViewState) {
+    items = state.items
     collectionView.reloadData()
   }
 
@@ -74,6 +75,8 @@ final class PokemonListViewController: UIViewController {
 
   private lazy var collectionViewLayout = UICollectionViewFlowLayout()
 
+  private var items = [PokemonListItemViewModel]()
+
   private let viewModel: PokemonListViewModel
   private var stateUpdateToken: Disposable?
 }
@@ -81,13 +84,14 @@ final class PokemonListViewController: UIViewController {
 extension PokemonListViewController: UICollectionViewDataSource {
 
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return 500
+    return items.count
   }
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell: PokemonListItemCell = collectionView.dequeue(forIndexPath: indexPath)
+    let viewModel = items[indexPath.row]
     cell.view.apply(style: Constants.itemStyle)
-    cell.view.set(title: "Hello", image: Observable(value: nil))
+    cell.view.set(title: viewModel.title, image: viewModel.image)
     return cell
   }
 
