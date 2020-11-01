@@ -57,8 +57,8 @@ final class PokemonListViewController: UIViewController {
   }
 
   private func bind() {
-    stateUpdateToken = viewModel.viewState.observe(on: .main) { [unowned self] in
-      self.didUpdate(state: $0)
+    stateUpdateToken = viewModel.viewState.observe(on: .main) { [weak self] in
+      self?.didUpdate(state: $0)
     }
   }
 

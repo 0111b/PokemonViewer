@@ -15,7 +15,7 @@ class Observable<Value> {
 
   typealias Observer = (Value) -> Void
 
-  var value: Value { return mutex.locked { _value }}
+  var value: Value { mutex.locked { _value }}
 
   func observe(on queue: DispatchQueue? = nil,
                skipCurrent: Bool = false,
@@ -24,7 +24,8 @@ class Observable<Value> {
     let id = UUID()
     observations[id] = (observer, queue)
     if !skipCurrent {
-      observer(value)
+      let value = _value
+      update(observer: observer, queue: queue, value: value)
     }
     return Disposable { [weak self] in
       self?.observations.removeValue(forKey: id)
@@ -35,15 +36,17 @@ class Observable<Value> {
   fileprivate var _value: Value {
     didSet {
       let newValue = _value
-      observations.values.forEach { observer, dispatchQueue in
-        if let queue = dispatchQueue {
-          queue.async {
-            observer(newValue)
-          }
-        } else {
-          observer(newValue)
-        }
+      observations.values.forEach { observer, queue in
+        update(observer: observer, queue: queue, value: newValue)
       }
+    }
+  }
+
+  private func update(observer: @escaping Observer, queue: DispatchQueue?, value: Value) {
+    if let queue = queue {
+      queue.async { observer(value) }
+    } else {
+      observer(value)
     }
   }
 

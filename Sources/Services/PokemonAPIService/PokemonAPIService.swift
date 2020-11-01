@@ -9,9 +9,9 @@ import Foundation
 
 final class PokemonAPIServiceImp: APIService, PokemonAPIService {
 
-  func pokemons(page: PokemonAPI.Page,
-                cachePolicy: CachePolicy,
-                completion: @escaping (PokemonAPIService.PockemonsPageResponse) -> Void) -> Disposable {
+  func list(page: PokemonAPI.Page,
+            cachePolicy: RequestCachePolicy,
+            completion: @escaping (PokemonAPIService.PockemonsPageResponse) -> Void) -> Disposable {
     return self.obtain(location: .pokemons(page: page),
                        cachePolicy: cachePolicy,
                        completion: completion)

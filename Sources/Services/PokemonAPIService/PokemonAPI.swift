@@ -13,14 +13,14 @@ protocol PokemonAPIServiceProvider {
 
 protocol PokemonAPIService {
   typealias PockemonsPageResponse = NetworkResult<PokemonAPI.PageResponse<PokemonAPI.PokemonName>>
-  func pokemons(page: PokemonAPI.Page,
-                cachePolicy: CachePolicy,
-                completion: @escaping (PokemonAPIService.PockemonsPageResponse) -> Void) -> Disposable
+  func list(page: PokemonAPI.Page,
+            cachePolicy: RequestCachePolicy,
+            completion: @escaping (PokemonAPIService.PockemonsPageResponse) -> Void) -> Disposable
 }
 
 enum PokemonAPI {
 
-  struct Page {
+  struct Page: Equatable {
     let offset: Int
     let limit: Int
 

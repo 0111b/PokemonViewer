@@ -14,38 +14,39 @@ class APIService {
   }
 
   func obtain<Object>(location: HTTPLocation,
-                      cachePolicy: CachePolicy = .networkFirst,
+                      cachePolicy: RequestCachePolicy = .networkFirst,
                       adapter: RequestAdapter = RequestAdapter(),
                       decoder: JSONDecoder = HTTP.defaultDecoder,
                       completion: @escaping (NetworkResult<Object>) -> Void) -> Disposable
   where Object: Decodable {
+
+    func decode<Object>(_ data: Data,
+                        decoder: JSONDecoder,
+                        completion: @escaping (NetworkResult<Object>) -> Void) where Object: Decodable {
+      decodingQueue.async {
+        do {
+          let value = try decoder.decode(Object.self, from: data)
+          completion(.success(value))
+        } catch let decodingError {
+          completion(.failure(.decodingError(decodingError)))
+        }
+      }
+    }
+
     guard let request = requestBuilder.request(location, adapter: adapter) else {
       completion(.failure(.badRequest))
       return Disposable.empty
     }
-    let token = self.network.fetch(request: request, cachePolicy: .cacheFirst) { [weak self] result in
+    let token = self.network.fetch(request: request, cachePolicy: .cacheFirst) { result in
       switch result {
       case .failure(let error):
         completion(.failure(error))
       case .success(let data):
-        self?.decode(data, decoder: decoder, completion: completion)
+        decode(data, decoder: decoder, completion: completion)
       }
     }
     return Disposable {
       token.cancel()
-    }
-  }
-
-  private func decode<Object>(_ data: Data,
-                              decoder: JSONDecoder,
-                              completion: @escaping (NetworkResult<Object>) -> Void) where Object: Decodable {
-    decodingQueue.async {
-      do {
-        let value = try decoder.decode(Object.self, from: data)
-        completion(.success(value))
-      } catch let decodingError {
-        completion(.failure(.decodingError(decodingError)))
-      }
     }
   }
 

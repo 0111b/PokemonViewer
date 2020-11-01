@@ -12,6 +12,7 @@
 		E67B2719254E0E2A00ACC825 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67B2718254E0E2A00ACC825 /* Strings.swift */; };
 		E67B271E254E0E4000ACC825 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67B271D254E0E4000ACC825 /* Fonts.swift */; };
 		E6E93BC5254F221200953885 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E93BC4254F221200953885 /* ImageService.swift */; };
+		E6E93BCD254F263400953885 /* RequestCachePolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E93BCC254F263400953885 /* RequestCachePolicy.swift */; };
 		E6EE3ED8254E20CF0002D155 /* Screens.strings in Resources */ = {isa = PBXBuildFile; fileRef = E6EE3EDA254E20CF0002D155 /* Screens.strings */; };
 		E6EE3EE3254E2D1C0002D155 /* Cancellable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6EE3EE2254E2D1C0002D155 /* Cancellable.swift */; };
 		E6EE3EE9254E2E2E0002D155 /* HTTPTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6EE3EE8254E2E2E0002D155 /* HTTPTransport.swift */; };
@@ -75,6 +76,7 @@
 		E67B2718254E0E2A00ACC825 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		E67B271D254E0E4000ACC825 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		E6E93BC4254F221200953885 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
+		E6E93BCC254F263400953885 /* RequestCachePolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestCachePolicy.swift; sourceTree = "<group>"; };
 		E6EE3ED9254E20CF0002D155 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Screens.strings; sourceTree = "<group>"; };
 		E6EE3EDE254E20D10002D155 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Screens.strings; sourceTree = "<group>"; };
 		E6EE3EE2254E2D1C0002D155 /* Cancellable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cancellable.swift; sourceTree = "<group>"; };
@@ -161,14 +163,15 @@
 			isa = PBXGroup;
 			children = (
 				E6EE3EE2254E2D1C0002D155 /* Cancellable.swift */,
+				E6E93BCC254F263400953885 /* RequestCachePolicy.swift */,
 				E6EE3EF2254E2EBE0002D155 /* NetworkError.swift */,
 				E6EE3EE8254E2E2E0002D155 /* HTTPTransport.swift */,
 				E6EE3EED254E2E770002D155 /* URLSession+HTTPtransport.swift */,
 				E6EE3EFA254E2FB80002D155 /* HTTP.swift */,
 				E6EE3EFF254E30380002D155 /* HTTPLocation.swift */,
+				E6EE3F78254EE9A00002D155 /* NetworkCache.swift */,
 				E6EE3F09254E31CA0002D155 /* RequestAdapter.swift */,
 				E6EE3F04254E31820002D155 /* RequestBuilder.swift */,
-				E6EE3F78254EE9A00002D155 /* NetworkCache.swift */,
 				E6EE3F3A254ED9FE0002D155 /* NetworkService.swift */,
 			);
 			path = Network;
@@ -541,6 +544,7 @@
 				E6EE3EF3254E2EBE0002D155 /* NetworkError.swift in Sources */,
 				E6EE96E7254DDAD700AD6933 /* PokemonListCoordinator.swift in Sources */,
 				E6EE3EE3254E2D1C0002D155 /* Cancellable.swift in Sources */,
+				E6E93BCD254F263400953885 /* RequestCachePolicy.swift in Sources */,
 				E6EE3EFB254E2FB80002D155 /* HTTP.swift in Sources */,
 				E6EE9684254DA43600AD6933 /* AppCoordinator.swift in Sources */,
 				E6EE96DD254DDA7500AD6933 /* PokemonListViewController.swift in Sources */,

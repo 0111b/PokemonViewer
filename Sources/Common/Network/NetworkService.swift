@@ -7,15 +7,9 @@
 
 import Foundation
 
-enum CachePolicy {
-  case cacheFirst
-  case networkFirst
-  case networkOnly
-}
-
 protocol NetworkService {
   func fetch(request: URLRequestConvertible,
-             cachePolicy: CachePolicy,
+             cachePolicy: RequestCachePolicy,
              completion: @escaping (NetworkResult<Data>) -> Void) -> Cancellable
 }
 
@@ -27,7 +21,7 @@ final class NetworkServiceImp: NetworkService {
   }
 
   func fetch(request: URLRequestConvertible,
-             cachePolicy: CachePolicy,
+             cachePolicy: RequestCachePolicy,
              completion: @escaping (NetworkResult<Data>) -> Void) -> Cancellable {
     let request = NetworkRequest(request)
     switch cachePolicy {

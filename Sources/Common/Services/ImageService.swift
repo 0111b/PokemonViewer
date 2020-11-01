@@ -9,7 +9,7 @@ import UIKit
 
 protocol ImageService {
   func image(location: HTTPLocation,
-             cachePolicy: CachePolicy,
+             cachePolicy: RequestCachePolicy,
              adapter: RequestAdapter,
              completion: @escaping (NetworkResult<UIImage>) -> Void) -> Disposable
 }
@@ -21,19 +21,20 @@ final class ImageServiceImp {
   }
 
   func image(location: HTTPLocation,
-             cachePolicy: CachePolicy = .cacheFirst,
+             cachePolicy: RequestCachePolicy = .cacheFirst,
              adapter: RequestAdapter = RequestAdapter(),
              completion: @escaping (NetworkResult<UIImage>) -> Void) -> Disposable {
     guard let request = requestBuilder.request(location, adapter: adapter) else {
       completion(.failure(.badRequest))
       return Disposable.empty
     }
-    let token = self.network.fetch(request: request, cachePolicy: .cacheFirst) { [weak self] result in
+    let processingQueue = imageTransformQueue
+    let token = self.network.fetch(request: request, cachePolicy: .cacheFirst) { result in
       switch result {
       case .failure(let error):
         completion(.failure(error))
       case .success(let data):
-        self?.imageTransformQueue.async {
+        processingQueue.async {
           if let image = UIImage(data: data) {
             completion(.success(image))
           } else {
