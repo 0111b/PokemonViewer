@@ -19,13 +19,23 @@ final class PokemonListViewModel {
 
   private func fetch() {
     // guard pageRequest
-    let page = viewStateRelay.value.currentPage ?? PokemonAPI.Page(limit: 42)
+    let page = viewStateRelay.value.currentPage ?? Page(limit: 42)
     pageRequest = pokemonAPIService.list(page: page, cachePolicy: .cacheFirst) { [weak self] result in
-      self?.pageRequest = nil
+      guard let self = self else { return }
+      self.pageRequest = nil
       Swift.print(result)
-
+      if case .success(let page) = result {
+        let identifier = page.items[Int.random(in: page.items.indices)]
+        self.details = self.pokemonAPIService.details(for: identifier, cachePolicy: .networkFirst) { detailsResult in
+          Swift.print(detailsResult)
+        }
+      }
     }
   }
+
+// REMOVE
+  private var details: Disposable?
+
 
   // MARK: - Input -
   func viewDidLoad() {

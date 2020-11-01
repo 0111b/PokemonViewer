@@ -7,44 +7,59 @@
 
 import Foundation
 
-protocol PokemonAPIServiceProvider {
-  var pokemonAPIService: PokemonAPIService { get }
-}
-
-protocol PokemonAPIService {
-  typealias PockemonsPageResponse = NetworkResult<PokemonAPI.PageResponse<PokemonAPI.PokemonName>>
-  func list(page: PokemonAPI.Page,
-            cachePolicy: RequestCachePolicy,
-            completion: @escaping (PokemonAPIService.PockemonsPageResponse) -> Void) -> Disposable
-}
-
 enum PokemonAPI {
-
-  struct Page: Equatable {
-    let offset: Int
-    let limit: Int
-
-    init(limit: Int) {
-      offset = 0
-      self.limit = limit
+  enum DTO {
+    struct PageResponse<Value: Decodable>: Decodable {
+      let count: Int
+      let results: [Value]
     }
 
-    func next() -> Page {
-      Page(offset: offset + limit, limit: limit)
+    struct Named: Decodable {
+      let name: String
     }
 
-    private init(offset: Int, limit: Int) {
-      self.offset = offset
-      self.limit = limit
+    typealias PokemonList = NetworkResult<PageResponse<Named>>
+
+    struct PokemonDetails: Decodable {
+      let name: String
+      let height: Int
+      let weight: Int
+      let sprites: PokemonSprites
+      let stats: [PokemonStat]
+      let abilities: [PokemonAbility]
+      let types: [PokemonType]
+    }
+
+    struct PokemonSprites: Decodable {
+      let backDefault: URL?
+      let backFemale: URL?
+      let backShiny: URL?
+      let backShinyFemale: URL?
+      let frontDefault: URL?
+      let frontFemale: URL?
+      let frontShiny: URL?
+      let frontShinyFemale: URL?
+    }
+
+    struct PokemonStat: Decodable {
+      let baseStat: Int
+      let effort: Int
+      let stat: Named
+    }
+
+    struct PokemonAbility: Decodable {
+      let slot: Int
+      let ability: Named
+    }
+
+    struct PokemonType: Decodable {
+      let slot: Int
+      let type: Named
     }
   }
 
-  struct PokemonName: Decodable, Hashable {
-    let name: String
-  }
-
-  struct PageResponse<Value: Decodable>: Decodable {
+  struct PokemonPage {
     let count: Int
-    let results: [Value]
+    let items: [Identifier<Pokemon>]
   }
 }

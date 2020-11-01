@@ -6,7 +6,7 @@
 //
 
 import Foundation
-// swiftlint:disable nesting
+
 enum Strings {
   enum Screens {
     enum PokemonList {
