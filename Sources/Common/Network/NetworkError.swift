@@ -10,7 +10,7 @@ import Foundation
 public enum NetworkError: Error {
   case badRequest
   case invalidStatusCode
-  case decodingError(Error)
+  case decodingError(Error?)
   case transportError(Error)
 }
 
