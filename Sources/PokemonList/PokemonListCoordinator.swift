@@ -25,7 +25,7 @@ final class PokemonListCoordinator {
 private struct Dependency: PokemonAPIServiceProvider {
   var pokemonAPIService: PokemonAPIService {
     PokemonAPIServiceImp(requestBuilder: RequestBuilder(baseURL: "https://pokeapi.co/api/v2"),
-                         network: NetworkService(transport: URLSession.shared,
-                                                 cache: URLCache.shared))
+                         network: NetworkServiceImp(transport: URLSession.shared,
+                                                    cache: URLCache.shared))
   }
 }

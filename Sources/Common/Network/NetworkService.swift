@@ -7,12 +7,19 @@
 
 import Foundation
 
-final class NetworkService {
-  enum CachePolicy {
-    case cacheFirst
-    case networkFirst
-    case networkOnly
-  }
+enum CachePolicy {
+  case cacheFirst
+  case networkFirst
+  case networkOnly
+}
+
+protocol NetworkService {
+  func fetch(request: URLRequestConvertible,
+             cachePolicy: CachePolicy,
+             completion: @escaping (NetworkResult<Data>) -> Void) -> Cancellable
+}
+
+final class NetworkServiceImp: NetworkService {
 
   init(transport: HTTPTransport, cache: NetworkCache) {
     self.transport = transport
@@ -81,7 +88,7 @@ final class NetworkService {
                                            qos: .userInitiated)
 }
 
-extension NetworkService {
+extension NetworkServiceImp {
   private final class NetworkRequest: Cancellable {
     init(_ request: URLRequestConvertible) {
       urlRequest = request

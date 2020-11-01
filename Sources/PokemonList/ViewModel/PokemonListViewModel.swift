@@ -20,7 +20,7 @@ final class PokemonListViewModel {
   private func fetch() {
     // guard pageRequest
     let page = viewStateRelay.value.currentPage ?? PokemonAPI.Page(limit: 42)
-    pageRequest = pokemonAPIService.pokemons(page: page) { [weak self] result in
+    pageRequest = pokemonAPIService.pokemons(page: page, cachePolicy: .cacheFirst) { [weak self] result in
       self?.pageRequest = nil
       Swift.print(result)
 
