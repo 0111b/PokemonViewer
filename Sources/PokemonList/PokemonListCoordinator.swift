@@ -21,3 +21,11 @@ final class PokemonListCoordinator {
     navigationController.setViewControllers([viewController], animated: true)
   }
 }
+
+private struct Dependency: PokemonAPIServiceProvider {
+  var pokemonAPIService: PokemonAPIService {
+    PokemonAPIServiceImp(requestBuilder: RequestBuilder(baseURL: "https://pokeapi.co/api/v2"),
+                         network: NetworkService(transport: URLSession.shared,
+                                                 cache: URLCache.shared))
+  }
+}

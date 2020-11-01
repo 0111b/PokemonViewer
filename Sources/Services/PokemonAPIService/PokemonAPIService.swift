@@ -8,9 +8,9 @@
 import Foundation
 
 final class PokemonAPIServiceImp: PokemonAPIService {
-  init(requestBuilder: RequestBuilder, transport: HTTPTransport) {
+  init(requestBuilder: RequestBuilder, network: NetworkService) {
     self.requestBuilder = requestBuilder
-    self.transport = transport
+    self.network = network
   }
 
   func pokemons(page: PokemonAPI.Page,
@@ -26,12 +26,12 @@ final class PokemonAPIServiceImp: PokemonAPIService {
       completion(.failure(.badRequest))
       return Disposable.empty
     }
-    let token = transport.obtain(request: request) { result in
+    let token = self.network.fetch(request: request, cachePolicy: .cacheFirst) { result in
       switch result {
       case .failure(let error): completion(.failure(error))
-      case .success(let response):
+      case .success(let data):
         do {
-          let value = try decoder.decode(Object.self, from: response.data)
+          let value = try decoder.decode(Object.self, from: data)
           completion(.success(value))
         } catch let decodingError {
           completion(.failure(.decodingError(decodingError)))
@@ -43,7 +43,7 @@ final class PokemonAPIServiceImp: PokemonAPIService {
     }
   }
 
-  private let transport: HTTPTransport
+  private let network: NetworkService
   private let requestBuilder: RequestBuilder
 
 }

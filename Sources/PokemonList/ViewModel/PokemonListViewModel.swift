@@ -17,11 +17,19 @@ final class PokemonListViewModel {
   private let pokemonAPIService: PokemonAPIService
   private var pageRequest: Disposable?
 
+  private func fetch() {
+    // guard pageRequest
+    let page = viewStateRelay.value.currentPage ?? PokemonAPI.Page(limit: 42)
+    pageRequest = pokemonAPIService.pokemons(page: page) { [weak self] result in
+      self?.pageRequest = nil
+      Swift.print(result)
+
+    }
   }
 
   // MARK: - Input -
   func viewDidLoad() {
-
+    fetch()
   }
 
   // MARK: - Output -
