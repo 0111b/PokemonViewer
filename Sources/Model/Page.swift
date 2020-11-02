@@ -8,10 +8,10 @@
 import Foundation
 
 struct Page: Equatable {
-  let offset: Int
-  let limit: Int
+  let offset: UInt
+  let limit: UInt
 
-  init(limit: Int) {
+  init(limit: UInt) {
     offset = 0
     self.limit = limit
   }
@@ -20,7 +20,9 @@ struct Page: Equatable {
     Page(offset: offset + limit, limit: limit)
   }
 
-  private init(offset: Int, limit: Int) {
+  var isFirst: Bool { offset == 0 }
+
+  private init(offset: UInt, limit: UInt) {
     self.offset = offset
     self.limit = limit
   }

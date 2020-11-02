@@ -8,11 +8,13 @@ code generation notes
  
  add ital locale
  
+ env clean cache
+ 
  image loading progress
  item vm state
  sync states atomic -> lock{}
  unload memory warn
- 
+ semaphore count
  image transition animitation
  
  grid / list layout switcher

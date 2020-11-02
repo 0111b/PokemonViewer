@@ -106,9 +106,11 @@ extension NetworkServiceImp {
     @Protected
     private(set) var isCanceled = false
 
+    @available(iOS 12.0, *)
+    private lazy var signpostId = OSSignpostID(log: Log.networking, object: self)
+
     func singpost(isBegin: Bool, message: String) {
       if #available(iOS 12.0, *) {
-        let signpostId = OSSignpostID(log: Log.networking, object: self as AnyObject)
         os_signpost(isBegin ? .begin : .end,
                     log: Log.networking,
                     name: "Request",

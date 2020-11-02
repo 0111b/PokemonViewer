@@ -17,14 +17,33 @@ enum PokemonListState {
     let page: Page
   }
 
+  var nextPage: Page? {
+    switch self {
+    case .idle: return PokemonListState.firstPage
+    case .data(let data):
+      return data.page.offset + data.page.limit < data.count ? data.page.next() : nil
+    }
+  }
+
+  var hasNext: Bool { nextPage != nil }
+
+  var items: [PokemonListItemViewModel] {
+    switch self {
+    case .idle: return []
+    case .data(let data): return data.items
+    }
+  }
+
   var viewState: PokemonListViewState {
     switch self {
     case .idle:
       return .empty
     case .data(let data):
       let list = PokemonListViewState.List(items: data.items,
-                                           hasNext: data.page.offset < data.count)
+                                           hasNext: hasNext)
       return .list(list)
     }
   }
+
+  static var firstPage: Page { Page(limit: 10) }
 }

@@ -29,15 +29,24 @@ final class PokemonListItemViewModel {
     // check progress
     detailsRequest = dependency.pokemonAPIService
       .details(for: identifier, cachePolicy: .cacheFirst) { [weak self] pokemonResult in
-        guard case .success(let pokemon) = pokemonResult,
-              let url = pokemon.sprites.first,
-              let self = self
-        else { return }
-        self.imageRequest = self.dependency.imageService.image(url: url,
-                                                               cachePolicy: .cacheFirst,
-                                                               adapter: RequestAdapter()) { [weak self] imageResult in
-          guard case .success(let image) = imageResult else { return }
-          self?.imageRelay.value = image
+        guard let self = self else { return }
+        switch pokemonResult {
+        case .failure(let error):
+          os_log("PokemonListItemViewModel details error %@", log: Log.general,
+                 type: .error, String(describing: error))
+        case .success(let pokemon):
+          guard let url = pokemon.sprites.first else { return }
+          self.imageRequest = self.dependency.imageService.image(url: url,
+                                                                 cachePolicy: .cacheFirst,
+                                                                 adapter: RequestAdapter()) { [weak self] imageResult in
+            switch imageResult {
+            case .failure(let error):
+              os_log("PokemonListItemViewModel image error %@", log: Log.general,
+                     type: .error, String(describing: error))
+            case .success(let image):
+              self?.imageRelay.value = image
+            }
+          }
         }
     }
   }

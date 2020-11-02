@@ -159,6 +159,9 @@ extension PokemonListViewController: UICollectionViewDelegate {
                       willDisplay cell: UICollectionViewCell,
                       forItemAt indexPath: IndexPath) {
     itemViewModel(at: indexPath).willDisplay()
+    if indexPath.row > items.count - 4 {
+      viewModel.askForNextPage()
+    }
   }
 
   func collectionView(_ collectionView: UICollectionView,
