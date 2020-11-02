@@ -7,10 +7,19 @@
 
 import Foundation
 
+// swiftlint:disable nesting
 enum Strings {
   enum Screens {
+
     enum PokemonList {
       static let title = Strings.tr("Screens", "PokemonList.title")
+    }
+
+
+    enum EmptyPokemonDetails {
+      enum Hint {
+        static let noItemSelected = Strings.tr("Screens", "EmptyPokemonDetails.Hint.noItemSelected")
+      }
     }
 
   }

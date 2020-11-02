@@ -8,14 +8,20 @@
 import Foundation
 import os.log
 
+protocol PokemonListViewModelCoordinating: class {
+  func showDetails(for identifier: Identifier<Pokemon>)
+}
+
 final class PokemonListViewModel {
   typealias Dependency = PokemonAPIServiceProvider & ImageServiceProvider
 
-  init(dependency: Dependency) {
+  init(dependency: Dependency, coordinator: PokemonListViewModelCoordinating) {
     self.dependency = dependency
+    self.coordinator = coordinator
   }
 
   private let dependency: Dependency
+  private weak var coordinator: PokemonListViewModelCoordinating?
 
   @Protected
   private var state = PokemonListState.idle {
@@ -70,6 +76,7 @@ final class PokemonListViewModel {
 
   func didSelect(item: PokemonListItemViewModel) {
     os_log("PokemonListViewModel didSelect %@", log: Log.general, type: .info, item.identifier.rawValue)
+    coordinator?.showDetails(for: item.identifier)
   }
 
   // MARK: - Output -

@@ -1,1 +1,2 @@
 "PokemonList.title" = "Покемоны";
+"EmptyPokemonDetails.Hint.noItemSelected" = "Пожалуйста, выберите покемона";

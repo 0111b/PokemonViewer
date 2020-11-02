@@ -25,10 +25,10 @@ final class AppCoordinator {
 
   private let window: UIWindow
 
-  private lazy var rootViewController = UINavigationController()
+  private lazy var rootViewController = UISplitViewController()
 
   private lazy var pokemonList: PokemonListCoordinator = {
-    PokemonListCoordinator(navigationController: rootViewController)
+    PokemonListCoordinator(rootViewController: rootViewController)
   }()
 
 }

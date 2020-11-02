@@ -1,1 +1,2 @@
 "PokemonList.title" = "Pokemons";
+"EmptyPokemonDetails.Hint.noItemSelected" = "Please select a Pokemon";

@@ -142,7 +142,7 @@ extension PokemonListViewController: UICollectionViewDataSource {
     static let minItemWidth: CGFloat = 100
     static let lineItemHeight: CGFloat = 80
 
-    static let itemStyle = PokemonListItemView.Style(titleColor: Colors.accent,
+    static let itemStyle = PokemonListItemView.Style(titleColor: Colors.primaryText,
                                                      titleFont: Fonts.title,
                                                      titleAlignment: .center,
                                                      backgroundColor: Colors.sectionBackground)
