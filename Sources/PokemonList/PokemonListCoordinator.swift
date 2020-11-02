@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import os.log
 
 final class PokemonListCoordinator {
 
@@ -16,6 +17,7 @@ final class PokemonListCoordinator {
   private let navigationController: UINavigationController
 
   func start() {
+    os_log("PokemonListCoordinator start", log: Log.general, type: .info)
     let viewModel = PokemonListViewModel(dependency: Dependency())
     let viewController = PokemonListViewController(viewModel: viewModel)
     navigationController.setViewControllers([viewController], animated: true)

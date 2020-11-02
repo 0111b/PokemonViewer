@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import os.log
 
 final class PokemonListItemViewModel {
   typealias Dependency = PokemonAPIServiceProvider & ImageServiceProvider
@@ -23,7 +24,9 @@ final class PokemonListItemViewModel {
   // MARK: - Input -
 
   func willDisplay() {
+    os_log("PokemonListItemViewModel willDisplay %@", log: Log.general, type: .debug, identifier.rawValue)
     guard imageRelay.value == nil else { return }
+    // check progress
     detailsRequest = dependency.pokemonAPIService
       .details(for: identifier, cachePolicy: .cacheFirst) { [weak self] pokemonResult in
         guard case .success(let pokemon) = pokemonResult,
@@ -40,6 +43,7 @@ final class PokemonListItemViewModel {
   }
 
   func didEndDisplaying() {
+    os_log("PokemonListItemViewModel didEndDisplaying %@", log: Log.general, type: .debug, identifier.rawValue)
     detailsRequest = nil
     imageRequest = nil
   }

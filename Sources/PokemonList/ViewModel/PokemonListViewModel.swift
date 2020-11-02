@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os.log
 
 final class PokemonListViewModel {
   typealias Dependency = PokemonAPIServiceProvider & ImageServiceProvider
@@ -27,13 +28,13 @@ final class PokemonListViewModel {
 
   private func fetch() {
     guard pageRequest == nil else { return }
-    let page =  Page(limit: 5)
+    let page =  Page(limit: 1000)
     pageRequest = dependency.pokemonAPIService.list(page: page, cachePolicy: .cacheFirst) { [weak self] result in
       guard let self = self else { return }
       self.pageRequest = nil
       switch result {
       case .failure(let error):
-        Swift.print(error)
+        os_log("Got error %@", log: Log.general, type: .error, String(describing: error))
       case .success(let pageData):
         // append
         // check page
@@ -50,11 +51,12 @@ final class PokemonListViewModel {
   // MARK: - Input -
 
   func viewDidLoad() {
+    os_log("PokemonListViewModel viewDidLoad", log: Log.general, type: .info)
     fetch()
   }
 
   func didSelect(item: PokemonListItemViewModel) {
-    
+    os_log("PokemonListViewModel didSelect %@", log: Log.general, type: .info, item.identifier.rawValue)
   }
 
   // MARK: - Output -
