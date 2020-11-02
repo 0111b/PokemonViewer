@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os.log
 
 protocol NetworkService {
   func fetch(request: URLRequestConvertible,
@@ -52,7 +53,9 @@ final class NetworkServiceImp: NetworkService {
   }
 
   private func fetchRemote(request: NetworkRequest, completion: @escaping (NetworkResult<Data>) -> Void) {
+    request.singpost(isBegin: true, message: "Fetch")
     request.networkToken = transport.obtain(request: request.urlRequest) { [weak self] fetchResult in
+      defer { request.singpost(isBegin: false, message: "Fetch") }
       if case .success(let response) = fetchResult {
         self?.cachingQueue.async {
           let cached = CachedURLResponse(response: response.httpResponse, data: response.data)
@@ -65,7 +68,9 @@ final class NetworkServiceImp: NetworkService {
   }
 
   private func fetchCached(request: NetworkRequest, completion: @escaping (NetworkResult<Data>) -> Void) {
+    request.singpost(isBegin: true, message: "Cached")
     cachingQueue.async { [weak self] in
+      defer { request.singpost(isBegin: false, message: "Cached") }
       guard !request.isCanceled else { return }
       guard let data = self?.cache.get(for: request.urlRequest)?.data else {
         completion(.failure(.badRequest))
@@ -100,5 +105,16 @@ extension NetworkServiceImp {
 
     @Protected
     private(set) var isCanceled = false
+
+    func singpost(isBegin: Bool, message: String) {
+      if #available(iOS 12.0, *) {
+        let signpostId = OSSignpostID(log: Log.networking, object: self as AnyObject)
+        os_signpost(isBegin ? .begin : .end,
+                    log: Log.networking,
+                    name: "Request",
+                    signpostID: signpostId,
+                    "%@", message)
+      }
+    }
   }
 }

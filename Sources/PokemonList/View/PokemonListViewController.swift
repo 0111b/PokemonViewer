@@ -64,8 +64,44 @@ final class PokemonListViewController: UIViewController {
   }
 
   private func didUpdate(state: PokemonListViewState) {
-    items = state.items
-    collectionView.reloadData()
+    updateCollectionView(state: state)
+  }
+
+  private func updateCollectionView(state: PokemonListViewState) {
+    if #available(iOS 13, *) {
+      var deletes = [IndexPath]()
+      var inserts = [IndexPath]()
+      var moves = [(from:IndexPath, to:IndexPath)]()
+      let difference = state.items.difference(from: items)
+      for update in difference.inferringMoves() {
+        switch update {
+        case let .remove(offset: offset, element: _, associatedWith: move):
+          if let move = move {
+            moves.append((
+              from: IndexPath(item: offset, section: 0),
+              to: IndexPath(item: move, section: 0)
+            ))
+          } else {
+            deletes.append(IndexPath(item: offset, section: 0))
+          }
+        case let .insert(offset: offset, element: _, associatedWith: move):
+          if move == nil {
+            inserts.append(IndexPath(item: offset, section: 0))
+          }
+        }
+      }
+      collectionView.performBatchUpdates({
+        items = items.applying(difference) ?? []
+        collectionView.deleteItems(at: deletes)
+        collectionView.insertItems(at: inserts)
+        moves.forEach { move in
+          collectionView.moveItem(at: move.from, to: move.to)
+        }
+      }, completion: nil)
+    } else {
+      items = state.items
+      collectionView.reloadData()
+    }
   }
 
   private lazy var collectionView: UICollectionView = {
