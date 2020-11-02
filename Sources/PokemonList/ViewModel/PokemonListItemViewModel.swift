@@ -16,7 +16,6 @@ final class PokemonListItemViewModel {
   }
 
   private let dependency: Dependency
-  private let identifier: Identifier<Pokemon>
 
   private var detailsRequest: Disposable?
   private var imageRequest: Disposable?
@@ -47,7 +46,20 @@ final class PokemonListItemViewModel {
 
   // MARK: - Output -
 
+  let identifier: Identifier<Pokemon>
   var title: String { identifier.rawValue }
   private let imageRelay = MutableObservable<UIImage?>(value: nil)
   var image: Observable<UIImage?> { imageRelay }
+}
+
+extension PokemonListItemViewModel: Equatable {
+  static func == (lhs: PokemonListItemViewModel, rhs: PokemonListItemViewModel) -> Bool {
+    lhs.identifier == rhs.identifier
+  }
+}
+
+extension PokemonListItemViewModel: Hashable {
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(identifier)
+  }
 }
