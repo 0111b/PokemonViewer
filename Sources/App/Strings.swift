@@ -13,6 +13,7 @@ enum Strings {
 
     enum PokemonList {
       static let title = Strings.tr("Screens", "PokemonList.title")
+      static let noMoreItems = Strings.tr("Screens", "PokemonList.noMoreItems")
     }
 
 

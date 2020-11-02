@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E607EF5525504C18008A9ED5 /* LoadingCollectionViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E607EF5425504C18008A9ED5 /* LoadingCollectionViewFooter.swift */; };
+		E607EF5A2550521D008A9ED5 /* LoadingViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E607EF592550521D008A9ED5 /* LoadingViewState.swift */; };
 		E65C0E6E254F478100385576 /* Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C0E6D254F478100385576 /* Identifier.swift */; };
 		E65C0E73254F4B0E00385576 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C0E72254F4B0E00385576 /* Page.swift */; };
 		E65C0E78254F4C3C00385576 /* Pokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C0E77254F4C3C00385576 /* Pokemon.swift */; };
@@ -79,6 +81,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E607EF5425504C18008A9ED5 /* LoadingCollectionViewFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingCollectionViewFooter.swift; sourceTree = "<group>"; };
+		E607EF592550521D008A9ED5 /* LoadingViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewState.swift; sourceTree = "<group>"; };
 		E65C0E6D254F478100385576 /* Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifier.swift; sourceTree = "<group>"; };
 		E65C0E72254F4B0E00385576 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
 		E65C0E77254F4C3C00385576 /* Pokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pokemon.swift; sourceTree = "<group>"; };
@@ -181,6 +185,7 @@
 			children = (
 				E663D13D254F6A8D0056EDB7 /* PokemonListState.swift */,
 				E6EE96EE254DDC5B00AD6933 /* PokemonListViewState.swift */,
+				E607EF592550521D008A9ED5 /* LoadingViewState.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -345,8 +350,8 @@
 				E663D15B254F797D0056EDB7 /* Log.swift */,
 				E67B2708254DFAE300ACC825 /* Colors.swift */,
 				E67B2713254DFB8E00ACC825 /* Images.swift */,
-				E67B2718254E0E2A00ACC825 /* Strings.swift */,
 				E67B271D254E0E4000ACC825 /* Fonts.swift */,
+				E67B2718254E0E2A00ACC825 /* Strings.swift */,
 				E6EE9663254D9ED100AD6933 /* Resources */,
 			);
 			path = App;
@@ -411,6 +416,7 @@
 			children = (
 				E6EE96DC254DDA7500AD6933 /* PokemonListViewController.swift */,
 				E6EE9743254DF04F00AD6933 /* PokemonListItemView.swift */,
+				E607EF5425504C18008A9ED5 /* LoadingCollectionViewFooter.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -606,6 +612,7 @@
 				E6EE3F2D254E40130002D155 /* PokemonAPI.swift in Sources */,
 				E6EE9744254DF04F00AD6933 /* PokemonListItemView.swift in Sources */,
 				E6E93BC5254F221200953885 /* ImageService.swift in Sources */,
+				E607EF5525504C18008A9ED5 /* LoadingCollectionViewFooter.swift in Sources */,
 				E6EE972C254DE6C700AD6933 /* UIView+Layout.swift in Sources */,
 				E6EE3EF3254E2EBE0002D155 /* NetworkError.swift in Sources */,
 				E6EE96E7254DDAD700AD6933 /* PokemonListCoordinator.swift in Sources */,
@@ -631,6 +638,7 @@
 				E67B271E254E0E4000ACC825 /* Fonts.swift in Sources */,
 				E6EE3F3B254ED9FE0002D155 /* NetworkService.swift in Sources */,
 				E6EE3F00254E30380002D155 /* HTTPLocation.swift in Sources */,
+				E607EF5A2550521D008A9ED5 /* LoadingViewState.swift in Sources */,
 				E6EE9626254D9D9900AD6933 /* SceneDelegate.swift in Sources */,
 				E65C0E73254F4B0E00385576 /* Page.swift in Sources */,
 			);

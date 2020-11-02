@@ -7,19 +7,9 @@
 
 import Foundation
 
-enum PokemonListViewState {
-  case empty
-  case list(List)
+struct PokemonListViewState {
+  let items: [PokemonListItemViewModel]
+  let loading: LoadingViewState
 
-  struct List {
-    let items: [PokemonListItemViewModel]
-    let hasNext: Bool
-  }
-
-  var items: [PokemonListItemViewModel] {
-    if case .list(let list) = self {
-      return list.items
-    }
-    return []
-  }
+  static let empty = PokemonListViewState(items: [], loading: .clear)
 }

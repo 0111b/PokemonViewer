@@ -25,8 +25,6 @@ enum PokemonListState {
     }
   }
 
-  var hasNext: Bool { nextPage != nil }
-
   var items: [PokemonListItemViewModel] {
     switch self {
     case .idle: return []
@@ -37,13 +35,18 @@ enum PokemonListState {
   var viewState: PokemonListViewState {
     switch self {
     case .idle:
-      return .empty
+      return PokemonListViewState(items: [], loading: .clear)
     case .data(let data):
-      let list = PokemonListViewState.List(items: data.items,
-                                           hasNext: hasNext)
-      return .list(list)
+      let loading: LoadingViewState
+      if nextPage != nil {
+        loading = .loading
+      } else {
+        loading = .hint(Strings.Screens.PokemonList.noMoreItems)
+      }
+      return PokemonListViewState(items: data.items,
+                                  loading: loading)
     }
   }
 
-  static var firstPage: Page { Page(limit: 10) }
+  static var firstPage: Page { Page(limit: 20) }
 }

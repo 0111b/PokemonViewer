@@ -39,6 +39,7 @@ final class PokemonListViewController: UIViewController {
     title = Strings.Screens.PokemonList.title
     collectionView.backgroundColor = Constants.backgroundColor
     collectionView.register(PokemonListItemCell.self)
+    collectionView.registerFooter(LoadingCollectionViewFooter.self)
     collectionView.dataSource = self
     collectionView.delegate = self
   }
@@ -54,6 +55,7 @@ final class PokemonListViewController: UIViewController {
     }
     if collectionViewLayout.itemSize != itemSize {
       collectionViewLayout.itemSize = itemSize
+      collectionViewLayout.footerReferenceSize = CGSize(width: contentSize.width, height: Constants.footerHeight)
     }
   }
 
@@ -64,15 +66,11 @@ final class PokemonListViewController: UIViewController {
   }
 
   private func didUpdate(state: PokemonListViewState) {
-    updateCollectionView(state: state)
-  }
-
-  private func updateCollectionView(state: PokemonListViewState) {
     if #available(iOS 13, *) {
       var deletes = [IndexPath]()
       var inserts = [IndexPath]()
       var moves = [(from:IndexPath, to:IndexPath)]()
-      let difference = state.items.difference(from: items)
+      let difference = state.items.difference(from: self.state.items)
       for update in difference.inferringMoves() {
         switch update {
         case let .remove(offset: offset, element: _, associatedWith: move):
@@ -91,7 +89,7 @@ final class PokemonListViewController: UIViewController {
         }
       }
       collectionView.performBatchUpdates({
-        items = items.applying(difference) ?? []
+        self.state = state
         collectionView.deleteItems(at: deletes)
         collectionView.insertItems(at: inserts)
         moves.forEach { move in
@@ -99,7 +97,7 @@ final class PokemonListViewController: UIViewController {
         }
       }, completion: nil)
     } else {
-      items = state.items
+      self.state = state
       collectionView.reloadData()
     }
   }
@@ -111,21 +109,33 @@ final class PokemonListViewController: UIViewController {
   }()
 
   private func itemViewModel(at indexPath: IndexPath) -> PokemonListItemViewModel {
-    items[indexPath.row]
+    state.items[indexPath.row]
   }
 
   private lazy var collectionViewLayout = UICollectionViewFlowLayout()
 
-  private var items = [PokemonListItemViewModel]()
+  private var state: PokemonListViewState = .empty
 
   private let viewModel: PokemonListViewModel
   private var stateUpdateToken: Disposable?
+
+  private enum Constants {
+    static let backgroundColor = Colors.background
+    static let itemsPerRow = 4
+    static let minItemWidth: CGFloat = 100
+    static let lineItemHeight: CGFloat = 80
+    static let footerHeight: CGFloat = 60
+    static let itemStyle = PokemonListItemView.Style(titleColor: Colors.primaryText,
+                                                     titleFont: Fonts.title,
+                                                     titleAlignment: .center,
+                                                     backgroundColor: Colors.sectionBackground)
+  }
 }
 
 extension PokemonListViewController: UICollectionViewDataSource {
 
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return items.count
+    return state.items.count
   }
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -136,17 +146,19 @@ extension PokemonListViewController: UICollectionViewDataSource {
     return cell
   }
 
-  private enum Constants {
-    static let backgroundColor = Colors.background
-    static let itemsPerRow = 4
-    static let minItemWidth: CGFloat = 100
-    static let lineItemHeight: CGFloat = 80
-
-    static let itemStyle = PokemonListItemView.Style(titleColor: Colors.primaryText,
-                                                     titleFont: Fonts.title,
-                                                     titleAlignment: .center,
-                                                     backgroundColor: Colors.sectionBackground)
+  func collectionView(_ collectionView: UICollectionView,
+                      viewForSupplementaryElementOfKind kind: String,
+                      at indexPath: IndexPath) -> UICollectionReusableView {
+    guard kind == UICollectionView.elementKindSectionFooter else {
+      return collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                             withReuseIdentifier: "Footer",
+                                                             for: indexPath)
+    }
+    let footer: LoadingCollectionViewFooter = collectionView.dequeueFooter(forIndexPath: indexPath)
+    footer.update(with: state.loading)
+    return footer
   }
+
 }
 
 extension PokemonListViewController: UICollectionViewDelegate {
@@ -159,7 +171,7 @@ extension PokemonListViewController: UICollectionViewDelegate {
                       willDisplay cell: UICollectionViewCell,
                       forItemAt indexPath: IndexPath) {
     itemViewModel(at: indexPath).willDisplay()
-    if indexPath.row > items.count - 4 {
+    if indexPath.row > state.items.count - 4 {
       viewModel.askForNextPage()
     }
   }
