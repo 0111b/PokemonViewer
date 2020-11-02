@@ -129,6 +129,10 @@ final class PokemonListViewController: UIViewController {
                                                      titleFont: Fonts.title,
                                                      titleAlignment: .center,
                                                      backgroundColor: Colors.sectionBackground)
+    static let selectedItemStyle = PokemonListItemView.Style(titleColor: Colors.primaryText,
+                                                             titleFont: Fonts.title,
+                                                             titleAlignment: .center,
+                                                             backgroundColor: .red)
   }
 }
 
@@ -163,8 +167,16 @@ extension PokemonListViewController: UICollectionViewDataSource {
 
 extension PokemonListViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    collectionView.deselectItem(at: indexPath, animated: true)
     viewModel.didSelect(item: itemViewModel(at: indexPath))
+    if let cell = collectionView.cellForItem(at: indexPath) as? PokemonListItemCell {
+      cell.view.apply(style: Constants.selectedItemStyle)
+    }
+  }
+
+  func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+    if let cell = collectionView.cellForItem(at: indexPath) as? PokemonListItemCell {
+      cell.view.apply(style: Constants.itemStyle)
+    }
   }
 
   func collectionView(_ collectionView: UICollectionView,
