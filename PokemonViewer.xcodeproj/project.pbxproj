@@ -247,8 +247,8 @@
 		E6EE3F99254F13470002D155 /* Atomic */ = {
 			isa = PBXGroup;
 			children = (
-				E6EE3F9A254F138C0002D155 /* Protected.swift */,
 				E6EE3F9F254F13EE0002D155 /* UnfairLock.swift */,
+				E6EE3F9A254F138C0002D155 /* Protected.swift */,
 			);
 			path = Atomic;
 			sourceTree = "<group>";

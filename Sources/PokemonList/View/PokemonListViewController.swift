@@ -144,6 +144,7 @@ extension PokemonListViewController: UICollectionViewDataSource {
 
     static let itemStyle = PokemonListItemView.Style(titleColor: Colors.accent,
                                                      titleFont: Fonts.title,
+                                                     titleAlignment: .center,
                                                      backgroundColor: Colors.sectionBackground)
   }
 }

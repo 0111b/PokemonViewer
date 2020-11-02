@@ -13,6 +13,7 @@ final class PokemonListItemView: UIView, Resetable {
   struct Style {
     let titleColor: UIColor
     let titleFont: UIFont
+    let titleAlignment: NSTextAlignment
     let backgroundColor: UIColor
   }
 
@@ -54,6 +55,7 @@ final class PokemonListItemView: UIView, Resetable {
   func apply(style: Style) {
     titleLabel.textColor = style.titleColor
     titleLabel.font = style.titleFont
+    titleLabel.textAlignment = style.titleAlignment
     backgroundColor = style.backgroundColor
   }
 
@@ -78,6 +80,7 @@ final class PokemonListItemView: UIView, Resetable {
     label.setContentCompressionResistancePriority(.required, for: .vertical)
     label.setContentCompressionResistancePriority(.required, for: .horizontal)
     label.adjustsFontForContentSizeCategory = true
+    label.numberOfLines = 0
     return label
   }()
 

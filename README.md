@@ -8,9 +8,7 @@ code generation notes
  
  add ital locale
  
- log
  image loading progress
- 
  item vm state
  sync states atomic -> lock{}
  unload memory warn
@@ -18,8 +16,12 @@ code generation notes
  image transition animitation
  
  grid / list layout switcher
- 
+ paginations
+ error handling
  - cell selection
+ split view
+ 
+
  
 mock responses
 rotation layout?
