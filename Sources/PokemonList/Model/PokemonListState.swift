@@ -10,7 +10,7 @@ import Foundation
 struct PokemonListState: Equatable {
   let layout: PokemonListLayout
   let list: ListData?
-  let pageRequest: RequestState
+  let pageRequest: PageRequestState
 
   struct ListData: Equatable {
     let items: [PokemonListItemViewModel]

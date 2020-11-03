@@ -30,6 +30,13 @@ final class PokemonListViewController: UIViewController {
     viewModel.viewDidLoad()
   }
 
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    collectionView.indexPathsForSelectedItems?.forEach { indexPath in
+      self.collectionView(collectionView, didDeselectItemAt: indexPath)
+    }
+  }
+
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
     updateItemSize(for: state.layout)
@@ -82,40 +89,8 @@ final class PokemonListViewController: UIViewController {
                                                        style: .plain,
                                                        target: self,
                                                        action: #selector(toggleLayout))
-//    if #available(iOS 13, *) {
-//      var deletes = [IndexPath]()
-//      var inserts = [IndexPath]()
-//      var moves = [(from:IndexPath, to:IndexPath)]()
-//      let difference = state.items.difference(from: self.state.items)
-//      for update in difference.inferringMoves() {
-//        switch update {
-//        case let .remove(offset: offset, element: _, associatedWith: move):
-//          if let move = move {
-//            moves.append((
-//              from: IndexPath(item: offset, section: 0),
-//              to: IndexPath(item: move, section: 0)
-//            ))
-//          } else {
-//            deletes.append(IndexPath(item: offset, section: 0))
-//          }
-//        case let .insert(offset: offset, element: _, associatedWith: move):
-//          if move == nil {
-//            inserts.append(IndexPath(item: offset, section: 0))
-//          }
-//        }
-//      }
-//      collectionView.performBatchUpdates({
-//        self.state = state
-//        collectionView.deleteItems(at: deletes)
-//        collectionView.insertItems(at: inserts)
-//        moves.forEach { move in
-//          collectionView.moveItem(at: move.from, to: move.to)
-//        }
-//      }, completion: nil)
-//    } else {
       self.state = state
       collectionView.reloadData()
-//    }
   }
 
   @objc private func toggleLayout() {

@@ -29,16 +29,14 @@ final class PokemonListCoordinator {
     let emptyViewModel = EmptyPokemonDetailsViewModel(hint: .noItemSelected)
     let emptyViewController = EmptyPokemonDetailsViewController(viewModel: emptyViewModel)
     let emptyNavigation = UINavigationController(rootViewController: emptyViewController)
-    emptyViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem
     splitViewController.viewControllers = [listNavigation, emptyNavigation]
   }
 }
 
 extension PokemonListCoordinator: PokemonListViewModelCoordinating {
   func showDetails(for identifier: Identifier<Pokemon>) {
-    let detailsViewModel = EmptyPokemonDetailsViewModel(hint: .noItemSelected)
-    let detailsViewController = EmptyPokemonDetailsViewController(viewModel: detailsViewModel)
-    detailsViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem
+    let detailsViewModel = PokemonDetailsViewModel(identifier: identifier)
+    let detailsViewController = PokemonDetailsViewController(viewModel: detailsViewModel)
     let detailsNavigation = UINavigationController(rootViewController: detailsViewController)
     splitViewController.showDetailViewController(detailsNavigation, sender: nil)
   }
