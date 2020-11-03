@@ -60,13 +60,17 @@ final class PokemonListItemViewModel {
 
   func willDisplay() {
     os_log("PokemonListItemViewModel willDisplay %@", log: Log.general, type: .debug, identifier.rawValue)
-    guard state.canStartRequest else { return }
-    state = .detailsRequest(fetchDetails())
+    $state.write { state in
+      guard state.canStartRequest else { return }
+      state = .detailsRequest(fetchDetails())
+    }
   }
 
   func didEndDisplaying() {
     os_log("PokemonListItemViewModel didEndDisplaying %@", log: Log.general, type: .debug, identifier.rawValue)
-    state = state.canceled()
+    $state.write { state in
+      state = state.canceled()
+    }
   }
 
   // MARK: - Output -

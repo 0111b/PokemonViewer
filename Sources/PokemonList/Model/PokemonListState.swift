@@ -12,7 +12,7 @@ struct PokemonListState {
   let list: ListData?
   let pageRequest: Disposable?
 
-  struct ListData {
+  struct ListData: Equatable {
     let items: [PokemonListItemViewModel]
     let count: Int
     let page: Page
@@ -43,6 +43,16 @@ struct PokemonListState {
 
   func with(layout updatedLayout: PokemonListLayout) -> PokemonListState {
     PokemonListState(layout: updatedLayout, list: list, pageRequest: pageRequest)
+  }
+
+  func hasVisualChanges(from other: PokemonListState) -> Bool {
+    if layout != other.layout || list != other.list { return true }
+    switch (pageRequest, other.pageRequest) {
+    case (.some, .some), (nil, nil):
+      return false
+    default:
+      return true
+    }
   }
 
   static let empty = PokemonListState(layout: .list, list: nil, pageRequest: nil)

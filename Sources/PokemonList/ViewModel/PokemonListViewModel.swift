@@ -24,14 +24,21 @@ final class PokemonListViewModel {
   private weak var coordinator: PokemonListViewModelCoordinating?
 
   @Protected
-  private var state = PokemonListState.empty {
-    didSet {
-      viewStateRelay.value = state.viewState
+  private var state = PokemonListState.empty
+
+  private func update(_ closure: (inout PokemonListState) -> Void) {
+    $state.write { state in
+      var updatedState = state
+      closure(&updatedState)
+      if updatedState.hasVisualChanges(from: state) {
+        viewStateRelay.value = updatedState.viewState
+      }
+      state = updatedState
     }
   }
 
   private func fetch(reload: Bool = false) {
-    self.$state.write { state in
+    update { state in
       guard state.pageRequest == nil else { return }
       guard let page = reload ? PokemonListState.firstPage : state.nextPage else { return }
       let cachePolicy: RequestCachePolicy = reload ? .networkFirst : .cacheFirst
@@ -43,22 +50,23 @@ final class PokemonListViewModel {
 
   private func didLoad(page: Page) -> (NetworkResult<PokemonAPI.PokemonPage>) -> Void {{ [weak self] result in
     guard let self = self else { return }
-    let currentState = self.state
-    switch result {
-    case .failure(let error):
-      os_log("PokemonListViewModel fetch error %@", log: Log.general, type: .error, String(describing: error))
-      self.state = PokemonListState(layout: currentState.layout,
-                                    list: currentState.list,
-                                    pageRequest: nil)
-    case .success(let pageData):
-      let newItems = pageData.items.map { PokemonListItemViewModel(dependency: self.dependency, id: $0) }
-      let items = page.isFirst ? newItems : currentState.items + newItems
-      let listData = PokemonListState.ListData(items: items,
-                                               count: pageData.count,
-                                               page: page)
-      self.state = PokemonListState(layout: currentState.layout,
-                                    list: listData,
-                                    pageRequest: nil)
+    self.update { state in
+      switch result {
+      case .failure(let error):
+        os_log("PokemonListViewModel fetch error %@", log: Log.general, type: .error, String(describing: error))
+        state = PokemonListState(layout: state.layout,
+                                 list: state.list,
+                                 pageRequest: nil)
+      case .success(let pageData):
+        let newItems = pageData.items.map { PokemonListItemViewModel(dependency: self.dependency, id: $0) }
+        let items = page.isFirst ? newItems : state.items + newItems
+        let listData = PokemonListState.ListData(items: items,
+                                                 count: pageData.count,
+                                                 page: page)
+        state = PokemonListState(layout: state.layout,
+                                      list: listData,
+                                      pageRequest: nil)
+      }
     }
   }}
 
@@ -85,7 +93,7 @@ final class PokemonListViewModel {
   }
 
   func toggleLayout() {
-    self.$state.write { state in
+    self.update { state in
       state = state.with(layout: state.layout.toggle())
     }
   }
