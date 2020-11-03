@@ -74,6 +74,11 @@ final class PokemonListViewModel {
     fetch()
   }
 
+  func refresh() {
+    os_log("PokemonListViewModel refresh", log: Log.general, type: .info)
+    fetch(reload: true)
+  }
+
   func didSelect(item: PokemonListItemViewModel) {
     os_log("PokemonListViewModel didSelect %@", log: Log.general, type: .info, item.identifier.rawValue)
     coordinator?.showDetails(for: item.identifier)

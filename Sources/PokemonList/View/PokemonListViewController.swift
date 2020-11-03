@@ -40,6 +40,7 @@ final class PokemonListViewController: UIViewController {
     collectionView.backgroundColor = Constants.backgroundColor
     collectionView.register(PokemonListItemCell.self)
     collectionView.registerFooter(LoadingCollectionViewFooter.self)
+    collectionView.refreshControl = refreshControl
     collectionView.dataSource = self
     collectionView.delegate = self
   }
@@ -73,6 +74,7 @@ final class PokemonListViewController: UIViewController {
   }
 
   private func didUpdate(state: PokemonListViewState) {
+    refreshControl.endRefreshing()
     if self.state.layout != state.layout {
       updateItemSize(for: state.layout)
     }
@@ -120,9 +122,21 @@ final class PokemonListViewController: UIViewController {
     viewModel.toggleLayout()
   }
 
+  @objc private func didPullToRefresh() {
+    viewModel.refresh()
+  }
+
+  private lazy var refreshControl: UIRefreshControl = {
+    let control = UIRefreshControl()
+    control.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
+    control.tintColor = Colors.accent
+    return control
+  }()
+
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
     collectionView.translatesAutoresizingMaskIntoConstraints = false
+    collectionView.alwaysBounceVertical = true
     return collectionView
   }()
 
