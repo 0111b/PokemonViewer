@@ -49,6 +49,7 @@ final class PokemonDetailsViewController: UIViewController {
     ])
     view.addStretchedToBounds(subview: loadingView)
     view.addStretchedToBounds(subview: errorView)
+    didUpdate(state: .idle)
   }
 
   private func bind() {

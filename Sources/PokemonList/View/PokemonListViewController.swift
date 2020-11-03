@@ -67,10 +67,8 @@ final class PokemonListViewController: UIViewController {
     let shouldUpdate = abs(currentSize.width - proposedSize.width) > Constants.layoutUpdateTreshold
       || abs(currentSize.height - proposedSize.height) > Constants.layoutUpdateTreshold
     if shouldUpdate {
-      let visibleIndexPaths = collectionView.indexPathsForVisibleItems
       collectionViewLayout.itemSize = proposedSize
       collectionViewLayout.footerReferenceSize = CGSize(width: contentWidth, height: Constants.footerHeight)
-      collectionView.reloadItems(at: visibleIndexPaths)
     }
   }
 
@@ -82,15 +80,13 @@ final class PokemonListViewController: UIViewController {
 
   private func didUpdate(state: PokemonListViewState) {
     refreshControl.endRefreshing()
-    if self.state.layout != state.layout {
-      updateItemSize(for: state.layout)
-    }
     navigationItem.leftBarButtonItem = UIBarButtonItem(image: state.layout.toggle().icon,
                                                        style: .plain,
                                                        target: self,
                                                        action: #selector(toggleLayout))
-      self.state = state
-      collectionView.reloadData()
+    self.state = state
+    updateItemSize(for: state.layout)
+    collectionView.reloadData()
   }
 
   @objc private func toggleLayout() {
