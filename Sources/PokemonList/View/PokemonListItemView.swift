@@ -47,7 +47,7 @@ final class PokemonListItemView: UIView, Resetable {
       guard let imageView = imageView else { return }
       UIView.transition(with: imageView,
                         duration: 0.5, options: .curveEaseIn) {
-        imageView.image = image ?? Images.defaultPlaceholder
+        imageView.image = image ?? Images.defaultPlaceholder?.withRenderingMode(.alwaysTemplate)
       }
     }
   }
@@ -81,6 +81,7 @@ final class PokemonListItemView: UIView, Resetable {
     image.translatesAutoresizingMaskIntoConstraints = false
     image.contentMode = .scaleAspectFit
     image.widthAnchor.constraint(equalTo: image.heightAnchor).isActive = true
+    image.tintColor = Colors.accent
     return image
   }()
 
