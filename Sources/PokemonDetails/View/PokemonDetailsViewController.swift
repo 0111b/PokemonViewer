@@ -29,12 +29,11 @@ final class PokemonDetailsViewController: UIViewController {
     view.backgroundColor = Constants.backgroundColor
     title = viewModel.identifier.rawValue
     view.addStretchedToBounds(subview: scrollView)
-    scrollView.addSubview(mainStackView)
+    scrollView.addStretchedToBounds(subview: mainStackView)
+    mainStackView.addArrangedSubviews([
+      nameLabel
+    ])
     NSLayoutConstraint.activate([
-      mainStackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-      mainStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-      mainStackView.leadingAnchor.constraint(equalTo: scrollView.readableContentGuide.leadingAnchor),
-      mainStackView.trailingAnchor.constraint(equalTo: scrollView.readableContentGuide.trailingAnchor),
       mainStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
     ])
     view.addStretchedToBounds(subview: loadingView)
@@ -56,7 +55,7 @@ final class PokemonDetailsViewController: UIViewController {
       errorView.isHidden = true
     }
     guard let pokemon = state.pokemon else { return }
-    Swift.print(pokemon)
+    nameLabel.text = pokemon.id.rawValue
   }
 
 
@@ -81,6 +80,16 @@ final class PokemonDetailsViewController: UIViewController {
   }()
 
 
+  private lazy var nameLabel: UILabel = {
+    let label = UILabel()
+    label.translatesAutoresizingMaskIntoConstraints = false
+    label.adjustsFontForContentSizeCategory = true
+    label.textAlignment = .left
+    label.textColor = Constants.primaryColor
+    label.font = Constants.nameFont
+    return label
+  }()
+
   private lazy var loadingView = PokemonDetailLoadingView()
 
   private lazy var errorView: PokemonDetailErrorView = {
@@ -96,5 +105,7 @@ final class PokemonDetailsViewController: UIViewController {
 
   private enum Constants {
     static let backgroundColor = Colors.background
+    static let primaryColor = Colors.primaryText
+    static let nameFont = Fonts.caption
   }
 }

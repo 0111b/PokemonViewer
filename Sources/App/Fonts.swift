@@ -10,4 +10,5 @@ import UIKit.UIFont
 enum Fonts {
   static let title = UIFont.preferredFont(forTextStyle: .title2)
   static let footnote = UIFont.preferredFont(forTextStyle: .footnote)
+  static let caption = UIFont.preferredFont(forTextStyle: .caption1)
 }
