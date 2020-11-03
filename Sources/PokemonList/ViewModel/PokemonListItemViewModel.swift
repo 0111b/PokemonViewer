@@ -30,6 +30,7 @@ final class PokemonListItemViewModel {
                type: .error, self.identifier.rawValue, String(describing: error))
         self.state = .idle
       case .success(let pokemon):
+        os_log("PokemonListItemViewModel details %@", log: Log.general, type: .debug, self.identifier.rawValue)
         if let url = pokemon.sprites.first {
           self.state = .imageRequest(self.fetchImage(url: url))
         } else {
@@ -50,6 +51,7 @@ final class PokemonListItemViewModel {
                type: .error, self.identifier.rawValue, String(describing: error))
         self.state = .idle
       case .success(let image):
+        os_log("PokemonListItemViewModel image %@", log: Log.general, type: .debug, self.identifier.rawValue)
         self.imageRelay.value = image
         self.state = .done
       }
@@ -59,7 +61,6 @@ final class PokemonListItemViewModel {
   // MARK: - Input -
 
   func willDisplay() {
-    os_log("PokemonListItemViewModel willDisplay %@", log: Log.general, type: .debug, identifier.rawValue)
     $state.write { state in
       guard state.canStartRequest else { return }
       state = .detailsRequest(fetchDetails())
@@ -67,7 +68,6 @@ final class PokemonListItemViewModel {
   }
 
   func didEndDisplaying() {
-    os_log("PokemonListItemViewModel didEndDisplaying %@", log: Log.general, type: .debug, identifier.rawValue)
     $state.write { state in
       state = state.canceled()
     }

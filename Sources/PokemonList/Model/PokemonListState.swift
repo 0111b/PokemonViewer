@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct PokemonListState {
+struct PokemonListState: Equatable {
   let layout: PokemonListLayout
   let list: ListData?
-  let pageRequest: Disposable?
+  let pageRequest: RequestState
 
   struct ListData: Equatable {
     let items: [PokemonListItemViewModel]
@@ -29,12 +29,13 @@ struct PokemonListState {
 
   var viewState: PokemonListViewState {
     let loading: LoadingViewState
-    if pageRequest != nil {
+    switch pageRequest {
+    case .pending:
       loading = .loading
-    } else if nextPage == nil {
-      loading = .hint(Strings.Screens.PokemonList.noMoreItems)
-    } else {
-      loading = .clear
+    case .error(let error):
+      loading = .hint(error.localizedDescription)
+    case .idle:
+      loading = nextPage == nil ? .hint(Strings.Screens.PokemonList.noMoreItems) : .clear
     }
     return PokemonListViewState(items: items,
                                 loading: loading,
@@ -45,17 +46,26 @@ struct PokemonListState {
     PokemonListState(layout: updatedLayout, list: list, pageRequest: pageRequest)
   }
 
-  func hasVisualChanges(from other: PokemonListState) -> Bool {
-    if layout != other.layout || list != other.list { return true }
-    switch (pageRequest, other.pageRequest) {
-    case (.some, .some), (nil, nil):
-      return false
-    default:
-      return true
+  func with(error: NetworkError) -> PokemonListState {
+    PokemonListState(layout: layout, list: list, pageRequest: .error(error))
+  }
+
+  func with(pageRequest request: Disposable) -> PokemonListState {
+    PokemonListState(layout: layout, list: list, pageRequest: .pending(request))
+  }
+
+  func with(list data: ListData) -> PokemonListState {
+    PokemonListState(layout: layout, list: data, pageRequest: .idle)
+  }
+
+  func canStartRequest() -> Bool {
+    switch pageRequest {
+    case .pending: return false
+    default: return true
     }
   }
 
-  static let empty = PokemonListState(layout: .list, list: nil, pageRequest: nil)
+  static let empty = PokemonListState(layout: .list, list: nil, pageRequest: .idle)
 
-  static var firstPage: Page { Page(limit: 20) }
+  static var firstPage: Page { Page(limit: 5) }
 }

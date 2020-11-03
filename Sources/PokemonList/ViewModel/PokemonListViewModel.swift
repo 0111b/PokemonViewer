@@ -30,7 +30,7 @@ final class PokemonListViewModel {
     $state.write { state in
       var updatedState = state
       closure(&updatedState)
-      if updatedState.hasVisualChanges(from: state) {
+      if updatedState != state {
         viewStateRelay.value = updatedState.viewState
       }
       state = updatedState
@@ -39,12 +39,13 @@ final class PokemonListViewModel {
 
   private func fetch(reload: Bool = false) {
     update { state in
-      guard state.pageRequest == nil else { return }
+      guard state.canStartRequest() else { return }
       guard let page = reload ? PokemonListState.firstPage : state.nextPage else { return }
       let cachePolicy: RequestCachePolicy = reload ? .networkFirst : .cacheFirst
+      os_log("PokemonListViewModel fetch %@", log: Log.general, type: .info, String(describing: page))
       let pageRequest = dependency.pokemonAPIService
         .list(page: page, cachePolicy: cachePolicy, completion: didLoad(page: page))
-      state = PokemonListState(layout: state.layout, list: state.list, pageRequest: pageRequest)
+      state = state.with(pageRequest: pageRequest)
     }
   }
 
@@ -54,18 +55,14 @@ final class PokemonListViewModel {
       switch result {
       case .failure(let error):
         os_log("PokemonListViewModel fetch error %@", log: Log.general, type: .error, String(describing: error))
-        state = PokemonListState(layout: state.layout,
-                                 list: state.list,
-                                 pageRequest: nil)
+        state = state.with(error: error)
       case .success(let pageData):
         let newItems = pageData.items.map { PokemonListItemViewModel(dependency: self.dependency, id: $0) }
         let items = page.isFirst ? newItems : state.items + newItems
         let listData = PokemonListState.ListData(items: items,
                                                  count: pageData.count,
                                                  page: page)
-        state = PokemonListState(layout: state.layout,
-                                      list: listData,
-                                      pageRequest: nil)
+        state = state.with(list: listData)
       }
     }
   }}
