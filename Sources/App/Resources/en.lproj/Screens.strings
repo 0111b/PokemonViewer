@@ -4,4 +4,5 @@
 "PokemonList.Error.default" = "Something went wrong\n Tap to retry";
 "PokemonDetails.Error.transport" = "Connection error";
 "PokemonDetails.Error.default" = "Something went wrong";
+"PokemonDetails.Error.cta" = "Try again";
 "EmptyPokemonDetails.Hint.noItemSelected" = "Please select a Pokemon";

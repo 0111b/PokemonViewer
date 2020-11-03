@@ -17,6 +17,8 @@
 		E607EF8725519DB6008A9ED5 /* PokemonDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E607EF8625519DB6008A9ED5 /* PokemonDetailsViewModel.swift */; };
 		E607EF8D2551A257008A9ED5 /* PokemonDetailsViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E607EF8C2551A257008A9ED5 /* PokemonDetailsViewState.swift */; };
 		E607EF922551A28B008A9ED5 /* PokemonDetailsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E607EF912551A28B008A9ED5 /* PokemonDetailsState.swift */; };
+		E607EFA92551B7DE008A9ED5 /* PokemonDetailLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E607EFA82551B7DE008A9ED5 /* PokemonDetailLoadingView.swift */; };
+		E607EFAE2551BA8C008A9ED5 /* PokemonDetailErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E607EFAD2551BA8C008A9ED5 /* PokemonDetailErrorView.swift */; };
 		E65C0E6E254F478100385576 /* Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C0E6D254F478100385576 /* Identifier.swift */; };
 		E65C0E73254F4B0E00385576 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C0E72254F4B0E00385576 /* Page.swift */; };
 		E65C0E78254F4C3C00385576 /* Pokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C0E77254F4C3C00385576 /* Pokemon.swift */; };
@@ -99,6 +101,8 @@
 		E607EF8625519DB6008A9ED5 /* PokemonDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailsViewModel.swift; sourceTree = "<group>"; };
 		E607EF8C2551A257008A9ED5 /* PokemonDetailsViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailsViewState.swift; sourceTree = "<group>"; };
 		E607EF912551A28B008A9ED5 /* PokemonDetailsState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailsState.swift; sourceTree = "<group>"; };
+		E607EFA82551B7DE008A9ED5 /* PokemonDetailLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailLoadingView.swift; sourceTree = "<group>"; };
+		E607EFAD2551BA8C008A9ED5 /* PokemonDetailErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailErrorView.swift; sourceTree = "<group>"; };
 		E65C0E6D254F478100385576 /* Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifier.swift; sourceTree = "<group>"; };
 		E65C0E72254F4B0E00385576 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
 		E65C0E77254F4C3C00385576 /* Pokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pokemon.swift; sourceTree = "<group>"; };
@@ -257,6 +261,8 @@
 			isa = PBXGroup;
 			children = (
 				E607EF8125519D54008A9ED5 /* PokemonDetailsViewController.swift */,
+				E607EFA82551B7DE008A9ED5 /* PokemonDetailLoadingView.swift */,
+				E607EFAD2551BA8C008A9ED5 /* PokemonDetailErrorView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -682,6 +688,7 @@
 				E663D15C254F797D0056EDB7 /* Log.swift in Sources */,
 				E607EF922551A28B008A9ED5 /* PokemonDetailsState.swift in Sources */,
 				E6EE3EFB254E2FB80002D155 /* HTTP.swift in Sources */,
+				E607EFAE2551BA8C008A9ED5 /* PokemonDetailErrorView.swift in Sources */,
 				E663D13E254F6A8D0056EDB7 /* PokemonListState.swift in Sources */,
 				E6EE9684254DA43600AD6933 /* AppCoordinator.swift in Sources */,
 				E6EE96DD254DDA7500AD6933 /* PokemonListViewController.swift in Sources */,
@@ -690,6 +697,7 @@
 				E6EE3F79254EE9A00002D155 /* NetworkCache.swift in Sources */,
 				E6EE3EEE254E2E770002D155 /* URLSession+HTTPtransport.swift in Sources */,
 				E6EE9624254D9D9900AD6933 /* AppDelegate.swift in Sources */,
+				E607EFA92551B7DE008A9ED5 /* PokemonDetailLoadingView.swift in Sources */,
 				E6A6846C255035460060ED78 /* EmptyPokemonDetailsViewController.swift in Sources */,
 				E6EE3F9B254F138C0002D155 /* Protected.swift in Sources */,
 				E607EF6D25506C61008A9ED5 /* PokemonListLayout.swift in Sources */,

@@ -4,4 +4,5 @@
 "PokemonList.Error.default" = "Что-то пошло не так\nНажмите, чтобы повторить";
 "PokemonDetails.Error.transport" = "Ошибка сети";
 "PokemonDetails.Error.default" = "Что-то пошло не так";
+"PokemonDetails.Error.cta" = "Попробовать еще раз";
 "EmptyPokemonDetails.Hint.noItemSelected" = "Пожалуйста, выберите покемона";

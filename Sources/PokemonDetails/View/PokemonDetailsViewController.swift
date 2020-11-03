@@ -37,6 +37,8 @@ final class PokemonDetailsViewController: UIViewController {
       mainStackView.trailingAnchor.constraint(equalTo: scrollView.readableContentGuide.trailingAnchor),
       mainStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
     ])
+    view.addStretchedToBounds(subview: loadingView)
+    view.addStretchedToBounds(subview: errorView)
   }
 
   private func bind() {
@@ -46,21 +48,15 @@ final class PokemonDetailsViewController: UIViewController {
   }
 
   private func didUpdate(state: PokemonDetailsViewState) {
-    Swift.print(state)
-    mainStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-    let contentViews: [UIView]
-    activityIndicator.startAnimating()
-    let label = UILabel()
-    label.translatesAutoresizingMaskIntoConstraints = false
-    label.adjustsFontForContentSizeCategory = true
-    label.numberOfLines = 0
-//    if case .data(let pokemon) = state {
-//      pokemon.
-//    }
-
-    contentViews = [activityIndicator, label]
-    contentViews.forEach { mainStackView.addArrangedSubview($0) }
-
+    loadingView.isHidden = !state.isLoading
+    if let error = state.error {
+      errorView.reason = error
+      errorView.isHidden = false
+    } else {
+      errorView.isHidden = true
+    }
+    guard let pokemon = state.pokemon else { return }
+    Swift.print(pokemon)
   }
 
 
@@ -84,13 +80,16 @@ final class PokemonDetailsViewController: UIViewController {
     return stackView
   }()
 
-  private lazy var activityIndicator: UIActivityIndicatorView = {
-    let indicator = UIActivityIndicatorView(style: .gray)
-    indicator.translatesAutoresizingMaskIntoConstraints = false
-    indicator.color = Colors.accent
-    return indicator
-  }()
 
+  private lazy var loadingView = PokemonDetailLoadingView()
+
+  private lazy var errorView: PokemonDetailErrorView = {
+    let errorView = PokemonDetailErrorView()
+    errorView.action = { [weak self] in
+      self?.viewModel.retry()
+    }
+    return errorView
+  }()
 
   private let viewModel: PokemonDetailsViewModel
   private var stateUpdateToken: Disposable?

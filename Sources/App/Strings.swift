@@ -26,6 +26,7 @@ enum Strings {
       enum Error {
         static let transport = Strings.tr("Screens", "PokemonDetails.Error.transport")
         static let `default` = Strings.tr("Screens", "PokemonDetails.Error.default")
+        static let cta = Strings.tr("Screens", "PokemonDetails.Error.cta")
       }
 
     }
