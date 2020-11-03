@@ -140,8 +140,9 @@ final class PokemonListViewController: UIViewController {
     return collectionView
   }()
 
-  private func itemViewModel(at indexPath: IndexPath) -> PokemonListItemViewModel {
-    state.items[indexPath.row]
+  private func itemViewModel(at indexPath: IndexPath) -> PokemonListItemViewModel? {
+    let index = indexPath.row
+    return state.items.indices.contains(index) ? state.items[index] : nil
   }
 
   private lazy var collectionViewLayout = UICollectionViewFlowLayout()
@@ -177,9 +178,12 @@ extension PokemonListViewController: UICollectionViewDataSource {
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell: PokemonListItemCell = collectionView.dequeue(forIndexPath: indexPath)
-    let viewModel = itemViewModel(at: indexPath)
     cell.view.apply(style: cell.isSelected ? Constants.selectedItemStyle : Constants.itemStyle)
-    cell.view.set(title: viewModel.title, image: viewModel.image, axis: state.layout.itemAxis)
+    if let viewModel = itemViewModel(at: indexPath) {
+      cell.view.set(title: viewModel.title, image: viewModel.image, axis: state.layout.itemAxis)
+    } else {
+      cell.view.resetToEmptyState()
+    }
     return cell
   }
 
@@ -200,7 +204,7 @@ extension PokemonListViewController: UICollectionViewDataSource {
 
 extension PokemonListViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    viewModel.didSelect(item: itemViewModel(at: indexPath))
+    itemViewModel(at: indexPath).map(viewModel.didSelect(item:))
     if let cell = collectionView.cellForItem(at: indexPath) as? PokemonListItemCell {
       cell.view.apply(style: Constants.selectedItemStyle)
     }
@@ -215,7 +219,7 @@ extension PokemonListViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView,
                       willDisplay cell: UICollectionViewCell,
                       forItemAt indexPath: IndexPath) {
-    itemViewModel(at: indexPath).willDisplay()
+    itemViewModel(at: indexPath)?.willDisplay()
     if indexPath.row > state.items.count - 4 {
       viewModel.askForNextPage()
     }
@@ -224,7 +228,7 @@ extension PokemonListViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView,
                       didEndDisplaying cell: UICollectionViewCell,
                       forItemAt indexPath: IndexPath) {
-    itemViewModel(at: indexPath).didEndDisplaying()
+    itemViewModel(at: indexPath)?.didEndDisplaying()
   }
 }
 

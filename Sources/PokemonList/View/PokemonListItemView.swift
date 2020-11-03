@@ -35,6 +35,7 @@ final class PokemonListItemView: UIView, Resetable {
 
   func set(title: String, image: Observable<UIImage?>, axis: NSLayoutConstraint.Axis) {
     titleLabel.text = title
+    stackView.axis = axis
     imageSubscription = image.observe(on: .main) { [weak imageView] image in
       guard let imageView = imageView else { return }
       UIView.transition(with: imageView,
@@ -42,7 +43,6 @@ final class PokemonListItemView: UIView, Resetable {
         imageView.image = image ?? Images.defaultPlaceholder
       }
     }
-    stackView.axis = axis
   }
 
   func apply(style: Style) {
