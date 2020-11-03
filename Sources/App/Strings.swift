@@ -48,6 +48,9 @@ enum Strings {
         static let weight = Strings.tr("Screens", "PokemonDetails.Content.weight")
         static let height = Strings.tr("Screens", "PokemonDetails.Content.height")
 
+        static func statTitleFormat(name: String, level: Int) -> String {
+          Strings.tr("Screens", "PokemonDetails.Content.statTitleFormat", name, String(describing: level))
+        }
       }
     }
 

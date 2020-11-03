@@ -13,3 +13,4 @@
 "PokemonDetails.Content.listSeparator" = ", ";
 "PokemonDetails.Content.weight" = "Вес";
 "PokemonDetails.Content.height" = "Высота";
+"PokemonDetails.Content.statTitleFormat" = "%@ (%@)";

@@ -36,6 +36,7 @@ final class PokemonDetailsViewController: UIViewController {
       weightView,
       makeHeader(title: Strings.Screens.PokemonDetails.Header.sprites),
       makeHeader(title: Strings.Screens.PokemonDetails.Header.stats),
+      statsStackView,
       makeHeader(title: Strings.Screens.PokemonDetails.Header.abilities),
       abilitiesLabel,
       makeHeader(title: Strings.Screens.PokemonDetails.Header.types),
@@ -66,7 +67,6 @@ final class PokemonDetailsViewController: UIViewController {
     guard let details = state.details else { return }
     let pokemon = details.pokemon
     nameLabel.text = pokemon.id.rawValue
-
     heightView.set(title: Strings.Screens.PokemonDetails.Content.height,
                    value: LengthFormatter.default.string(fromDecimetres: pokemon.height))
     weightView.set(title: Strings.Screens.PokemonDetails.Content.weight,
@@ -77,8 +77,9 @@ final class PokemonDetailsViewController: UIViewController {
     typesLabel.text = pokemon.types
       .map(\.id.rawValue)
       .joined(separator: Strings.Screens.PokemonDetails.Content.listSeparator)
+    statsStackView.removeArrangedSubviews()
+    statsStackView.addArrangedSubviews(pokemon.stats.map(makeStatView(from:)))
   }
-
 
   private func makeHeader(title: String) -> UIView {
     let label = UILabel()
@@ -104,6 +105,14 @@ final class PokemonDetailsViewController: UIViewController {
     return label
   }
 
+  private func makeStatView(from stat: PokemonStat) -> UIView {
+    let view = TitledValueView(style: Constants.titledValueStyle)
+    view.set(title: Strings.Screens.PokemonDetails.Content.statTitleFormat(name: stat.id.rawValue,
+                                                                           level: stat.effort),
+             value: String(stat.baseStat))
+    return view
+  }
+
   private lazy var scrollView: UIScrollView = {
     let scrollView = UIScrollView()
     scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -125,6 +134,15 @@ final class PokemonDetailsViewController: UIViewController {
     return stackView
   }()
 
+  private lazy var statsStackView: UIStackView = {
+    let stackView = UIStackView()
+    stackView.translatesAutoresizingMaskIntoConstraints = false
+    stackView.axis = .vertical
+    stackView.distribution = .fill
+    stackView.alignment = .fill
+    stackView.spacing = Constants.contentSpacing
+    return stackView
+  }()
 
   private lazy var nameLabel: UILabel = {
     let label = UILabel()

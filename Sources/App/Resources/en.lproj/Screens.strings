@@ -13,4 +13,4 @@
 "PokemonDetails.Content.listSeparator" = ", ";
 "PokemonDetails.Content.weight" = "Weight";
 "PokemonDetails.Content.height" = "Height";
-
+"PokemonDetails.Content.statTitleFormat" = "%@ (%@)";
