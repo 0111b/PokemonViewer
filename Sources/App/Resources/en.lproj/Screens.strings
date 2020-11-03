@@ -1,8 +1,14 @@
 "PokemonList.title" = "Pokemons";
 "PokemonList.noMoreItems" = "That's all pokemons that we have";
+"EmptyPokemonDetails.Hint.noItemSelected" = "Please select a Pokemon";
 "PokemonList.Error.transport" = "Connection error\n Tap to retry";
 "PokemonList.Error.default" = "Something went wrong\n Tap to retry";
 "PokemonDetails.Error.transport" = "Connection error";
 "PokemonDetails.Error.default" = "Something went wrong";
 "PokemonDetails.Error.cta" = "Try again";
-"EmptyPokemonDetails.Hint.noItemSelected" = "Please select a Pokemon";
+"PokemonDetails.Header.sprites" = "Sprites";
+"PokemonDetails.Header.stats" = "Stats";
+"PokemonDetails.Header.abilities" = "Abilities";
+"PokemonDetails.Header.types" = "Types";
+"PokemonDetails.Content.listSeparator" = ", ";
+

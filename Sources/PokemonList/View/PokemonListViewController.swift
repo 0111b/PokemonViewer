@@ -139,7 +139,7 @@ final class PokemonListViewController: UIViewController {
                                                      backgroundColor: Colors.sectionBackground)
     static let selectedItemStyle = PokemonListItemView.Style(titleColor: Colors.primaryText,
                                                              titleFont: Fonts.title,
-                                                             backgroundColor: .red)
+                                                             backgroundColor: Colors.accent)
   }
 }
 

@@ -1,8 +1,13 @@
 "PokemonList.title" = "Покемоны";
 "PokemonList.noMoreItems" = "Это все покемоны что у нас есть";
+"EmptyPokemonDetails.Hint.noItemSelected" = "Пожалуйста, выберите покемона";
 "PokemonList.Error.transport" = "Ошибка сети\nНажмите, чтобы повторить";
 "PokemonList.Error.default" = "Что-то пошло не так\nНажмите, чтобы повторить";
 "PokemonDetails.Error.transport" = "Ошибка сети";
 "PokemonDetails.Error.default" = "Что-то пошло не так";
 "PokemonDetails.Error.cta" = "Попробовать еще раз";
-"EmptyPokemonDetails.Hint.noItemSelected" = "Пожалуйста, выберите покемона";
+"PokemonDetails.Header.sprites" = "Спрайты";
+"PokemonDetails.Header.stats" = "Статистика";
+"PokemonDetails.Header.abilities" = "Способности";
+"PokemonDetails.Header.types" = "Типы";
+"PokemonDetails.Content.listSeparator" = ", ";

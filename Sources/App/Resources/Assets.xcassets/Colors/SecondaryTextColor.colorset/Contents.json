@@ -3,7 +3,7 @@
     {
       "color" : {
         "platform" : "ios",
-        "reference" : "groupTableViewBackgroundColor"
+        "reference" : "secondaryLabelColor"
       },
       "idiom" : "universal"
     }

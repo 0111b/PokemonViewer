@@ -22,6 +22,13 @@ enum Strings {
 
     }
 
+    enum EmptyPokemonDetails {
+      enum Hint {
+        static let noItemSelected = Strings.tr("Screens", "EmptyPokemonDetails.Hint.noItemSelected")
+      }
+
+    }
+
     enum PokemonDetails {
       enum Error {
         static let transport = Strings.tr("Screens", "PokemonDetails.Error.transport")
@@ -29,12 +36,15 @@ enum Strings {
         static let cta = Strings.tr("Screens", "PokemonDetails.Error.cta")
       }
 
-    }
+      enum Header {
+        static let sprites = Strings.tr("Screens", "PokemonDetails.Header.sprites")
+        static let stats = Strings.tr("Screens", "PokemonDetails.Header.stats")
+        static let abilities = Strings.tr("Screens", "PokemonDetails.Header.abilities")
+        static let types = Strings.tr("Screens", "PokemonDetails.Header.types")
+      }
 
-
-    enum EmptyPokemonDetails {
-      enum Hint {
-        static let noItemSelected = Strings.tr("Screens", "EmptyPokemonDetails.Hint.noItemSelected")
+      enum Content {
+        static let listSeparator = Strings.tr("Screens", "PokemonDetails.Content.listSeparator")
       }
     }
 
