@@ -39,7 +39,7 @@ final class PokemonListViewModel {
 
   private func fetch(reload: Bool = false) {
     update { state in
-      guard state.canStartRequest() else { return }
+      guard state.canStartRequest(forced: reload) else { return }
       guard let page = reload ? PokemonListState.firstPage : state.nextPage else { return }
       let cachePolicy: RequestCachePolicy = reload ? .networkFirst : .cacheFirst
       os_log("PokemonListViewModel fetch %@", log: Log.general, type: .info, String(describing: page))

@@ -58,10 +58,11 @@ struct PokemonListState: Equatable {
     PokemonListState(layout: layout, list: data, pageRequest: .idle)
   }
 
-  func canStartRequest() -> Bool {
+  func canStartRequest(forced: Bool) -> Bool {
     switch pageRequest {
-    case .pending: return false
-    default: return true
+    case .idle: return true
+    case .error where forced: return true
+    default: return false
     }
   }
 
