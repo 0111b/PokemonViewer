@@ -10,6 +10,7 @@ import Foundation
 struct PokemonListViewState {
   let items: [PokemonListItemViewModel]
   let loading: LoadingViewState
+  let layout: PokemonListLayout
 
-  static let empty = PokemonListViewState(items: [], loading: .clear)
+  static let empty = PokemonListViewState(items: [], loading: .clear, layout: .list)
 }

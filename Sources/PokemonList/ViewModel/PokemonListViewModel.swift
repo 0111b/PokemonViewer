@@ -24,7 +24,7 @@ final class PokemonListViewModel {
   private weak var coordinator: PokemonListViewModelCoordinating?
 
   @Protected
-  private var state = PokemonListState.idle {
+  private var state = PokemonListState(layout: .list, list: .idle) {
     didSet {
       viewStateRelay.value = state.viewState
     }
@@ -48,7 +48,7 @@ final class PokemonListViewModel {
         let listData = PokemonListState.ListData(items: items,
                                                  count: pageData.count,
                                                  page: page)
-        self.state = .data(listData)
+        self.state = PokemonListState(layout: currentState.layout, list: .data(listData))
       }
     }
   }
@@ -77,6 +77,12 @@ final class PokemonListViewModel {
   func didSelect(item: PokemonListItemViewModel) {
     os_log("PokemonListViewModel didSelect %@", log: Log.general, type: .info, item.identifier.rawValue)
     coordinator?.showDetails(for: item.identifier)
+  }
+
+  func toggleLayout() {
+    let currentState = state
+    state = PokemonListState(layout: currentState.layout.toggle(),
+                             list: currentState.list)
   }
 
   // MARK: - Output -

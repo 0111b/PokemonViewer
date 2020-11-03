@@ -31,17 +31,9 @@ final class PokemonListItemView: UIView, Resetable {
     addStretchedToBounds(subview: stackView)
     stackView.addArrangedSubview(imageView)
     stackView.addArrangedSubview(titleLabel)
-    reflectTraitCollectionChange()
   }
 
-  override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-    super.traitCollectionDidChange(previousTraitCollection)
-    guard traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass
-    else { return }
-    reflectTraitCollectionChange()
-  }
-
-  func set(title: String, image: Observable<UIImage?>) {
+  func set(title: String, image: Observable<UIImage?>, axis: NSLayoutConstraint.Axis) {
     titleLabel.text = title
     imageSubscription = image.observe(on: .main) { [weak imageView] image in
       guard let imageView = imageView else { return }
@@ -50,6 +42,7 @@ final class PokemonListItemView: UIView, Resetable {
         imageView.image = image ?? Images.defaultPlaceholder
       }
     }
+    stackView.axis = axis
   }
 
   func apply(style: Style) {
@@ -63,15 +56,6 @@ final class PokemonListItemView: UIView, Resetable {
     titleLabel.text = nil
     imageView.image = nil
     imageSubscription = nil
-  }
-
-  private func reflectTraitCollectionChange() {
-    switch traitCollection.verticalSizeClass {
-    case .regular:
-      stackView.axis = .horizontal
-    default:
-      stackView.axis = .vertical
-    }
   }
 
   private lazy var titleLabel: UILabel = {

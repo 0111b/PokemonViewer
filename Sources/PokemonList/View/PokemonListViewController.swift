@@ -32,7 +32,7 @@ final class PokemonListViewController: UIViewController {
 
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
-    updateItemSize(contentSize: collectionView.bounds.size)
+    updateItemSize(for: state.layout)
   }
 
   private func setupUI() {
@@ -44,18 +44,25 @@ final class PokemonListViewController: UIViewController {
     collectionView.delegate = self
   }
 
-  private func updateItemSize(contentSize: CGSize) {
-    let itemSize: CGSize
-    let spacing = collectionViewLayout.minimumInteritemSpacing * CGFloat(Constants.itemsPerRow + 2)
-    let side = (contentSize.width - spacing) / CGFloat(Constants.itemsPerRow)
-    if side < Constants.minItemWidth {
-      itemSize = CGSize(width: contentSize.width, height: Constants.lineItemHeight)
-    } else {
-      itemSize = CGSize(width: side, height: side)
+  private func updateItemSize(for layout: PokemonListLayout) {
+    let contentWidth = collectionView.bounds.width
+    let proposedSize: CGSize
+    switch layout {
+    case .list:
+      proposedSize = CGSize(width: contentWidth, height: Constants.listLayoutItemHeight)
+    case .grid:
+      let spacing = collectionViewLayout.minimumInteritemSpacing * CGFloat(Constants.itemsPerRow + 2)
+      let side = max(Constants.girLayoutMinSide, (contentWidth - spacing) / CGFloat(Constants.itemsPerRow))
+      proposedSize = CGSize(width: side, height: side)
     }
-    if collectionViewLayout.itemSize != itemSize {
-      collectionViewLayout.itemSize = itemSize
-      collectionViewLayout.footerReferenceSize = CGSize(width: contentSize.width, height: Constants.footerHeight)
+    let currentSize = collectionViewLayout.itemSize
+    let shouldUpdate = abs(currentSize.width - proposedSize.width) > Constants.layoutUpdateTreshold
+      || abs(currentSize.height - proposedSize.height) > Constants.layoutUpdateTreshold
+    if shouldUpdate {
+      let visibleIndexPaths = collectionView.indexPathsForVisibleItems
+      collectionViewLayout.itemSize = proposedSize
+      collectionViewLayout.footerReferenceSize = CGSize(width: contentWidth, height: Constants.footerHeight)
+      collectionView.reloadItems(at: visibleIndexPaths)
     }
   }
 
@@ -66,6 +73,13 @@ final class PokemonListViewController: UIViewController {
   }
 
   private func didUpdate(state: PokemonListViewState) {
+    if self.state.layout != state.layout {
+      updateItemSize(for: state.layout)
+    }
+    navigationItem.leftBarButtonItem = UIBarButtonItem(image: state.layout.toggle().icon,
+                                                       style: .plain,
+                                                       target: self,
+                                                       action: #selector(toggleLayout))
     if #available(iOS 13, *) {
       var deletes = [IndexPath]()
       var inserts = [IndexPath]()
@@ -102,6 +116,10 @@ final class PokemonListViewController: UIViewController {
     }
   }
 
+  @objc private func toggleLayout() {
+    viewModel.toggleLayout()
+  }
+
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
     collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -122,8 +140,9 @@ final class PokemonListViewController: UIViewController {
   private enum Constants {
     static let backgroundColor = Colors.background
     static let itemsPerRow = 4
-    static let minItemWidth: CGFloat = 100
-    static let lineItemHeight: CGFloat = 80
+    static let girLayoutMinSide: CGFloat = 150
+    static let listLayoutItemHeight: CGFloat = 80
+    static let layoutUpdateTreshold: CGFloat = 10
     static let footerHeight: CGFloat = 60
     static let itemStyle = PokemonListItemView.Style(titleColor: Colors.primaryText,
                                                      titleFont: Fonts.title,
@@ -145,8 +164,8 @@ extension PokemonListViewController: UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell: PokemonListItemCell = collectionView.dequeue(forIndexPath: indexPath)
     let viewModel = itemViewModel(at: indexPath)
-    cell.view.apply(style: Constants.itemStyle)
-    cell.view.set(title: viewModel.title, image: viewModel.image)
+    cell.view.apply(style: cell.isSelected ? Constants.selectedItemStyle : Constants.itemStyle)
+    cell.view.set(title: viewModel.title, image: viewModel.image, axis: state.layout.itemAxis)
     return cell
   }
 
@@ -192,5 +211,21 @@ extension PokemonListViewController: UICollectionViewDelegate {
                       didEndDisplaying cell: UICollectionViewCell,
                       forItemAt indexPath: IndexPath) {
     itemViewModel(at: indexPath).didEndDisplaying()
+  }
+}
+
+private extension PokemonListLayout {
+  var icon: UIImage? {
+    switch self {
+    case .grid: return Images.gridIcon
+    case .list: return Images.listIcon
+    }
+  }
+
+  var itemAxis: NSLayoutConstraint.Axis {
+    switch self {
+    case .grid: return .vertical
+    case .list: return .horizontal
+    }
   }
 }

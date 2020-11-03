@@ -7,9 +7,14 @@
 
 import Foundation
 
-enum PokemonListState {
-  case idle
-  case data(ListData)
+struct PokemonListState {
+  let layout: PokemonListLayout
+  let list: List
+
+  enum List {
+    case idle
+    case data(ListData)
+  }
 
   struct ListData {
     let items: [PokemonListItemViewModel]
@@ -18,7 +23,7 @@ enum PokemonListState {
   }
 
   var nextPage: Page? {
-    switch self {
+    switch list {
     case .idle: return PokemonListState.firstPage
     case .data(let data):
       return data.page.offset + data.page.limit < data.count ? data.page.next() : nil
@@ -26,16 +31,16 @@ enum PokemonListState {
   }
 
   var items: [PokemonListItemViewModel] {
-    switch self {
+    switch list {
     case .idle: return []
     case .data(let data): return data.items
     }
   }
 
   var viewState: PokemonListViewState {
-    switch self {
+    switch list {
     case .idle:
-      return PokemonListViewState(items: [], loading: .clear)
+      return PokemonListViewState(items: [], loading: .clear, layout: layout)
     case .data(let data):
       let loading: LoadingViewState
       if nextPage != nil {
@@ -44,7 +49,8 @@ enum PokemonListState {
         loading = .hint(Strings.Screens.PokemonList.noMoreItems)
       }
       return PokemonListViewState(items: data.items,
-                                  loading: loading)
+                                  loading: loading,
+                                  layout: layout)
     }
   }
 
