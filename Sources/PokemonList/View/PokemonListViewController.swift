@@ -197,6 +197,9 @@ extension PokemonListViewController: UICollectionViewDataSource {
     }
     let footer: LoadingCollectionViewFooter = collectionView.dequeueFooter(forIndexPath: indexPath)
     footer.update(with: state.loading)
+    footer.tapHandler = { [weak self] in
+      self?.viewModel.retry()
+    }
     return footer
   }
 

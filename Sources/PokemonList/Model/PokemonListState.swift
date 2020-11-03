@@ -33,7 +33,7 @@ struct PokemonListState: Equatable {
     case .pending:
       loading = .loading
     case .error(let error):
-      loading = .hint(error.localizedDescription)
+      loading = .hint(error.recoveryOptions)
     case .idle:
       loading = nextPage == nil ? .hint(Strings.Screens.PokemonList.noMoreItems) : .clear
     }
@@ -69,4 +69,15 @@ struct PokemonListState: Equatable {
   static let empty = PokemonListState(layout: .list, list: nil, pageRequest: .idle)
 
   static var firstPage: Page { Page(limit: 5) }
+}
+
+private extension NetworkError {
+  var recoveryOptions: String {
+    switch self {
+    case .transportError:
+      return Strings.Screens.PokemonList.Error.transport
+    default:
+      return Strings.Screens.PokemonList.Error.default
+    }
+  }
 }

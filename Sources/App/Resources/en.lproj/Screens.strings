@@ -1,3 +1,5 @@
 "PokemonList.title" = "Pokemons";
 "PokemonList.noMoreItems" = "That's all pokemons that we have";
+"PokemonList.Error.transport" = "Connection error\n Tap to retry";
+"PokemonList.Error.default" = "Something went wrong\n Tap to retry";
 "EmptyPokemonDetails.Hint.noItemSelected" = "Please select a Pokemon";

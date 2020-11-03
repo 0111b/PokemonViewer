@@ -37,9 +37,9 @@ final class PokemonListViewModel {
     }
   }
 
-  private func fetch(reload: Bool = false) {
+  private func fetch(userInitiated: Bool, reload: Bool) {
     update { state in
-      guard state.canStartRequest(forced: reload) else { return }
+      guard state.canStartRequest(forced: userInitiated) else { return }
       guard let page = reload ? PokemonListState.firstPage : state.nextPage else { return }
       let cachePolicy: RequestCachePolicy = reload ? .networkFirst : .cacheFirst
       os_log("PokemonListViewModel fetch %@", log: Log.general, type: .info, String(describing: page))
@@ -71,17 +71,22 @@ final class PokemonListViewModel {
 
   func viewDidLoad() {
     os_log("PokemonListViewModel viewDidLoad", log: Log.general, type: .info)
-    fetch()
+    fetch(userInitiated: false, reload: false)
   }
 
   func askForNextPage() {
     os_log("PokemonListViewModel askForNextPage", log: Log.general, type: .info)
-    fetch()
+    fetch(userInitiated: false, reload: false)
+  }
+
+  func retry() {
+    os_log("PokemonListViewModel retry", log: Log.general, type: .info)
+    fetch(userInitiated: true, reload: false)
   }
 
   func refresh() {
     os_log("PokemonListViewModel refresh", log: Log.general, type: .info)
-    fetch(reload: true)
+    fetch(userInitiated: true, reload: true)
   }
 
   func didSelect(item: PokemonListItemViewModel) {

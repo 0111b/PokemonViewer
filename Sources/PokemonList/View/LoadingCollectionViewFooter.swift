@@ -23,6 +23,7 @@ final class LoadingCollectionViewFooter: UICollectionReusableView, CollectionVie
     addStretchedToBounds(subview: hintLabel)
     addStretchedToBounds(subview: activityIndicator)
     backgroundColor = Colors.background
+    addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTap)))
   }
 
   func update(with state: LoadingViewState) {
@@ -39,9 +40,16 @@ final class LoadingCollectionViewFooter: UICollectionReusableView, CollectionVie
     }
   }
 
+  var tapHandler: () -> Void = {}
+
   override func prepareForReuse() {
     super.prepareForReuse()
     update(with: .clear)
+    tapHandler = {}
+  }
+
+  @objc private func didTap() {
+    tapHandler()
   }
 
   private lazy var hintLabel: UILabel = {

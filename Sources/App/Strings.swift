@@ -14,6 +14,12 @@ enum Strings {
     enum PokemonList {
       static let title = Strings.tr("Screens", "PokemonList.title")
       static let noMoreItems = Strings.tr("Screens", "PokemonList.noMoreItems")
+
+      enum Error {
+        static let transport = Strings.tr("Screens", "PokemonList.Error.transport")
+        static let `default` = Strings.tr("Screens", "PokemonList.Error.default")
+      }
+
     }
 
 
