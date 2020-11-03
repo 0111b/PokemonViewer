@@ -27,7 +27,7 @@ final class PokemonListItemView: UIView, Resetable {
   }
 
   private func commonInit() {
-    addStretchedToBounds(subview: stackView)
+    addStretchedToBounds(subview: stackView, insets: Constants.contentInset)
     stackView.addArrangedSubview(imageView)
     stackView.addArrangedSubview(titleLabel)
   }
@@ -95,4 +95,8 @@ final class PokemonListItemView: UIView, Resetable {
   }()
 
   private var imageSubscription: Disposable?
+
+  private enum Constants {
+    static let contentInset = UIEdgeInsets(top: 6, left: 6, bottom: 6, right: 6)
+  }
 }
