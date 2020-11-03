@@ -35,7 +35,7 @@ final class PokemonListCoordinator {
 
 extension PokemonListCoordinator: PokemonListViewModelCoordinating {
   func showDetails(for identifier: Identifier<Pokemon>) {
-    let detailsViewModel = PokemonDetailsViewModel(identifier: identifier)
+    let detailsViewModel = PokemonDetailsViewModel(dependency: dependency, identifier: identifier)
     let detailsViewController = PokemonDetailsViewController(viewModel: detailsViewModel)
     let detailsNavigation = UINavigationController(rootViewController: detailsViewController)
     splitViewController.showDetailViewController(detailsNavigation, sender: nil)

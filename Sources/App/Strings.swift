@@ -22,6 +22,14 @@ enum Strings {
 
     }
 
+    enum PokemonDetails {
+      enum Error {
+        static let transport = Strings.tr("Screens", "PokemonDetails.Error.transport")
+        static let `default` = Strings.tr("Screens", "PokemonDetails.Error.default")
+      }
+
+    }
+
 
     enum EmptyPokemonDetails {
       enum Hint {

@@ -46,13 +46,23 @@ final class PokemonDetailsViewController: UIViewController {
   }
 
   private func didUpdate(state: PokemonDetailsViewState) {
+    Swift.print(state)
     mainStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
     let contentViews: [UIView]
     activityIndicator.startAnimating()
-    contentViews = [activityIndicator]
+    let label = UILabel()
+    label.translatesAutoresizingMaskIntoConstraints = false
+    label.adjustsFontForContentSizeCategory = true
+    label.numberOfLines = 0
+//    if case .data(let pokemon) = state {
+//      pokemon.
+//    }
+
+    contentViews = [activityIndicator, label]
     contentViews.forEach { mainStackView.addArrangedSubview($0) }
 
   }
+
 
   private lazy var scrollView: UIScrollView = {
     let scrollView = UIScrollView()

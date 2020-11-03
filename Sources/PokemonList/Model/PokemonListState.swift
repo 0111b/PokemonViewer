@@ -28,7 +28,7 @@ struct PokemonListState: Equatable {
   }
 
   var viewState: PokemonListViewState {
-    let loading: LoadingViewState
+    let loading: PageLoadingViewState
     switch pageRequest {
     case .pending:
       loading = .loading

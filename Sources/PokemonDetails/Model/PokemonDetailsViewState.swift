@@ -7,7 +7,9 @@
 
 import Foundation
 
-struct PokemonDetailsViewState {
-
-  static let empty = PokemonDetailsViewState()
+enum PokemonDetailsViewState {
+  case idle
+  case error(String)
+  case loading
+  case data(Pokemon)
 }

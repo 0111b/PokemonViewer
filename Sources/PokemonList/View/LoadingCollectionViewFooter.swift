@@ -26,7 +26,7 @@ final class LoadingCollectionViewFooter: UICollectionReusableView, CollectionVie
     addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTap)))
   }
 
-  func update(with state: LoadingViewState) {
+  func update(with state: PageLoadingViewState) {
     switch state {
     case .clear:
       activityIndicator.stopAnimating()

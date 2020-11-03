@@ -2,4 +2,6 @@
 "PokemonList.noMoreItems" = "Это все покемоны что у нас есть";
 "PokemonList.Error.transport" = "Ошибка сети\nНажмите, чтобы повторить";
 "PokemonList.Error.default" = "Что-то пошло не так\nНажмите, чтобы повторить";
+"PokemonDetails.Error.transport" = "Ошибка сети";
+"PokemonDetails.Error.default" = "Что-то пошло не так";
 "EmptyPokemonDetails.Hint.noItemSelected" = "Пожалуйста, выберите покемона";
