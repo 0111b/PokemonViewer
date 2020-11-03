@@ -13,7 +13,6 @@ final class PokemonListItemView: UIView, Resetable {
   struct Style {
     let titleColor: UIColor
     let titleFont: UIFont
-    let titleAlignment: NSTextAlignment
     let backgroundColor: UIColor
   }
 
@@ -36,6 +35,14 @@ final class PokemonListItemView: UIView, Resetable {
   func set(title: String, image: Observable<UIImage?>, axis: NSLayoutConstraint.Axis) {
     titleLabel.text = title
     stackView.axis = axis
+    switch axis {
+    case .horizontal:
+      titleLabel.textAlignment = .left
+    case .vertical:
+      titleLabel.textAlignment = .center
+    @unknown default:
+      titleLabel.textAlignment = .center
+    }
     imageSubscription = image.observe(on: .main) { [weak imageView] image in
       guard let imageView = imageView else { return }
       UIView.transition(with: imageView,
@@ -48,7 +55,6 @@ final class PokemonListItemView: UIView, Resetable {
   func apply(style: Style) {
     titleLabel.textColor = style.titleColor
     titleLabel.font = style.titleFont
-    titleLabel.textAlignment = style.titleAlignment
     backgroundColor = style.backgroundColor
   }
 

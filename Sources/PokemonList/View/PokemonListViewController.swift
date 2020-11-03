@@ -161,11 +161,9 @@ final class PokemonListViewController: UIViewController {
     static let footerHeight: CGFloat = 60
     static let itemStyle = PokemonListItemView.Style(titleColor: Colors.primaryText,
                                                      titleFont: Fonts.title,
-                                                     titleAlignment: .center,
                                                      backgroundColor: Colors.sectionBackground)
     static let selectedItemStyle = PokemonListItemView.Style(titleColor: Colors.primaryText,
                                                              titleFont: Fonts.title,
-                                                             titleAlignment: .center,
                                                              backgroundColor: .red)
   }
 }
