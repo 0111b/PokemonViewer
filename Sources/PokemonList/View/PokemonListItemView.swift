@@ -69,6 +69,8 @@ final class PokemonListItemView: UIView, Resetable {
     label.translatesAutoresizingMaskIntoConstraints = false
     label.setContentCompressionResistancePriority(.required, for: .vertical)
     label.setContentCompressionResistancePriority(.required, for: .horizontal)
+    label.setContentHuggingPriority(.required, for: .horizontal)
+    label.setContentHuggingPriority(.required, for: .vertical)
     label.adjustsFontForContentSizeCategory = true
     label.numberOfLines = 0
     return label

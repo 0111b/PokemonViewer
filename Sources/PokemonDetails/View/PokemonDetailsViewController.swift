@@ -35,6 +35,7 @@ final class PokemonDetailsViewController: UIViewController {
       heightView,
       weightView,
       makeHeader(title: Strings.Screens.PokemonDetails.Header.sprites),
+      spritesView,
       makeHeader(title: Strings.Screens.PokemonDetails.Header.stats),
       statsStackView,
       makeHeader(title: Strings.Screens.PokemonDetails.Header.abilities),
@@ -79,6 +80,7 @@ final class PokemonDetailsViewController: UIViewController {
       .joined(separator: Strings.Screens.PokemonDetails.Content.listSeparator)
     statsStackView.removeArrangedSubviews()
     statsStackView.addArrangedSubviews(pokemon.stats.map(makeStatView(from:)))
+    spritesView.set(sprites: details.sprites)
   }
 
   private func makeHeader(title: String) -> UIView {
@@ -157,6 +159,8 @@ final class PokemonDetailsViewController: UIViewController {
   private lazy var heightView = TitledValueView(style: Constants.titledValueStyle)
 
   private lazy var weightView = TitledValueView(style: Constants.titledValueStyle)
+
+  private lazy var spritesView = PokemonSpriteView()
 
   private lazy var abilitiesLabel = makeContentLabel()
 

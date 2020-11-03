@@ -8,6 +8,14 @@
 import UIKit
 
 final class PokemonDetailErrorView: UIView {
+
+  var reason: String? {
+    get { resonLabel.text }
+    set { resonLabel.text = newValue }
+  }
+
+  var action: () -> Void = {}
+
   override init(frame: CGRect) {
     super.init(frame: .zero)
     commonInit()
@@ -17,13 +25,6 @@ final class PokemonDetailErrorView: UIView {
     super.init(coder: coder)
     commonInit()
   }
-
-  var reason: String? {
-    get { resonLabel.text }
-    set { resonLabel.text = newValue }
-  }
-
-  var action: () -> Void = {}
 
   private func commonInit() {
     backgroundColor = Colors.background
@@ -63,6 +64,5 @@ final class PokemonDetailErrorView: UIView {
     button.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
     return button
   }()
-
 
 }
