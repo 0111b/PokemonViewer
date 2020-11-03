@@ -25,6 +25,7 @@
 		E607EFC62551DA6F008A9ED5 /* TitledValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E607EFC52551DA6F008A9ED5 /* TitledValueView.swift */; };
 		E607EFCE2551E297008A9ED5 /* Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = E607EFCD2551E297008A9ED5 /* Formatters.swift */; };
 		E607EFD32551F08D008A9ED5 /* PokemonSpriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E607EFD22551F08D008A9ED5 /* PokemonSpriteView.swift */; };
+		E607EFE725522526008A9ED5 /* ObservableCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = E607EFE225522519008A9ED5 /* ObservableCollector.swift */; };
 		E65C0E6E254F478100385576 /* Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C0E6D254F478100385576 /* Identifier.swift */; };
 		E65C0E73254F4B0E00385576 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C0E72254F4B0E00385576 /* Page.swift */; };
 		E65C0E78254F4C3C00385576 /* Pokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C0E77254F4C3C00385576 /* Pokemon.swift */; };
@@ -116,6 +117,7 @@
 		E607EFCD2551E297008A9ED5 /* Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatters.swift; sourceTree = "<group>"; };
 		E607EFD22551F08D008A9ED5 /* PokemonSpriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonSpriteView.swift; sourceTree = "<group>"; };
 		E607EFDD25521BAC008A9ED5 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Screens.strings; sourceTree = "<group>"; };
+		E607EFE225522519008A9ED5 /* ObservableCollector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableCollector.swift; sourceTree = "<group>"; };
 		E65C0E6D254F478100385576 /* Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifier.swift; sourceTree = "<group>"; };
 		E65C0E72254F4B0E00385576 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
 		E65C0E77254F4C3C00385576 /* Pokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pokemon.swift; sourceTree = "<group>"; };
@@ -246,6 +248,14 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		E607EFE1255224FA008A9ED5 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				E607EFE225522519008A9ED5 /* ObservableCollector.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		E65C0E6C254F475100385576 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -259,12 +269,12 @@
 		E65C0E87254F657800385576 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				E607EF6C25506C61008A9ED5 /* PokemonListLayout.swift */,
 				E663D13D254F6A8D0056EDB7 /* PokemonListState.swift */,
 				E6EE96EE254DDC5B00AD6933 /* PokemonListViewState.swift */,
 				E607EF592550521D008A9ED5 /* PageLoadingViewState.swift */,
-				E607EF6425506529008A9ED5 /* PokemonListItemState.swift */,
-				E607EF6C25506C61008A9ED5 /* PokemonListLayout.swift */,
 				E607EF7425517C08008A9ED5 /* PageRequestState.swift */,
+				E607EF6425506529008A9ED5 /* PokemonListItemState.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -384,6 +394,7 @@
 		E6EE9639254D9D9B00AD6933 /* PokemonViewerTests */ = {
 			isa = PBXGroup;
 			children = (
+				E607EFE1255224FA008A9ED5 /* Utils */,
 				E6EE963A254D9D9B00AD6933 /* DisposableTests.swift */,
 				E6EE96CF254DD5D700AD6933 /* ObservableTests.swift */,
 				E6EE3F12254E34EF0002D155 /* HTTPLocationTests.swift */,
@@ -756,6 +767,7 @@
 			files = (
 				E6EE96D0254DD5D700AD6933 /* ObservableTests.swift in Sources */,
 				E6EE96F7254DDE4400AD6933 /* PokemonListViewModelTests.swift in Sources */,
+				E607EFE725522526008A9ED5 /* ObservableCollector.swift in Sources */,
 				E6EE3F13254E34EF0002D155 /* HTTPLocationTests.swift in Sources */,
 				E6EE963B254D9D9B00AD6933 /* DisposableTests.swift in Sources */,
 				E6EE3F18254E353E0002D155 /* RequestAdapterTests.swift in Sources */,

@@ -29,14 +29,12 @@ final class AppDependency {
     config.urlCache = nil
     config.requestCachePolicy = .reloadIgnoringLocalCacheData
     let transport: HTTPTransport = URLSession(configuration: config)
-    //    let networkCache: NetworkCache = DisabledNetworkCache()
     let networkCache: NetworkCache = URLCache(memoryCapacity: Constants.defaultMemoryCapacity,
                                               diskCapacity: Constants.defaultDiskCapacity,
                                               diskPath: "NetworkService")
     return NetworkServiceImp(transport: transport,
                              cache: networkCache)
   }()
-
 
   private enum Constants {
     static let defaultMemoryCapacity: Int = 10*1024*1024
