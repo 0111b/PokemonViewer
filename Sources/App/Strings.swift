@@ -45,6 +45,9 @@ enum Strings {
 
       enum Content {
         static let listSeparator = Strings.tr("Screens", "PokemonDetails.Content.listSeparator")
+        static let weight = Strings.tr("Screens", "PokemonDetails.Content.weight")
+        static let height = Strings.tr("Screens", "PokemonDetails.Content.height")
+
       }
     }
 

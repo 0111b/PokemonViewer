@@ -11,3 +11,5 @@
 "PokemonDetails.Header.abilities" = "Способности";
 "PokemonDetails.Header.types" = "Типы";
 "PokemonDetails.Content.listSeparator" = ", ";
+"PokemonDetails.Content.weight" = "Вес";
+"PokemonDetails.Content.height" = "Высота";

@@ -66,6 +66,11 @@ final class PokemonDetailsViewController: UIViewController {
     guard let details = state.details else { return }
     let pokemon = details.pokemon
     nameLabel.text = pokemon.id.rawValue
+
+    heightView.set(title: Strings.Screens.PokemonDetails.Content.height,
+                   value: LengthFormatter.default.string(fromDecimetres: pokemon.height))
+    weightView.set(title: Strings.Screens.PokemonDetails.Content.weight,
+                   value: MassFormatter.default.string(fromHectograms: pokemon.height))
     abilitiesLabel.text = pokemon.abilities
       .map(\.id.rawValue)
       .joined(separator: Strings.Screens.PokemonDetails.Content.listSeparator)

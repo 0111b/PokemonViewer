@@ -11,4 +11,6 @@
 "PokemonDetails.Header.abilities" = "Abilities";
 "PokemonDetails.Header.types" = "Types";
 "PokemonDetails.Content.listSeparator" = ", ";
+"PokemonDetails.Content.weight" = "Weight";
+"PokemonDetails.Content.height" = "Height";
 
