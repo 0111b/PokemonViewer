@@ -10,20 +10,20 @@ import UIKit
 final class PokemonSpriteViewModel {
   typealias Dependency = ImageService
 
-  init(dependency: Dependency, url: URL) {
+  init(dependency: Dependency, sprite: PokemonSprite) {
     self.dependency = dependency
-    self.url = url
+    self.sprite = sprite
   }
 
   private let dependency: Dependency
-  private let url: URL
+  private let sprite: PokemonSprite
 
   private var imageRequest: Disposable?
 
   // MARK: - Input -
 
   func fetchImage() {
-    imageRequest = dependency.image(url: url,
+    imageRequest = dependency.image(url: sprite.url,
                                     cachePolicy: .cacheFirst,
                                     adapter: RequestAdapter()) { [weak self] result in
       guard case .success(let image) = result else { return }
@@ -35,5 +35,5 @@ final class PokemonSpriteViewModel {
 
   private let imageRelay = MutableObservable<UIImage?>(value: nil)
   var image: Observable<UIImage?> { imageRelay }
-
+  var kind: PokemonSprite.Kind { sprite.kind }
 }

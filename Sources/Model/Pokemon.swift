@@ -11,7 +11,7 @@ struct Pokemon: Identifiable {
   let id: Identifier<Pokemon>
   let height: Int
   let weight: Int
-  let sprites: [URL]
+  let sprites: [PokemonSprite]
   let stats: [PokemonStat]
   let abilities: [PokemonAbility]
   let types: [PokemonType]
@@ -29,4 +29,14 @@ struct PokemonAbility: Identifiable {
 
 struct PokemonType: Identifiable {
   let id: Identifier<PokemonType>
+}
+
+struct PokemonSprite {
+  let url: URL
+  let kind: Kind
+
+  enum Kind: Comparable {
+    case frontDefault, backDefault, frontFemale, backFemale, frontShiny, backShiny, frontShinyFemale, backShinyFemale
+  }
+
 }

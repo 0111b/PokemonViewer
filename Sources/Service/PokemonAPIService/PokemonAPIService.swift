@@ -65,16 +65,19 @@ private extension Pokemon {
     id = .init(rawValue: dto.name)
     height = dto.height
     weight = dto.weight
-    sprites = [
-      dto.sprites.frontDefault,
-      dto.sprites.backDefault,
-      dto.sprites.frontShiny,
-      dto.sprites.backShiny,
-      dto.sprites.frontFemale,
-      dto.sprites.backFemale,
-      dto.sprites.frontShinyFemale,
-      dto.sprites.backShinyFemale
-    ].compactMap { $0 }
+    let rawSprites: [PokemonSprite.Kind: URL?] = [
+      .frontDefault: dto.sprites.frontDefault,
+      .backDefault: dto.sprites.backDefault,
+      .frontShiny: dto.sprites.frontShiny,
+      .backShiny: dto.sprites.backShiny,
+      .frontFemale: dto.sprites.frontFemale,
+      .backFemale: dto.sprites.backFemale,
+      .frontShinyFemale: dto.sprites.frontShinyFemale,
+      .backShinyFemale: dto.sprites.backShinyFemale
+    ]
+    sprites = rawSprites.compactMap { kind, url in
+      url.map { PokemonSprite(url: $0, kind: kind) }
+    }.sorted { $0.kind < $1.kind }
     stats = dto.stats.map { PokemonStat(dto: $0) }
     abilities = dto.abilities
       .sorted { $0.slot < $1.slot }

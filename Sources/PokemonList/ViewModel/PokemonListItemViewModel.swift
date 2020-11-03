@@ -31,7 +31,7 @@ final class PokemonListItemViewModel {
         self.state = .idle
       case .success(let pokemon):
         os_log("PokemonListItemViewModel details %@", log: Log.general, type: .debug, self.identifier.rawValue)
-        if let url = pokemon.sprites.first {
+        if let url = pokemon.sprites.first?.url {
           self.state = .imageRequest(self.fetchImage(url: url))
         } else {
           self.state = .done

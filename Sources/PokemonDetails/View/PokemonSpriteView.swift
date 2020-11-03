@@ -63,8 +63,33 @@ extension PokemonSpriteView: UICollectionViewDataSource {
     let cell: PokemonListItemCell = collectionView.dequeue(forIndexPath: indexPath)
     cell.view.apply(style: Constants.itemStyle)
     let viewModel = items[indexPath.row]
-    cell.view.set(title: "Hello", image: viewModel.image, axis: .vertical)
+    cell.view.set(title: viewModel.kind.legend,
+                  image: viewModel.image,
+                  axis: .vertical)
     viewModel.fetchImage()
     return cell
+  }
+}
+
+private extension PokemonSprite.Kind {
+  var legend: String {
+    switch self {
+    case .backDefault:
+      return "🚫🌎👦"
+    case .backFemale:
+      return "🚫🌎👩"
+    case .backShiny:
+      return "🚫☀️👦"
+    case .backShinyFemale:
+      return "🚫☀️👩"
+    case .frontDefault:
+      return "⭕️🌎👦"
+    case .frontFemale:
+      return "⭕️🌎👩"
+    case .frontShiny:
+      return "⭕️☀️👦"
+    case .frontShinyFemale:
+      return "⭕️☀️👩"
+    }
   }
 }

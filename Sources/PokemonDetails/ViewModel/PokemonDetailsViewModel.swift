@@ -34,7 +34,7 @@ final class PokemonDetailsViewModel {
           self.state = .error(error)
         case .success(let pokemon):
           let sprites = pokemon.sprites.map {
-            PokemonSpriteViewModel(dependency: self.dependency.imageService, url: $0)
+            PokemonSpriteViewModel(dependency: self.dependency.imageService, sprite: $0)
           }
           let details = PokemonDetails(pokemon: pokemon,
                                        sprites: sprites)
