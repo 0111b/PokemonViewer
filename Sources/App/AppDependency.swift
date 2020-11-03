@@ -30,24 +30,17 @@ final class AppDependency {
     config.requestCachePolicy = .reloadIgnoringLocalCacheData
     let transport: HTTPTransport = URLSession(configuration: config)
     //    let networkCache: NetworkCache = DisabledNetworkCache()
-    let networkCache: NetworkCache = {
-      let cacheDirectory = FileManager.default
-        .urls(for: .cachesDirectory, in: .userDomainMask)
-        .first?
-        .path
-      return URLCache(memoryCapacity: Constants.defaultMemoryCapacity,
-                      diskCapacity: Constants.defaultDiskCapacity,
-                      diskPath: cacheDirectory)
-    }()
-    let cache = DisabledNetworkCache()/*URLCache.shared*/
+    let networkCache: NetworkCache = URLCache(memoryCapacity: Constants.defaultMemoryCapacity,
+                                              diskCapacity: Constants.defaultDiskCapacity,
+                                              diskPath: "NetworkService")
     return NetworkServiceImp(transport: transport,
-                             cache: cache)
+                             cache: networkCache)
   }()
 
 
   private enum Constants {
-    static let defaultMemoryCapacity: Int = 10*1024
-    static let defaultDiskCapacity: Int = 50*1024
+    static let defaultMemoryCapacity: Int = 10*1024*1024
+    static let defaultDiskCapacity: Int = 50*1024*1024
   }
 }
 

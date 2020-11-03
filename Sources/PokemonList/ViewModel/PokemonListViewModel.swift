@@ -41,7 +41,7 @@ final class PokemonListViewModel {
     update { state in
       guard state.canStartRequest(forced: userInitiated) else { return }
       guard let page = reload ? PokemonListState.firstPage : state.nextPage else { return }
-      let cachePolicy: RequestCachePolicy = reload ? .networkFirst : .cacheFirst
+      let cachePolicy: RequestCachePolicy = userInitiated ? .networkFirst : .cacheFirst
       os_log("PokemonListViewModel fetch %@", log: Log.general, type: .info, String(describing: page))
       let pageRequest = dependency.pokemonAPIService
         .list(page: page, cachePolicy: cachePolicy, completion: didLoad(page: page))
