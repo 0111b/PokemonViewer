@@ -115,6 +115,7 @@
 		E607EFC52551DA6F008A9ED5 /* TitledValueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitledValueView.swift; sourceTree = "<group>"; };
 		E607EFCD2551E297008A9ED5 /* Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatters.swift; sourceTree = "<group>"; };
 		E607EFD22551F08D008A9ED5 /* PokemonSpriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonSpriteView.swift; sourceTree = "<group>"; };
+		E607EFDD25521BAC008A9ED5 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Screens.strings; sourceTree = "<group>"; };
 		E65C0E6D254F478100385576 /* Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifier.swift; sourceTree = "<group>"; };
 		E65C0E72254F4B0E00385576 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
 		E65C0E77254F4C3C00385576 /* Pokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pokemon.swift; sourceTree = "<group>"; };
@@ -597,6 +598,7 @@
 				en,
 				Base,
 				ru,
+				it,
 			);
 			mainGroup = E6EE9617254D9D9900AD6933;
 			productRefGroup = E6EE9621254D9D9900AD6933 /* Products */;
@@ -789,6 +791,7 @@
 			children = (
 				E6EE3ED9254E20CF0002D155 /* en */,
 				E6EE3EDE254E20D10002D155 /* ru */,
+				E607EFDD25521BAC008A9ED5 /* it */,
 			);
 			name = Screens.strings;
 			sourceTree = "<group>";

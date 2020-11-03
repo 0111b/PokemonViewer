@@ -1,0 +1,16 @@
+"PokemonList.title" = "Pokemon";
+"PokemonList.noMoreItems" = "Sono tutti Pokemon che abbiamo";
+"EmptyPokemonDetails.Hint.noItemSelected" = "Seleziona un Pokemon";
+"PokemonList.Error.transport" = "Errore di connessione\n Premi per riprovare";
+"PokemonList.Error.default" = "Qualcosa è andato storto\n Premi per riprovare";
+"PokemonDetails.Error.transport" = "Errore di connessione";
+"PokemonDetails.Error.default" = "Qualcosa è andato storto";
+"PokemonDetails.Error.cta" = "Riprova";
+"PokemonDetails.Header.sprites" = "Sprite";
+"PokemonDetails.Header.stats" = "Statistiche";
+"PokemonDetails.Header.abilities" = "Abilità";
+"PokemonDetails.Header.types" = "Tipi";
+"PokemonDetails.Content.listSeparator" = ", ";
+"PokemonDetails.Content.weight" = "Peso";
+"PokemonDetails.Content.height" = "Altezza";
+"PokemonDetails.Content.statTitleFormat" = "%@ (%@)";
