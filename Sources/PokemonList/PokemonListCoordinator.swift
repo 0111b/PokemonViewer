@@ -9,18 +9,21 @@ import UIKit
 import os.log
 
 final class PokemonListCoordinator {
+  typealias Dependency = PokemonAPIServiceProvider & ImageServiceProvider
 
-  init(rootViewController: UISplitViewController) {
+  init(dependency: Dependency, rootViewController: UISplitViewController) {
+    self.dependency = dependency
     self.splitViewController = rootViewController
   }
 
+  private let dependency: Dependency
   private let splitViewController: UISplitViewController
 
   func start() {
     os_log("PokemonListCoordinator start", log: Log.general, type: .info)
     splitViewController.delegate = self
     splitViewController.preferredDisplayMode = .oneBesideSecondary
-    let listViewModel = PokemonListViewModel(dependency: Dependency(), coordinator: self)
+    let listViewModel = PokemonListViewModel(dependency: dependency, coordinator: self)
     let listViewController = PokemonListViewController(viewModel: listViewModel)
     let listNavigation = UINavigationController(rootViewController: listViewController)
     let emptyViewModel = EmptyPokemonDetailsViewModel(hint: .noItemSelected)
@@ -50,18 +53,5 @@ extension PokemonListCoordinator: UISplitViewControllerDelegate {
       return true
     }
     return false
-  }
-}
-
-private final class Dependency: PokemonAPIServiceProvider, ImageServiceProvider {
-  lazy var networkService = NetworkServiceImp(transport: URLSession.shared,
-                                              cache: URLCache.shared)
-  var imageService: ImageService {
-    ImageServiceImp(network: networkService)
-  }
-
-  var pokemonAPIService: PokemonAPIService {
-    PokemonAPIServiceImp(requestBuilder: RequestBuilder(baseURL: "https://pokeapi.co/api/v2"),
-                         network: networkService)
   }
 }

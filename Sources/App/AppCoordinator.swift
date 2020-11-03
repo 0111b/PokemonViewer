@@ -24,11 +24,11 @@ final class AppCoordinator {
   }
 
   private let window: UIWindow
-
+  private lazy var dependency = AppDependency()
   private lazy var rootViewController = UISplitViewController()
 
   private lazy var pokemonList: PokemonListCoordinator = {
-    PokemonListCoordinator(rootViewController: rootViewController)
+    PokemonListCoordinator(dependency: dependency, rootViewController: rootViewController)
   }()
 
 }
