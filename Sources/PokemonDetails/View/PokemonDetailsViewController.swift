@@ -54,8 +54,10 @@ final class PokemonDetailsViewController: UIViewController {
     } else {
       errorView.isHidden = true
     }
-    guard let pokemon = state.pokemon else { return }
+    guard let details = state.details else { return }
+    let pokemon = details.pokemon
     nameLabel.text = pokemon.id.rawValue
+    Swift.print(pokemon)
   }
 
 

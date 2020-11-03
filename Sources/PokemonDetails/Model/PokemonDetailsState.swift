@@ -11,7 +11,7 @@ enum PokemonDetailsState {
   case idle
   case loading(Disposable)
   case error(NetworkError)
-  case done(Pokemon)
+  case done(PokemonDetails)
 
   var viewState: PokemonDetailsViewState {
     switch self {

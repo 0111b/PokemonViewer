@@ -8,7 +8,7 @@
 import Foundation
 
 final class PokemonDetailsViewModel {
-  typealias Dependency = PokemonAPIServiceProvider
+  typealias Dependency = PokemonAPIServiceProvider & ImageServiceProvider
 
   init(dependency: Dependency, identifier: Identifier<Pokemon>) {
     self.dependency = dependency
@@ -28,12 +28,18 @@ final class PokemonDetailsViewModel {
     state = .loading(
       dependency.pokemonAPIService.details(for: identifier,
                                            cachePolicy: .cacheFirst) { [weak self] result in
-        let newState: PokemonDetailsState
+        guard let self = self else { return }
         switch result {
-        case .failure(let error): newState = .error(error)
-        case .success(let pokemon): newState = .done(pokemon)
+        case .failure(let error):
+          self.state = .error(error)
+        case .success(let pokemon):
+          let sprites = pokemon.sprites.map {
+            PokemonSpriteViewModel(dependency: self.dependency.imageService, url: $0)
+          }
+          let details = PokemonDetails(pokemon: pokemon,
+                                       sprites: sprites)
+          self.state = .done(details)
         }
-        self?.state = newState
       })
   }
 

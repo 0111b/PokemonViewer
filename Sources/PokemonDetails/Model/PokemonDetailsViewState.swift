@@ -11,7 +11,7 @@ enum PokemonDetailsViewState {
   case idle
   case error(String)
   case loading
-  case data(Pokemon)
+  case data(PokemonDetails)
 
   var isLoading: Bool {
     switch self {
@@ -27,9 +27,9 @@ enum PokemonDetailsViewState {
     }
   }
 
-  var pokemon: Pokemon? {
+  var details: PokemonDetails? {
     switch self {
-    case .data(let pokemon): return pokemon
+    case .data(let details): return details
     default: return nil
     }
   }

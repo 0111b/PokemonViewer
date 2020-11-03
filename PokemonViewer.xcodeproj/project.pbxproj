@@ -20,6 +20,8 @@
 		E607EFA92551B7DE008A9ED5 /* PokemonDetailLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E607EFA82551B7DE008A9ED5 /* PokemonDetailLoadingView.swift */; };
 		E607EFAE2551BA8C008A9ED5 /* PokemonDetailErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E607EFAD2551BA8C008A9ED5 /* PokemonDetailErrorView.swift */; };
 		E607EFB32551C288008A9ED5 /* UIStackView+Add.swift in Sources */ = {isa = PBXBuildFile; fileRef = E607EFB22551C288008A9ED5 /* UIStackView+Add.swift */; };
+		E607EFBB2551C995008A9ED5 /* PokemonDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = E607EFBA2551C995008A9ED5 /* PokemonDetails.swift */; };
+		E607EFC02551C9E2008A9ED5 /* PokemonSpriteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E607EFBF2551C9E2008A9ED5 /* PokemonSpriteViewModel.swift */; };
 		E65C0E6E254F478100385576 /* Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C0E6D254F478100385576 /* Identifier.swift */; };
 		E65C0E73254F4B0E00385576 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C0E72254F4B0E00385576 /* Page.swift */; };
 		E65C0E78254F4C3C00385576 /* Pokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C0E77254F4C3C00385576 /* Pokemon.swift */; };
@@ -105,6 +107,8 @@
 		E607EFA82551B7DE008A9ED5 /* PokemonDetailLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailLoadingView.swift; sourceTree = "<group>"; };
 		E607EFAD2551BA8C008A9ED5 /* PokemonDetailErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailErrorView.swift; sourceTree = "<group>"; };
 		E607EFB22551C288008A9ED5 /* UIStackView+Add.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Add.swift"; sourceTree = "<group>"; };
+		E607EFBA2551C995008A9ED5 /* PokemonDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetails.swift; sourceTree = "<group>"; };
+		E607EFBF2551C9E2008A9ED5 /* PokemonSpriteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonSpriteViewModel.swift; sourceTree = "<group>"; };
 		E65C0E6D254F478100385576 /* Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifier.swift; sourceTree = "<group>"; };
 		E65C0E72254F4B0E00385576 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
 		E65C0E77254F4C3C00385576 /* Pokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pokemon.swift; sourceTree = "<group>"; };
@@ -197,6 +201,7 @@
 			children = (
 				E607EF912551A28B008A9ED5 /* PokemonDetailsState.swift */,
 				E607EF8C2551A257008A9ED5 /* PokemonDetailsViewState.swift */,
+				E607EFBA2551C995008A9ED5 /* PokemonDetails.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -273,6 +278,7 @@
 			isa = PBXGroup;
 			children = (
 				E607EF8625519DB6008A9ED5 /* PokemonDetailsViewModel.swift */,
+				E607EFBF2551C9E2008A9ED5 /* PokemonSpriteViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -690,6 +696,7 @@
 				E6E93BCD254F263400953885 /* RequestCachePolicy.swift in Sources */,
 				E663D15C254F797D0056EDB7 /* Log.swift in Sources */,
 				E607EF922551A28B008A9ED5 /* PokemonDetailsState.swift in Sources */,
+				E607EFBB2551C995008A9ED5 /* PokemonDetails.swift in Sources */,
 				E6EE3EFB254E2FB80002D155 /* HTTP.swift in Sources */,
 				E607EFAE2551BA8C008A9ED5 /* PokemonDetailErrorView.swift in Sources */,
 				E663D13E254F6A8D0056EDB7 /* PokemonListState.swift in Sources */,
@@ -715,6 +722,7 @@
 				E607EFB32551C288008A9ED5 /* UIStackView+Add.swift in Sources */,
 				E6EE3F00254E30380002D155 /* HTTPLocation.swift in Sources */,
 				E607EF5A2550521D008A9ED5 /* PageLoadingViewState.swift in Sources */,
+				E607EFC02551C9E2008A9ED5 /* PokemonSpriteViewModel.swift in Sources */,
 				E6EE9626254D9D9900AD6933 /* SceneDelegate.swift in Sources */,
 				E65C0E73254F4B0E00385576 /* Page.swift in Sources */,
 			);
