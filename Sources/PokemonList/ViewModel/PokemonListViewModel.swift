@@ -24,54 +24,54 @@ final class PokemonListViewModel {
   private weak var coordinator: PokemonListViewModelCoordinating?
 
   @Protected
-  private var state = PokemonListState(layout: .list, list: .idle) {
+  private var state = PokemonListState.empty {
     didSet {
       viewStateRelay.value = state.viewState
     }
   }
 
-  @Protected
-  private var pageRequest: Disposable?
-
-  private func fetch(page: Page, cachePolicy: RequestCachePolicy) {
-    guard pageRequest == nil else { return }
-    pageRequest = dependency.pokemonAPIService.list(page: page, cachePolicy: .cacheFirst) { [weak self] result in
-      guard let self = self else { return }
-      defer { self.pageRequest = nil }
-      switch result {
-      case .failure(let error):
-        os_log("PokemonListViewModel fetch error %@", log: Log.general, type: .error, String(describing: error))
-      case .success(let pageData):
-        let currentState = self.state
-        let newItems = pageData.items.map { PokemonListItemViewModel(dependency: self.dependency, id: $0) }
-        let items = page.isFirst ? newItems : currentState.items + newItems
-        let listData = PokemonListState.ListData(items: items,
-                                                 count: pageData.count,
-                                                 page: page)
-        self.state = PokemonListState(layout: currentState.layout, list: .data(listData))
-      }
+  private func fetch(reload: Bool = false) {
+    self.$state.write { state in
+      guard state.pageRequest == nil else { return }
+      guard let page = reload ? PokemonListState.firstPage : state.nextPage else { return }
+      let cachePolicy: RequestCachePolicy = reload ? .networkFirst : .cacheFirst
+      let pageRequest = dependency.pokemonAPIService
+        .list(page: page, cachePolicy: cachePolicy, completion: didLoad(page: page))
+      state = PokemonListState(layout: state.layout, list: state.list, pageRequest: pageRequest)
     }
   }
 
-  private func fetchNext() {
-    guard let nextPage = state.nextPage else { return }
-    fetch(page: nextPage, cachePolicy: .cacheFirst)
-  }
-
-  private func reload() {
-    fetch(page: PokemonListState.firstPage, cachePolicy: .networkFirst)
-  }
+  private func didLoad(page: Page) -> (NetworkResult<PokemonAPI.PokemonPage>) -> Void {{ [weak self] result in
+    guard let self = self else { return }
+    let currentState = self.state
+    switch result {
+    case .failure(let error):
+      os_log("PokemonListViewModel fetch error %@", log: Log.general, type: .error, String(describing: error))
+      self.state = PokemonListState(layout: currentState.layout,
+                                    list: currentState.list,
+                                    pageRequest: nil)
+    case .success(let pageData):
+      let newItems = pageData.items.map { PokemonListItemViewModel(dependency: self.dependency, id: $0) }
+      let items = page.isFirst ? newItems : currentState.items + newItems
+      let listData = PokemonListState.ListData(items: items,
+                                               count: pageData.count,
+                                               page: page)
+      self.state = PokemonListState(layout: currentState.layout,
+                                    list: listData,
+                                    pageRequest: nil)
+    }
+  }}
 
   // MARK: - Input -
 
   func viewDidLoad() {
     os_log("PokemonListViewModel viewDidLoad", log: Log.general, type: .info)
-    fetchNext()
+    fetch()
   }
 
   func askForNextPage() {
     os_log("PokemonListViewModel askForNextPage", log: Log.general, type: .info)
-    fetchNext()
+    fetch()
   }
 
   func didSelect(item: PokemonListItemViewModel) {
@@ -80,9 +80,9 @@ final class PokemonListViewModel {
   }
 
   func toggleLayout() {
-    let currentState = state
-    state = PokemonListState(layout: currentState.layout.toggle(),
-                             list: currentState.list)
+    self.$state.write { state in
+      state = state.with(layout: state.layout.toggle())
+    }
   }
 
   // MARK: - Output -

@@ -9,12 +9,8 @@ import Foundation
 
 struct PokemonListState {
   let layout: PokemonListLayout
-  let list: List
-
-  enum List {
-    case idle
-    case data(ListData)
-  }
+  let list: ListData?
+  let pageRequest: Disposable?
 
   struct ListData {
     let items: [PokemonListItemViewModel]
@@ -23,36 +19,33 @@ struct PokemonListState {
   }
 
   var nextPage: Page? {
-    switch list {
-    case .idle: return PokemonListState.firstPage
-    case .data(let data):
-      return data.page.offset + data.page.limit < data.count ? data.page.next() : nil
-    }
+    guard let data = list else { return PokemonListState.firstPage }
+    return data.page.offset + data.page.limit < data.count ? data.page.next() : nil
   }
 
   var items: [PokemonListItemViewModel] {
-    switch list {
-    case .idle: return []
-    case .data(let data): return data.items
-    }
+    list?.items ?? []
   }
 
   var viewState: PokemonListViewState {
-    switch list {
-    case .idle:
-      return PokemonListViewState(items: [], loading: .clear, layout: layout)
-    case .data(let data):
-      let loading: LoadingViewState
-      if nextPage != nil {
-        loading = .loading
-      } else {
-        loading = .hint(Strings.Screens.PokemonList.noMoreItems)
-      }
-      return PokemonListViewState(items: data.items,
-                                  loading: loading,
-                                  layout: layout)
+    let loading: LoadingViewState
+    if pageRequest != nil {
+      loading = .loading
+    } else if nextPage == nil {
+      loading = .hint(Strings.Screens.PokemonList.noMoreItems)
+    } else {
+      loading = .clear
     }
+    return PokemonListViewState(items: items,
+                                loading: loading,
+                                layout: layout)
   }
+
+  func with(layout updatedLayout: PokemonListLayout) -> PokemonListState {
+    PokemonListState(layout: updatedLayout, list: list, pageRequest: pageRequest)
+  }
+
+  static let empty = PokemonListState(layout: .list, list: nil, pageRequest: nil)
 
   static var firstPage: Page { Page(limit: 20) }
 }
