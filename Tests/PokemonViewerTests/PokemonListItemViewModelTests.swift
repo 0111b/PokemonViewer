@@ -35,7 +35,7 @@ final class PokemonListItemViewModelTests: XCTestCase {
   }
 
   func testNoSprites() {
-    dependency.mockPokemonAPIService.$detailsResult.thenReturns(.success(pokemon(sprites: [])))
+    dependency.mockPokemonAPIService.$detailsResult.thenReturns(.success(Stubs.pokemon(sprites: [])))
     dependency.mockImageService.$imageResult.thenReturns(.failure(.badRequest))
 
     viewModel.willDisplay()
@@ -44,7 +44,7 @@ final class PokemonListItemViewModelTests: XCTestCase {
   }
 
   func testImageError() {
-    dependency.mockPokemonAPIService.$detailsResult.thenReturns(.success(pokemon(sprites: [sprite()])))
+    dependency.mockPokemonAPIService.$detailsResult.thenReturns(.success(Stubs.pokemon(sprites: [Stubs.sprite()])))
     dependency.mockImageService.$imageResult.thenReturns(.failure(.badRequest))
 
     viewModel.willDisplay()
@@ -54,7 +54,7 @@ final class PokemonListItemViewModelTests: XCTestCase {
 
   func testSuccess() {
     let image = UIImage()
-    dependency.mockPokemonAPIService.$detailsResult.thenReturns(.success(pokemon(sprites: [sprite()])))
+    dependency.mockPokemonAPIService.$detailsResult.thenReturns(.success(Stubs.pokemon(sprites: [Stubs.sprite()])))
     dependency.mockImageService.$imageResult.thenReturns(.success(image))
 
     viewModel.willDisplay()
@@ -65,19 +65,7 @@ final class PokemonListItemViewModelTests: XCTestCase {
   func assertViewState(image: [UIImage?]) {
     let expectation = self.expectation(with: collector, keyPath: \.values, toBe: image)
     wait(for: [expectation], timeout: 4)
+    collector.reset()
   }
 
-  func pokemon(sprites: [PokemonSprite]) -> Pokemon {
-    Pokemon(id: .init(rawValue: "123"),
-            height: 1,
-            weight: 1,
-            sprites: sprites,
-            stats: [],
-            abilities: [],
-            types: [])
-  }
-
-  func sprite() -> PokemonSprite {
-    PokemonSprite(url: Stubs.url(), kind: .frontDefault)
-  }
 }
