@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import XCTest
 @testable import PokemonViewer
 
 public enum Stubs {
@@ -33,7 +34,17 @@ public enum Stubs {
     HTTPURLResponse(url: url(), statusCode: statusCode, httpVersion: nil, headerFields: headers)!
   }
 
-  public static func json(from object: Any) throws -> Data {
-    try JSONSerialization.data(withJSONObject: object, options: [])
+  public static func load(json: String) throws -> Data {
+    try load(resource: json, ofType: "json")
+  }
+
+  public static func load(resource: String, ofType type: String?) throws -> Data {
+    guard let path = Bundle(for: BundleToken.self).path(forResource: resource, ofType: type) else {
+      XCTFail("Resource not found: \(resource) type: \(type ?? String())")
+      return Data()
+    }
+    return try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
   }
 }
+
+private final class BundleToken {}
