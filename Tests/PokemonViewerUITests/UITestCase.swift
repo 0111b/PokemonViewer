@@ -6,13 +6,19 @@
 //
 
 import XCTest
+import UITeststingSupport
 
 class UITestCase: XCTestCase {
   var app: XCUIApplication!
 
   override func setUpWithError() throws {
     app = XCUIApplication()
-    app.launchArguments = [AppConfiguration.testingFlag]
+    app.launchArguments = [AppTestConfiguration.testingFlag]
     continueAfterFailure = false
+  }
+
+  func launch(with config: AppTestConfiguration = AppTestConfiguration()) {
+    app.launchEnvironment = config.toRawValue()
+    app.launch()
   }
 }

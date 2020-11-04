@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import UITeststingSupport
 
 final class PokemonListViewController: UIViewController {
 
@@ -129,7 +130,7 @@ final class PokemonListViewController: UIViewController {
   }
 
   private func setupAccessibility() {
-    view.accessibilityIdentifier = "PokemonListScreen"
+    view.accessibilityIdentifier = AccessibilityId.PokemonList.name
   }
 }
 
@@ -215,8 +216,8 @@ private extension PokemonListLayout {
 
   var accessibilityIdentifier: String {
     switch self {
-    case .grid: return "gridLayoutButton"
-    case .list: return "listLayoutButton"
+    case .grid: return AccessibilityId.PokemonList.gridLayoutButton
+    case .list: return AccessibilityId.PokemonList.listLayoutButton
     }
   }
 }

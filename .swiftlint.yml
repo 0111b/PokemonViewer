@@ -1,6 +1,7 @@
 included:
   - Sources
   - Tests
+  - UITeststingSupport
 reporter: "xcode"
 identifier_name:
   excluded:

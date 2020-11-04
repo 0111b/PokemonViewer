@@ -6,11 +6,12 @@
 //
 
 import Foundation
+import UITeststingSupport
 
 final class AppDependency {
   init() {
     #if DEBUG
-    if CommandLine.arguments.contains(AppConfiguration.testingFlag) {
+    if CommandLine.arguments.contains(AppTestConfiguration.testingFlag) {
       isTestingEnabled = true
     } else {
       isTestingEnabled = false
@@ -21,15 +22,23 @@ final class AppDependency {
   }
 
   private let isTestingEnabled: Bool
-  private let env = ProcessInfo.processInfo.environment
+  private let testConfig = AppTestConfiguration(raw: ProcessInfo.processInfo.environment)
 
   lazy var imageService: ImageService = {
-    ImageServiceImp(network: imageNetwork)
+    if isTestingEnabled {
+      return TestImageService(config: testConfig.imageService)
+    } else {
+      return ImageServiceImp(network: imageNetwork)
+    }
   }()
 
   lazy var pokemonAPIService: PokemonAPIService = {
-    PokemonAPIServiceImp(requestBuilder: RequestBuilder(baseURL: "https://pokeapi.co/api/v2"),
-                         network: apiNetwork)
+    if isTestingEnabled {
+      return TestPokemonAPIService(config: testConfig.pokemonService)
+    } else {
+      return PokemonAPIServiceImp(requestBuilder: RequestBuilder(baseURL: "https://pokeapi.co/api/v2"),
+                                  network: apiNetwork)
+    }
   }()
 
   private var imageNetwork: NetworkService { networkService }

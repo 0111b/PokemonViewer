@@ -10,7 +10,7 @@ import XCTest
 final class PokemonListTests: UITestCase {
 
   func testLayoutSwitch() throws {
-    app.launch()
+    launch()
     let screen = app.pokemonListScreen
     XCTAssertTrue(screen.exists)
     XCTAssertTrue(screen.listLayoutButton.exists)
