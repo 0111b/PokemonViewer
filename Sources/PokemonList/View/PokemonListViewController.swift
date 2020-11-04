@@ -33,11 +33,6 @@ final class PokemonListViewController: UIViewController {
     }
   }
 
-  override func viewDidLayoutSubviews() {
-    super.viewDidLayoutSubviews()
-    updateItemSize(for: state.layout)
-  }
-
   private func setupUI() {
     view.backgroundColor = Constants.backgroundColor
     title = Strings.Screens.PokemonList.title
@@ -55,26 +50,6 @@ final class PokemonListViewController: UIViewController {
     collectionView.delegate = self
   }
 
-  private func updateItemSize(for layout: PokemonListLayout) {
-    let contentWidth = collectionView.bounds.width
-    let proposedSize: CGSize
-    switch layout {
-    case .list:
-      proposedSize = CGSize(width: contentWidth, height: Constants.listLayoutItemHeight)
-    case .grid:
-      let spacing = collectionViewLayout.minimumInteritemSpacing * CGFloat(Constants.itemsPerRow + 2)
-      let side = max(Constants.girLayoutMinSide, (contentWidth - spacing) / CGFloat(Constants.itemsPerRow))
-      proposedSize = CGSize(width: side, height: side)
-    }
-    let currentSize = collectionViewLayout.itemSize
-    let shouldUpdate = abs(currentSize.width - proposedSize.width) > Constants.layoutUpdateTreshold
-      || abs(currentSize.height - proposedSize.height) > Constants.layoutUpdateTreshold
-    if shouldUpdate {
-      collectionViewLayout.itemSize = proposedSize
-      collectionViewLayout.footerReferenceSize = CGSize(width: contentWidth, height: Constants.footerHeight)
-    }
-  }
-
   private func bind() {
     stateUpdateToken = viewModel.viewState.observe(on: .main) { [weak self] in
       self?.didUpdate(state: $0)
@@ -88,7 +63,11 @@ final class PokemonListViewController: UIViewController {
                                                        target: self,
                                                        action: #selector(toggleLayout))
     self.state = state
-    updateItemSize(for: state.layout)
+    collectionViewLayout.layout = state.layout
+
+    // Improvement: gracefully update only changed item
+    // Logic must be extracted to the separate generic datasource
+    // NOTE: Collection.difference(from:) and UICollectionViewDiffableDataSource is available on iOS 13.
     collectionView.reloadData()
   }
 
@@ -107,6 +86,8 @@ final class PokemonListViewController: UIViewController {
     return control
   }()
 
+  private lazy var collectionViewLayout = PokemonListCollectionViewLayout()
+
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
     collectionView.backgroundColor = Constants.backgroundColor
@@ -120,8 +101,6 @@ final class PokemonListViewController: UIViewController {
     return state.items.indices.contains(index) ? state.items[index] : nil
   }
 
-  private lazy var collectionViewLayout = UICollectionViewFlowLayout()
-
   private var state: PokemonListViewState = .empty
 
   private let viewModel: PokemonListViewModel
@@ -129,11 +108,6 @@ final class PokemonListViewController: UIViewController {
 
   private enum Constants {
     static let backgroundColor = Colors.background
-    static let itemsPerRow = 4
-    static let girLayoutMinSide: CGFloat = 150
-    static let listLayoutItemHeight: CGFloat = 80
-    static let layoutUpdateTreshold: CGFloat = 10
-    static let footerHeight: CGFloat = 60
     static let itemStyle = PokemonListItemView.Style(titleColor: Colors.primaryText,
                                                      titleFont: Fonts.title,
                                                      backgroundColor: Colors.sectionBackground)
