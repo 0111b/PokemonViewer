@@ -51,6 +51,14 @@ enum Strings {
         static func statTitleFormat(name: String, level: Int) -> String {
           Strings.tr("Screens", "PokemonDetails.Content.statTitleFormat", name, String(describing: level))
         }
+
+        static let health = Strings.tr("Screens", "PokemonDetails.Content.health")
+        static let attack = Strings.tr("Screens", "PokemonDetails.Content.attack")
+        static let defense = Strings.tr("Screens", "PokemonDetails.Content.defense")
+        static let specialAttack = Strings.tr("Screens", "PokemonDetails.Content.specialAttack")
+        static let specialDefense = Strings.tr("Screens", "PokemonDetails.Content.specialDefense")
+        static let speed = Strings.tr("Screens", "PokemonDetails.Content.speed")
+
       }
     }
 

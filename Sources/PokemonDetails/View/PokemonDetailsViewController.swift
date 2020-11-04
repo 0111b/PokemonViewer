@@ -114,7 +114,7 @@ final class PokemonDetailsViewController: UIViewController {
 
   private func makeStatView(from stat: PokemonStat) -> UIView {
     let view = TitledValueView(style: Constants.titledValueStyle)
-    view.set(title: Strings.Screens.PokemonDetails.Content.statTitleFormat(name: stat.id.rawValue,
+    view.set(title: Strings.Screens.PokemonDetails.Content.statTitleFormat(name: stat.kind.name,
                                                                            level: stat.effort),
              value: String(stat.baseStat))
     return view
@@ -202,6 +202,20 @@ final class PokemonDetailsViewController: UIViewController {
                             titleFont: headerFont,
                             valueColor: Colors.secondaryText,
                             valueFont: contentFont)
+    }
+  }
+}
+
+private extension PokemonStat.Kind {
+  var name: String {
+    switch self {
+    case .custom(let string): return string
+    case .health: return Strings.Screens.PokemonDetails.Content.health
+    case .attack: return Strings.Screens.PokemonDetails.Content.attack
+    case .defense: return Strings.Screens.PokemonDetails.Content.defense
+    case .specialAttack: return Strings.Screens.PokemonDetails.Content.specialAttack
+    case .specialDefense: return Strings.Screens.PokemonDetails.Content.specialDefense
+    case .speed: return Strings.Screens.PokemonDetails.Content.speed
     }
   }
 }

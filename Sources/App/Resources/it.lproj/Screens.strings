@@ -14,3 +14,9 @@
 "PokemonDetails.Content.weight" = "Peso";
 "PokemonDetails.Content.height" = "Altezza";
 "PokemonDetails.Content.statTitleFormat" = "%@ (%@)";
+"PokemonDetails.Content.health" = "Salute";
+"PokemonDetails.Content.attack" = "Attacco";
+"PokemonDetails.Content.defense" = "Difesa";
+"PokemonDetails.Content.specialAttack" = "Attacco speciale";
+"PokemonDetails.Content.specialDefense" = "Difesa speciale";
+"PokemonDetails.Content.speed" = "Velocità";

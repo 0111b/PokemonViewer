@@ -91,7 +91,29 @@ private extension Pokemon {
 private extension PokemonStat {
   init(dto: PokemonAPI.DTO.PokemonStat) {
     id = .init(rawValue: dto.stat.name)
+    kind = .init(rawValue: dto.stat.name)
     baseStat = dto.baseStat
     effort = dto.effort
+  }
+}
+
+private extension PokemonStat.Kind {
+  init(rawValue: String) {
+    switch rawValue {
+    case "hp":
+      self = .health
+    case "attack":
+      self = .attack
+    case "defense":
+      self = .defense
+    case "special-attack":
+      self = .specialAttack
+    case "special-defense":
+      self = .specialDefense
+    case "speed":
+      self = .speed
+    default:
+      self = .custom(rawValue)
+    }
   }
 }

@@ -19,8 +19,14 @@ struct Pokemon: Identifiable {
 
 struct PokemonStat: Identifiable {
   let id: Identifier<PokemonStat>
+  let kind: Kind
   let baseStat: Int
   let effort: Int
+
+  enum Kind {
+    case custom(String)
+    case health, attack, defense, specialAttack, specialDefense, speed
+  }
 }
 
 struct PokemonAbility: Identifiable {

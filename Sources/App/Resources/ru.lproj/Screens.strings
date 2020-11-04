@@ -14,3 +14,9 @@
 "PokemonDetails.Content.weight" = "Вес";
 "PokemonDetails.Content.height" = "Высота";
 "PokemonDetails.Content.statTitleFormat" = "%@ (%@)";
+"PokemonDetails.Content.health" = "Здоровье";
+"PokemonDetails.Content.attack" = "Атака";
+"PokemonDetails.Content.defense" = "Защита";
+"PokemonDetails.Content.specialAttack" = "Спец-атака";
+"PokemonDetails.Content.specialDefense" = "Спец-защита";
+"PokemonDetails.Content.speed" = "Скорость";
