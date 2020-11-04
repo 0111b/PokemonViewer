@@ -8,7 +8,7 @@
 import XCTest
 @testable import PokemonViewer
 
-class PokemonAPIServiceTests: XCTestCase {
+final class PokemonAPIServiceTests: XCTestCase {
 
   var apiService: PokemonAPIService!
   var networkService: MockNetworkService!
