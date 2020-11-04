@@ -11,9 +11,17 @@ typealias PokemonListItemCell = UICollectionViewContainerCell<PokemonListItemVie
 
 final class PokemonListItemView: UIView, Resetable {
   struct Style {
+    internal init(titleColor: UIColor, titleFont: UIFont, backgroundColor: UIColor, cornerRadius: CGFloat = 10) {
+      self.titleColor = titleColor
+      self.titleFont = titleFont
+      self.backgroundColor = backgroundColor
+      self.cornerRadius = cornerRadius
+    }
+
     let titleColor: UIColor
     let titleFont: UIFont
     let backgroundColor: UIColor
+    let cornerRadius: CGFloat
   }
 
   override init(frame: CGRect) {
@@ -27,6 +35,7 @@ final class PokemonListItemView: UIView, Resetable {
   }
 
   private func commonInit() {
+    layer.masksToBounds = true
     addStretchedToBounds(subview: stackView, insets: Constants.contentInset)
     stackView.addArrangedSubview(imageView)
     stackView.addArrangedSubview(titleLabel)
@@ -53,6 +62,7 @@ final class PokemonListItemView: UIView, Resetable {
   }
 
   func apply(style: Style) {
+    layer.cornerRadius = style.cornerRadius
     titleLabel.textColor = style.titleColor
     titleLabel.font = style.titleFont
     backgroundColor = style.backgroundColor

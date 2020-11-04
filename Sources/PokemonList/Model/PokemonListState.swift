@@ -68,7 +68,7 @@ struct PokemonListState: Equatable {
 
   static let empty = PokemonListState(layout: .list, list: nil, pageRequest: .idle)
 
-  static var firstPage: Page { Page(limit: 5) }
+  static var firstPage: Page { Page(limit: 10) }
 }
 
 private extension NetworkError {

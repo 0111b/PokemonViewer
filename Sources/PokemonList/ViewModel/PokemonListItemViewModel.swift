@@ -30,7 +30,6 @@ final class PokemonListItemViewModel {
                type: .error, self.identifier.rawValue, String(describing: error))
         self.state = .idle
       case .success(let pokemon):
-        os_log("PokemonListItemViewModel details %@", log: Log.general, type: .debug, self.identifier.rawValue)
         if let url = pokemon.sprites.first?.url {
           self.state = .imageRequest(self.fetchImage(url: url))
         } else {
@@ -51,7 +50,6 @@ final class PokemonListItemViewModel {
                type: .error, self.identifier.rawValue, String(describing: error))
         self.state = .idle
       case .success(let image):
-        os_log("PokemonListItemViewModel image %@", log: Log.general, type: .debug, self.identifier.rawValue)
         self.imageRelay.value = image
         self.state = .done
       }
