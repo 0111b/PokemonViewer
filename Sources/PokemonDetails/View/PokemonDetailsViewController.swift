@@ -28,7 +28,7 @@ final class PokemonDetailsViewController: UIViewController {
   private func setupUI() {
     view.backgroundColor = Constants.backgroundColor
     title = viewModel.identifier.rawValue
-    view.addStretchedToBounds(subview: scrollView)
+    view.addSubview(scrollView)
     scrollView.addStretchedToBounds(subview: mainStackView, insets: Constants.contentInset)
     mainStackView.addArrangedSubviews([
       nameLabel,
@@ -44,6 +44,10 @@ final class PokemonDetailsViewController: UIViewController {
       typesLabel
     ])
     NSLayoutConstraint.activate([
+      scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+      scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+      scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+      scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
       scrollView.widthAnchor.constraint(equalTo: mainStackView.widthAnchor,
                                         constant: Constants.contentInset.left + Constants.contentInset.right)
     ])

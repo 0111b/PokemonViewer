@@ -19,10 +19,6 @@ final class PokemonListViewController: UIViewController {
     super.init(nibName: nil, bundle: nil)
   }
 
-  override func loadView() {
-    view = collectionView
-  }
-
   override func viewDidLoad() {
     super.viewDidLoad()
     setupUI()
@@ -43,8 +39,15 @@ final class PokemonListViewController: UIViewController {
   }
 
   private func setupUI() {
+    view.backgroundColor = Constants.backgroundColor
     title = Strings.Screens.PokemonList.title
-    collectionView.backgroundColor = Constants.backgroundColor
+    view.addSubview(collectionView)
+    NSLayoutConstraint.activate([
+      collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+      collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+      collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+      collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+    ])
     collectionView.register(PokemonListItemCell.self)
     collectionView.registerFooter(LoadingCollectionViewFooter.self)
     collectionView.refreshControl = refreshControl
@@ -106,6 +109,7 @@ final class PokemonListViewController: UIViewController {
 
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
+    collectionView.backgroundColor = Constants.backgroundColor
     collectionView.translatesAutoresizingMaskIntoConstraints = false
     collectionView.alwaysBounceVertical = true
     return collectionView
