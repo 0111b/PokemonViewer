@@ -37,6 +37,7 @@
 		E607F04F2552ECFE008A9ED5 /* MockNetworkCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E607F04A2552ECE1008A9ED5 /* MockNetworkCache.swift */; };
 		E607F05B25530225008A9ED5 /* XCTestCase+KeyPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = E607F0562553021F008A9ED5 /* XCTestCase+KeyPath.swift */; };
 		E607F0662553039B008A9ED5 /* APIServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E607F0652553039B008A9ED5 /* APIServiceTests.swift */; };
+		E607F06B25530443008A9ED5 /* MockNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E607F06A25530443008A9ED5 /* MockNetworkService.swift */; };
 		E65C0E6E254F478100385576 /* Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C0E6D254F478100385576 /* Identifier.swift */; };
 		E65C0E73254F4B0E00385576 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C0E72254F4B0E00385576 /* Page.swift */; };
 		E65C0E78254F4C3C00385576 /* Pokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C0E77254F4C3C00385576 /* Pokemon.swift */; };
@@ -139,6 +140,7 @@
 		E607F04A2552ECE1008A9ED5 /* MockNetworkCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkCache.swift; sourceTree = "<group>"; };
 		E607F0562553021F008A9ED5 /* XCTestCase+KeyPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+KeyPath.swift"; sourceTree = "<group>"; };
 		E607F0652553039B008A9ED5 /* APIServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceTests.swift; sourceTree = "<group>"; };
+		E607F06A25530443008A9ED5 /* MockNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkService.swift; sourceTree = "<group>"; };
 		E65C0E6D254F478100385576 /* Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifier.swift; sourceTree = "<group>"; };
 		E65C0E72254F4B0E00385576 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
 		E65C0E77254F4C3C00385576 /* Pokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pokemon.swift; sourceTree = "<group>"; };
@@ -278,6 +280,7 @@
 				E607F0112552E672008A9ED5 /* MockFunc.swift */,
 				E607F0022552E5EE008A9ED5 /* MockHTTPTransport.swift */,
 				E607F04A2552ECE1008A9ED5 /* MockNetworkCache.swift */,
+				E607F06A25530443008A9ED5 /* MockNetworkService.swift */,
 				E607F0162552E6A2008A9ED5 /* Stubs.swift */,
 				E607F03E2552E922008A9ED5 /* EmptyCancellable.swift */,
 			);
@@ -804,6 +807,7 @@
 				E607F04F2552ECFE008A9ED5 /* MockNetworkCache.swift in Sources */,
 				E607F0292552E722008A9ED5 /* MockFunc.swift in Sources */,
 				E6EE3F13254E34EF0002D155 /* HTTPLocationTests.swift in Sources */,
+				E607F06B25530443008A9ED5 /* MockNetworkService.swift in Sources */,
 				E6EE963B254D9D9B00AD6933 /* DisposableTests.swift in Sources */,
 				E607F0662553039B008A9ED5 /* APIServiceTests.swift in Sources */,
 				E607F05B25530225008A9ED5 /* XCTestCase+KeyPath.swift in Sources */,

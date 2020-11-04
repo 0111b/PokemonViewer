@@ -17,8 +17,12 @@ public enum Stubs {
     URLRequest(url: url())
   }
 
+  public static func string() -> String {
+    "Sample data"
+  }
+
   public static func data() -> Data {
-    "Sample data".data(using: .utf8)!
+    string().data(using: .utf8)!
   }
 
   public static func cachedResponse(data: Data? = nil) -> CachedURLResponse {
