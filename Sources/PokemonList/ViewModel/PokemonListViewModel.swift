@@ -42,7 +42,8 @@ final class PokemonListViewModel {
       guard state.canStartRequest(forced: userInitiated) else { return }
       guard let page = reload ? PokemonListState.firstPage : state.nextPage else { return }
       let cachePolicy: RequestCachePolicy = userInitiated ? .networkFirst : .cacheFirst
-      os_log("PokemonListViewModel fetch %@", log: Log.general, type: .info, String(describing: page))
+      os_log("PokemonListViewModel fetch %@ %@", log: Log.general, type: .info,
+             String(describing: page), String(describing: cachePolicy))
       let pageRequest = dependency.pokemonAPIService
         .list(page: page, cachePolicy: cachePolicy, completion: didLoad(page: page))
       state = state.with(pageRequest: pageRequest)
@@ -75,17 +76,14 @@ final class PokemonListViewModel {
   }
 
   func askForNextPage() {
-    os_log("PokemonListViewModel askForNextPage", log: Log.general, type: .info)
     fetch(userInitiated: false, reload: false)
   }
 
   func retry() {
-    os_log("PokemonListViewModel retry", log: Log.general, type: .info)
     fetch(userInitiated: true, reload: false)
   }
 
   func refresh() {
-    os_log("PokemonListViewModel refresh", log: Log.general, type: .info)
     fetch(userInitiated: true, reload: true)
   }
 

@@ -37,7 +37,7 @@ class APIService {
       completion(.failure(.badRequest))
       return Disposable.empty
     }
-    let token = self.network.fetch(request: request, cachePolicy: .cacheFirst) { result in
+    let token = self.network.fetch(request: request, cachePolicy: cachePolicy) { result in
       switch result {
       case .failure(let error):
         completion(.failure(error))
