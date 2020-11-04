@@ -17,6 +17,10 @@ final class ObservableCollector<Value> {
   private var disposable = Disposable.empty
   private(set) var values = [Value]()
   var last: Value { return values.last! } // swiftlint:disable:this force_unwrapping
+
+  func reset() {
+    values = []
+  }
 }
 
 extension ObservableCollector where Value: Equatable {

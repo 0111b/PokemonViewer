@@ -12,5 +12,3 @@ enum PageLoadingViewState {
   case hint(String)
   case clear
 }
-
-extension PageLoadingViewState: Equatable {}
