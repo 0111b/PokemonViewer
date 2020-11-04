@@ -7,18 +7,10 @@
 
 import XCTest
 
-class PokemonListTests: XCTestCase {
-  
-  var app: XCUIApplication!
-  
-  
-  override func setUpWithError() throws {
-    app = XCUIApplication()
-    app.launch()
-  }
-  
-  
+final class PokemonListTests: UITestCase {
+
   func testLayoutSwitch() throws {
+    app.launch()
     let screen = app.pokemonListScreen
     XCTAssertTrue(screen.exists)
     XCTAssertTrue(screen.listLayoutButton.exists)
@@ -30,5 +22,5 @@ class PokemonListTests: XCTestCase {
     XCTAssertTrue(screen.listLayoutButton.exists)
     XCTAssertFalse(screen.gridLayoutButton.exists)
   }
-  
+
 }

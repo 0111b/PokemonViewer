@@ -9,8 +9,19 @@ import Foundation
 
 final class AppDependency {
   init() {
-
+    #if DEBUG
+    if CommandLine.arguments.contains(AppConfiguration.testingFlag) {
+      isTestingEnabled = true
+    } else {
+      isTestingEnabled = false
+    }
+    #else
+    isTestingEnabled = false
+    #endif
   }
+
+  private let isTestingEnabled: Bool
+  private let env = ProcessInfo.processInfo.environment
 
   lazy var imageService: ImageService = {
     ImageServiceImp(network: imageNetwork)
