@@ -33,6 +33,11 @@ final class PokemonListViewController: UIViewController {
     }
   }
 
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    collectionViewLayout.layout = state.layout
+  }
+
   private func setupUI() {
     view.backgroundColor = Constants.backgroundColor
     title = Strings.Screens.PokemonList.title
