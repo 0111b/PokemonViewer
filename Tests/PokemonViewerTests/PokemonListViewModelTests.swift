@@ -275,7 +275,7 @@ final class PokemonListViewModelTests: XCTestCase {
       expectations.append(expectation)
     }
 
-    wait(for: expectations, timeout: 4)
+    wait(for: expectations, timeout: Stubs.assertInterval)
     collector.reset()
   }
 }

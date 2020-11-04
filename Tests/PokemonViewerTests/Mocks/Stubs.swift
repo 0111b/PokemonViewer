@@ -60,6 +60,8 @@ public enum Stubs {
     PokemonSprite(url: Stubs.url(), kind: .frontDefault)
   }
 
+  static let assertInterval: TimeInterval = 2
+
 }
 
 private final class BundleToken {}

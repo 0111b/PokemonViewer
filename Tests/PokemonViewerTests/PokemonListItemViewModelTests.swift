@@ -64,7 +64,7 @@ final class PokemonListItemViewModelTests: XCTestCase {
 
   func assertViewState(image: [UIImage?]) {
     let expectation = self.expectation(with: collector, keyPath: \.values, toBe: image)
-    wait(for: [expectation], timeout: 4)
+    wait(for: [expectation], timeout: Stubs.assertInterval)
     collector.reset()
   }
 

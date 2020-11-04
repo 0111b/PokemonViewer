@@ -60,7 +60,7 @@ final class PokemonDetailsViewModelTests: XCTestCase {
 
   func assertView(state: [PokemonDetailsViewState]) {
     let expectation = self.expectation(with: collector, keyPath: \.values, toBe: state)
-    wait(for: [expectation], timeout: 4)
+    wait(for: [expectation], timeout: Stubs.assertInterval)
     collector.reset()
   }
 }

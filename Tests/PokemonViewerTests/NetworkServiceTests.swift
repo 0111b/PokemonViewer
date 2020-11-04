@@ -28,7 +28,7 @@ final class NetworkServiceTests: XCTestCase {
       self.expectation(with: cache, keyPath: \.setMock.called, toBe: didSet),
       self.expectation(with: cache, keyPath: \.getMock.called, toBe: didGet),
       self.expectation(with: transport, keyPath: \.obtainMock.called, toBe: network)
-    ], timeout: 4)
+    ], timeout: Stubs.assertInterval)
   }
 
   func assertSuccess(data: Data) -> (NetworkResult<Data>) -> Void {{ result in
