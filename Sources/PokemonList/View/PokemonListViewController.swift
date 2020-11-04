@@ -22,6 +22,7 @@ final class PokemonListViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     setupUI()
+    setupAccessibility()
     bind()
     viewModel.viewDidLoad()
   }
@@ -63,10 +64,7 @@ final class PokemonListViewController: UIViewController {
 
   private func didUpdate(state: PokemonListViewState) {
     refreshControl.endRefreshing()
-    navigationItem.leftBarButtonItem = UIBarButtonItem(image: state.layout.toggle().icon,
-                                                       style: .plain,
-                                                       target: self,
-                                                       action: #selector(toggleLayout))
+    navigationItem.leftBarButtonItem = makeLayoutSwitchButtonItem(for: state.layout)
     self.state = state
     collectionViewLayout.layout = state.layout
 
@@ -78,6 +76,15 @@ final class PokemonListViewController: UIViewController {
 
   @objc private func toggleLayout() {
     viewModel.toggleLayout()
+  }
+
+  private func makeLayoutSwitchButtonItem(for layout: PokemonListLayout) -> UIBarButtonItem {
+    let item = UIBarButtonItem(image: layout.toggle().icon,
+                               style: .plain,
+                               target: self,
+                               action: #selector(toggleLayout))
+    item.accessibilityIdentifier = layout.accessibilityIdentifier
+    return item
   }
 
   @objc private func didPullToRefresh() {
@@ -119,6 +126,10 @@ final class PokemonListViewController: UIViewController {
     static let selectedItemStyle = PokemonListItemView.Style(titleColor: Colors.primaryText,
                                                              titleFont: Fonts.title,
                                                              backgroundColor: Colors.accent)
+  }
+
+  private func setupAccessibility() {
+    view.accessibilityIdentifier = "PokemonListScreen"
   }
 }
 
@@ -199,6 +210,13 @@ private extension PokemonListLayout {
     switch self {
     case .grid: return .vertical
     case .list: return .horizontal
+    }
+  }
+
+  var accessibilityIdentifier: String {
+    switch self {
+    case .grid: return "gridLayoutButton"
+    case .list: return "listLayoutButton"
     }
   }
 }
