@@ -74,7 +74,7 @@ final class PokemonListItemViewModel {
   // MARK: - Output -
 
   let identifier: Identifier<Pokemon>
-  var title: String { identifier.rawValue }
+  var title: String { identifier.rawValue.capitalized }
   private let imageRelay = MutableObservable<UIImage?>(value: nil)
   var image: Observable<UIImage?> { imageRelay }
 }

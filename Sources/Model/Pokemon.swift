@@ -15,6 +15,8 @@ struct Pokemon: Identifiable {
   let stats: [PokemonStat]
   let abilities: [PokemonAbility]
   let types: [PokemonType]
+
+  var name: String { id.rawValue.capitalized }
 }
 
 struct PokemonStat: Identifiable {

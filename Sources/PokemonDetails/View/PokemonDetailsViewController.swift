@@ -74,7 +74,7 @@ final class PokemonDetailsViewController: UIViewController {
     }
     guard let details = state.details else { return }
     let pokemon = details.pokemon
-    nameLabel.text = pokemon.id.rawValue
+    nameLabel.text = pokemon.name
     heightView.set(title: Strings.Screens.PokemonDetails.Content.height,
                    value: LengthFormatter.default.string(fromDecimetres: pokemon.height))
     weightView.set(title: Strings.Screens.PokemonDetails.Content.weight,
@@ -214,7 +214,7 @@ final class PokemonDetailsViewController: UIViewController {
 private extension PokemonStat.Kind {
   var name: String {
     switch self {
-    case .custom(let string): return string
+    case .custom(let string): return string.capitalized
     case .health: return Strings.Screens.PokemonDetails.Content.health
     case .attack: return Strings.Screens.PokemonDetails.Content.attack
     case .defense: return Strings.Screens.PokemonDetails.Content.defense
