@@ -129,14 +129,18 @@ generic, reusable views
 ## App
 
 This part contains settings and resources related to the entire application.
+
 It is app lifecycle files, main flow coordinator, application assets, common data formatters and log definitions.
 
-Important is * AppDependency *. It defines application behavior by determining all dependencies
+Important is *AppDependency*. It defines application behavior by determining all dependencies
 and check if the app is executed in the test mode (see below).
 
-Last but not least is files with constants definition about app feel and look.
+Last but not least are files which constants definition about app feel and look.
+
 Fonts, colors, images, strings must be in sync with the design system and updated in time.
+
 It is pretty easy to use existing or write custom code generation tool for this.
+
 Using constants also reduces the chance of errors or typos.
 
 ## Model
@@ -167,12 +171,16 @@ Pokemon stats and detailed info
 ### Unit tests
 
 Unit tests are cover almost all logic of the application except the views.
+
 Besides common mocks, there is a *Stubs* object which provides all data types required in tests.
-To improve test quality it is possible to add randomization to the returned values.
+
+To improve test quality it is possible to add randomization to the returned values of this object.
 
 ### UI tests
 
-UI tests are mostly used as integration tests. They are checking how all modules
+UI tests are mostly used as integration tests.
+
+They are checking how all modules
 work together and cover the logic that is not handled by unit tests.
 
 Page Object pattern is used in the implementation.  It reduces code complexity, increases code reuse, and eliminate some class of errors.
@@ -180,6 +188,7 @@ Page Object pattern is used in the implementation.  It reduces code complexity, 
 ### UITeststingSupport
 
 This is the shared library that is compiled both with the app and with the UI test target.
+
 It serves two main purposes:
 
 - Share accessibility ids between both targets in a way that changes in one of them affect another
@@ -189,14 +198,46 @@ It serves two main purposes:
 
 There are several things that can be improved or introduced
 
-- **Atomic**
+
+- **Collection diffing**
+
+In the current implementation when the new portion of content arrive app is just call *reloadData* on the collection view.
+
+The better way will be to calculate the difference between the current values and apply them.
+
+There are several options according to the deployment target.
 
 
-update cell diff
-ui tests more
-manage DI lifetime  ---  property wrapper
-unload memory warn
-snapshot tests
+  - *UICollectionViewDiffableDataSource* is available on iOS 13.
 
-UIPreview
-CI/ CD
+  - *Collection.difference(from:)* is available since Swift 5.1 but sadly, it shipped by Apple also with iOS 13
+
+  - some third-party library exists that solving this problem
+
+  - nothing to stop implement this manually
+
+In any case, this must be implemented as a separate generic data source.
+
+- **Memory pressure**
+
+It is good to subscribe and react appropriately where possible
+
+- **Managing dependency lifetime**
+
+With increasing complexity, it is worth considering to manage dependencies lifetime in the more smart way
+
+- **Snapshot testing**
+
+The remaining thing that is not covered by tests in the current solution is UI.
+
+I'm recommending to use [SnapshotTesting](https://github.com/pointfreeco/swift-snapshot-testing) from the Point-Free guys. It has proven quality and in any way, this code does not ship with the app. So, there will be no vendor lock.
+
+- **Swift UI previews**
+
+It is possible to use SwiftUI previews for rapid UI development even with UIKit views.
+
+Another option is to generate a complete catalog of all available views which can be used by UI/UX engineers for reference.
+
+- **CI/CD integration**
+
+just a must
