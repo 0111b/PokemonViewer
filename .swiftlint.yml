@@ -1,9 +1,14 @@
 included:
   - Sources
   - Tests
+  - UITeststingSupport
 reporter: "xcode"
 identifier_name:
   excluded:
     - id
     - x
     - y
+vertical_whitespace:
+  max_empty_lines: 2
+nesting:
+  type_level: 2

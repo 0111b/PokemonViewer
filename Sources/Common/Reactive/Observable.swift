@@ -9,24 +9,23 @@ import Foundation
 
 class Observable<Value> {
   init(value: Value, onDispose: @escaping () -> Void = {}) {
-    mutex = .allocate(capacity: 1)
-    mutex.initialize(to: os_unfair_lock())
     self._value = value
     self.onDispose = onDispose
   }
 
   typealias Observer = (Value) -> Void
 
-  var value: Value { return _value }
+  var value: Value { mutex.locked { _value }}
 
   func observe(on queue: DispatchQueue? = nil,
                skipCurrent: Bool = false,
                _ observer: @escaping Observer) -> Disposable {
-    self.lock(); defer { self.unlock() }
+    mutex.lock(); defer { mutex.unlock() }
     let id = UUID()
     observations[id] = (observer, queue)
     if !skipCurrent {
-      observer(value)
+      let value = _value
+      update(observer: observer, queue: queue, value: value)
     }
     return Disposable { [weak self] in
       self?.observations.removeValue(forKey: id)
@@ -37,28 +36,26 @@ class Observable<Value> {
   fileprivate var _value: Value {
     didSet {
       let newValue = _value
-      observations.values.forEach { observer, dispatchQueue in
-        if let queue = dispatchQueue {
-          queue.async {
-            observer(newValue)
-          }
-        } else {
-          observer(newValue)
-        }
+      observations.values.forEach { observer, queue in
+        update(observer: observer, queue: queue, value: newValue)
       }
+    }
+  }
+
+  private func update(observer: @escaping Observer, queue: DispatchQueue?, value: Value) {
+    if let queue = queue {
+      queue.async { observer(value) }
+    } else {
+      observer(value)
     }
   }
 
   deinit {
     onDispose()
-    mutex.deinitialize(count: 1)
-    mutex.deallocate()
   }
 
   private let onDispose: () -> Void
-  private var mutex: os_unfair_lock_t
-  fileprivate func lock() { os_unfair_lock_lock(mutex) }
-  fileprivate func unlock() { os_unfair_lock_unlock(mutex) }
+  fileprivate var mutex = UnfairLock()
   private var observations: [UUID: (Observer, DispatchQueue?)] = [:]
 }
 
@@ -66,8 +63,9 @@ final class MutableObservable<Value>: Observable<Value> {
   override var value: Value {
     get { return super.value }
     set {
-      self.lock(); defer { self.unlock() }
-      _value = newValue
+      mutex.locked {
+        _value = newValue
+      }
     }
   }
 }

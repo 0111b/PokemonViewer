@@ -7,6 +7,6 @@
 
 import Foundation
 
-public protocol Resetable: class {
+public protocol Resetable {
   func resetToEmptyState()
 }

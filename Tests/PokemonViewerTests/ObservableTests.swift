@@ -35,14 +35,3 @@ final class ObservableTests: XCTestCase {
   }
 
 }
-
-final class ObservableCollector<Value> {
-  init(observable: Observable<Value>, skipCurrent: Bool = false) {
-    disposable = observable.observe(skipCurrent: skipCurrent) { [unowned self] value in
-      self.values.append(value)
-    }
-  }
-  private var disposable = Disposable.empty
-  private(set) var values = [Value]()
-  var last: Value { return values.last! } //swiftlint:disable:this force_unwrapping
-}
