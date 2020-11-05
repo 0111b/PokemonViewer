@@ -10,7 +10,9 @@ Displays a list of Pokemons with the ability to see more detailed info about cho
 
 # Screenshots
 
-// TODO:
+![iPhone-portrait](Screenshots/iPhone-portrait.png?raw=true)
+![iPhone-landscape.png](Screenshots/iPhone-landscape.png?raw=true)
+![iPad-landscape](Screenshots/iPad-landscape.png?raw=true)
 
 # Requirements
 
