@@ -70,6 +70,8 @@ The preferable way of transferring data from the view model is an object with ex
 
 Most of the views support the separation of the data and style. Each of them can be applied separately.
 
+The app is trying to reduce network pressure by canceling requests for all items that are not visible on the screen
+
 ### Localisation
 
 The app is localized for these languages: en, it, ru.
