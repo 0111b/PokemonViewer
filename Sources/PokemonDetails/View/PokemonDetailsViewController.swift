@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import UITeststingSupport
 
 final class PokemonDetailsViewController: UIViewController {
   @available(*, unavailable, message: "Use `init(viewModel:)` instead")
@@ -27,6 +28,7 @@ final class PokemonDetailsViewController: UIViewController {
 
   private func setupUI() {
     view.backgroundColor = Constants.backgroundColor
+    view.accessibilityIdentifier = AccessibilityId.PokemonDetails.screen
     title = viewModel.identifier.rawValue
     view.addSubview(scrollView)
     scrollView.addStretchedToBounds(subview: mainStackView, insets: Constants.contentInset)
@@ -133,6 +135,7 @@ final class PokemonDetailsViewController: UIViewController {
 
   private lazy var mainStackView: UIStackView = {
     let stackView = UIStackView()
+    stackView.accessibilityIdentifier = AccessibilityId.PokemonDetails.contentView
     stackView.translatesAutoresizingMaskIntoConstraints = false
     stackView.axis = .vertical
     stackView.distribution = .fill
@@ -153,6 +156,7 @@ final class PokemonDetailsViewController: UIViewController {
 
   private lazy var nameLabel: UILabel = {
     let label = UILabel()
+    label.accessibilityIdentifier = AccessibilityId.PokemonDetails.pokemonName
     label.translatesAutoresizingMaskIntoConstraints = false
     label.adjustsFontForContentSizeCategory = true
     label.textAlignment = .left
@@ -175,6 +179,7 @@ final class PokemonDetailsViewController: UIViewController {
 
   private lazy var errorView: PokemonDetailErrorView = {
     let errorView = PokemonDetailErrorView()
+    errorView.accessibilityIdentifier = AccessibilityId.PokemonDetails.errorView
     errorView.action = { [weak self] in
       self?.viewModel.retry()
     }

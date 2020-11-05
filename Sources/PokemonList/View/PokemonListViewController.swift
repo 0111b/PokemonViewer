@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import UITeststingSupport
 
 final class PokemonListViewController: UIViewController {
 
@@ -39,6 +40,7 @@ final class PokemonListViewController: UIViewController {
   }
 
   private func setupUI() {
+    view.accessibilityIdentifier = AccessibilityId.PokemonList.screen
     view.backgroundColor = Constants.backgroundColor
     title = Strings.Screens.PokemonList.title
     view.addSubview(collectionView)
@@ -63,10 +65,7 @@ final class PokemonListViewController: UIViewController {
 
   private func didUpdate(state: PokemonListViewState) {
     refreshControl.endRefreshing()
-    navigationItem.leftBarButtonItem = UIBarButtonItem(image: state.layout.toggle().icon,
-                                                       style: .plain,
-                                                       target: self,
-                                                       action: #selector(toggleLayout))
+    navigationItem.leftBarButtonItem = makeLayoutSwitchButtonItem(for: state.layout)
     self.state = state
     collectionViewLayout.layout = state.layout
 
@@ -78,6 +77,15 @@ final class PokemonListViewController: UIViewController {
 
   @objc private func toggleLayout() {
     viewModel.toggleLayout()
+  }
+
+  private func makeLayoutSwitchButtonItem(for layout: PokemonListLayout) -> UIBarButtonItem {
+    let item = UIBarButtonItem(image: layout.toggle().icon,
+                               style: .plain,
+                               target: self,
+                               action: #selector(toggleLayout))
+    item.accessibilityIdentifier = layout.accessibilityIdentifier
+    return item
   }
 
   @objc private func didPullToRefresh() {
@@ -95,6 +103,7 @@ final class PokemonListViewController: UIViewController {
 
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
+    collectionView.accessibilityIdentifier = AccessibilityId.PokemonList.pokemonList
     collectionView.backgroundColor = Constants.backgroundColor
     collectionView.translatesAutoresizingMaskIntoConstraints = false
     collectionView.alwaysBounceVertical = true
@@ -130,6 +139,7 @@ extension PokemonListViewController: UICollectionViewDataSource {
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell: PokemonListItemCell = collectionView.dequeue(forIndexPath: indexPath)
+    cell.accessibilityIdentifier = AccessibilityId.PokemonList.pokemon(at: indexPath.row)
     cell.view.apply(style: cell.isSelected ? Constants.selectedItemStyle : Constants.itemStyle)
     if let viewModel = itemViewModel(at: indexPath) {
       cell.view.set(title: viewModel.title, image: viewModel.image, axis: state.layout.itemAxis)
@@ -148,6 +158,7 @@ extension PokemonListViewController: UICollectionViewDataSource {
                                                              for: indexPath)
     }
     let footer: LoadingCollectionViewFooter = collectionView.dequeueFooter(forIndexPath: indexPath)
+    footer.accessibilityIdentifier = AccessibilityId.PokemonList.statusView
     footer.update(with: state.loading)
     footer.tapHandler = { [weak self] in
       self?.viewModel.retry()
@@ -199,6 +210,13 @@ private extension PokemonListLayout {
     switch self {
     case .grid: return .vertical
     case .list: return .horizontal
+    }
+  }
+
+  var accessibilityIdentifier: String {
+    switch self {
+    case .grid: return AccessibilityId.PokemonList.gridLayoutButton
+    case .list: return AccessibilityId.PokemonList.listLayoutButton
     }
   }
 }

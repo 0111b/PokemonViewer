@@ -26,4 +26,8 @@ struct Page: Equatable {
     self.offset = offset
     self.limit = limit
   }
+
+  var pageNumber: UInt {
+    (offset + limit) / limit
+  }
 }
