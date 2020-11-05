@@ -22,7 +22,7 @@ final class PokemonAPIServiceTests: XCTestCase {
     networkService.fetchMock.returns(EmptyCancellable())
   }
 
-  func assertSuccess<Object>() -> (NetworkResult<Object>) -> Void {{ result in
+  func assertSuccess<Object>() -> (NetworkResult<Object>) -> Void { { result in
     guard case .success = result else {
       XCTFail("Success expected")
       return

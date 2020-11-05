@@ -31,7 +31,7 @@ final class NetworkServiceTests: XCTestCase {
     ], timeout: Stubs.assertInterval)
   }
 
-  func assertSuccess(data: Data) -> (NetworkResult<Data>) -> Void {{ result in
+  func assertSuccess(data: Data) -> (NetworkResult<Data>) -> Void { { result in
     guard case .success(let resultData) = result else {
       XCTFail("Success expected")
       return
@@ -39,7 +39,7 @@ final class NetworkServiceTests: XCTestCase {
     XCTAssertEqual(data, resultData)
   }}
 
-  func assertFailure() -> (NetworkResult<Data>) -> Void {{ result in
+  func assertFailure() -> (NetworkResult<Data>) -> Void { { result in
     if case .success = result {
       XCTFail("Failure expected")
     }

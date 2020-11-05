@@ -50,7 +50,7 @@ final class PokemonListViewModel {
     }
   }
 
-  private func didLoad(page: Page) -> (NetworkResult<PokemonAPI.PokemonPage>) -> Void {{ [weak self] result in
+  private func didLoad(page: Page) -> (NetworkResult<PokemonAPI.PokemonPage>) -> Void { { [weak self] result in
     guard let self = self else { return }
     self.update { state in
       switch result {
