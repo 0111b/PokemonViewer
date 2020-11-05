@@ -8,7 +8,7 @@
 import UIKit.UIImage
 
 enum Images {
-  static let defaultPlaceholder = UIImage(named: "defaultPlaceholder")
+  static let defaultPlaceholder = UIImage(named: "placeholder")
   static let listIcon = UIImage(named: "listIcon")
   static let gridIcon = UIImage(named: "gridIcon")
   static let retryIcon = UIImage(named: "retryIcon")
