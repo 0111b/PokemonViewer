@@ -8,25 +8,29 @@
 import Foundation
 
 public struct PokemonServiceConfig: EnvironmentConvertible {
+  public init(listConfig: ListConfig = .default,
+              detailsConfig: DetailsConfig = .default) {
+    self.listConfig = listConfig
+    self.detailsConfig = detailsConfig
+  }
 
   public let listConfig: ListConfig
   public let detailsConfig: DetailsConfig
 
-  public static let `default`: PokemonServiceConfig = PokemonServiceConfig(listConfig: .default,
-                                                                           detailsConfig: .default)
+  public static let `default` = PokemonServiceConfig()
 
   public enum ListConfig: String, EnvironmentConvertible, Defaultable {
     case error
     case sampleValue
 
-    public static let `default`: ListConfig = .sampleValue
+    public static let `default`: ListConfig = .error
   }
 
   public enum DetailsConfig: String, EnvironmentConvertible, Defaultable {
     case error
     case sampleValue
 
-    public static let `default`: DetailsConfig = .sampleValue
+    public static let `default`: DetailsConfig = .error
   }
 
   static func decode(from env: Environment) -> PokemonServiceConfig {

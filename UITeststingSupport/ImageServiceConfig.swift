@@ -11,5 +11,5 @@ public enum ImageServiceConfig: String, EnvironmentConvertible, Defaultable {
   case error
   case sampleValue
 
-  public static let `default`: ImageServiceConfig = .sampleValue
+  public static let `default`: ImageServiceConfig = .error
 }

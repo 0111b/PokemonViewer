@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import UITeststingSupport
 
 final class LoadingCollectionViewFooter: UICollectionReusableView, CollectionViewFooter {
 
@@ -60,6 +61,7 @@ final class LoadingCollectionViewFooter: UICollectionReusableView, CollectionVie
     label.textColor = Colors.primaryText
     label.font = Fonts.footnote
     label.textAlignment = .center
+    label.accessibilityIdentifier = AccessibilityId.PokemonList.statusHint
     return label
   }()
 
@@ -67,6 +69,7 @@ final class LoadingCollectionViewFooter: UICollectionReusableView, CollectionVie
     let indicator = UIActivityIndicatorView(style: .gray)
     indicator.translatesAutoresizingMaskIntoConstraints = false
     indicator.color = Colors.accent
+    indicator.accessibilityIdentifier = AccessibilityId.PokemonList.statusActivity
     return indicator
   }()
 }

@@ -10,11 +10,11 @@ import UITeststingSupport
 
 final class TestImageService: ImageService {
 
-  init(config: ImageServiceConfig) {
+  init(config: UITeststingSupport.ImageServiceConfig) {
     self.config = config
   }
 
-  private let config: ImageServiceConfig
+  private let config: UITeststingSupport.ImageServiceConfig
 
   func image(url: URL,
              cachePolicy: RequestCachePolicy,

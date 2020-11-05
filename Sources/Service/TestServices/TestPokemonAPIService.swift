@@ -9,11 +9,11 @@ import Foundation
 import UITeststingSupport
 
 final class TestPokemonAPIService: PokemonAPIService {
-  init(config: PokemonServiceConfig) {
+  init(config: UITeststingSupport.PokemonServiceConfig) {
     self.config = config
   }
 
-  private let config: PokemonServiceConfig
+  private let config: UITeststingSupport.PokemonServiceConfig
 
   func list(page: Page,
             cachePolicy: RequestCachePolicy,
@@ -48,10 +48,14 @@ final class TestPokemonAPIService: PokemonAPIService {
   }
 
   private func page(_ pageNumber: UInt) -> PokemonAPI.PokemonPage {
-    PokemonAPI.PokemonPage(count: 100, items: [])
+    PokemonAPI.PokemonPage(count: 100,
+                           items: [
+                            .init(rawValue: "1"),
+                            .init(rawValue: "2")
+                           ])
   }
 
   private func pokemon(_ id: Identifier<Pokemon>) -> Pokemon {
-    Pokemon(id: .init(rawValue: "1"), height: 1, weight: 1, sprites: [], stats: [], abilities: [], types: [])
+    Pokemon(id: id, height: 1, weight: 1, sprites: [], stats: [], abilities: [], types: [])
   }
 }

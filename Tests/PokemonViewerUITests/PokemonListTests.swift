@@ -6,6 +6,7 @@
 //
 
 import XCTest
+import UITeststingSupport
 
 final class PokemonListTests: UITestCase {
 
@@ -23,4 +24,15 @@ final class PokemonListTests: UITestCase {
     XCTAssertFalse(screen.gridLayoutButton.exists)
   }
 
+  func testNoNetwork() {
+    launch()
+    let screen = app.pokemonListScreen
+    XCTAssertTrue(screen.statusHint.exists)
+  }
+
+  func testShowDetails() {
+    launch(with: AppTestConfiguration(pokemonService: PokemonServiceConfig(listConfig: .sampleValue)))
+    let screen = app.pokemonListScreen
+    _ = screen.openDetails()
+  }
 }

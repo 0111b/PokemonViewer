@@ -23,7 +23,6 @@ final class PokemonListViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     setupUI()
-    setupAccessibility()
     bind()
     viewModel.viewDidLoad()
   }
@@ -41,6 +40,7 @@ final class PokemonListViewController: UIViewController {
   }
 
   private func setupUI() {
+    view.accessibilityIdentifier = AccessibilityId.PokemonList.screen
     view.backgroundColor = Constants.backgroundColor
     title = Strings.Screens.PokemonList.title
     view.addSubview(collectionView)
@@ -103,6 +103,7 @@ final class PokemonListViewController: UIViewController {
 
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
+    collectionView.accessibilityIdentifier = AccessibilityId.PokemonList.pokemonList
     collectionView.backgroundColor = Constants.backgroundColor
     collectionView.translatesAutoresizingMaskIntoConstraints = false
     collectionView.alwaysBounceVertical = true
@@ -128,10 +129,6 @@ final class PokemonListViewController: UIViewController {
                                                              titleFont: Fonts.title,
                                                              backgroundColor: Colors.accent)
   }
-
-  private func setupAccessibility() {
-    view.accessibilityIdentifier = AccessibilityId.PokemonList.name
-  }
 }
 
 extension PokemonListViewController: UICollectionViewDataSource {
@@ -142,6 +139,7 @@ extension PokemonListViewController: UICollectionViewDataSource {
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell: PokemonListItemCell = collectionView.dequeue(forIndexPath: indexPath)
+    cell.accessibilityIdentifier = AccessibilityId.PokemonList.pokemon(at: indexPath.row)
     cell.view.apply(style: cell.isSelected ? Constants.selectedItemStyle : Constants.itemStyle)
     if let viewModel = itemViewModel(at: indexPath) {
       cell.view.set(title: viewModel.title, image: viewModel.image, axis: state.layout.itemAxis)
@@ -160,6 +158,7 @@ extension PokemonListViewController: UICollectionViewDataSource {
                                                              for: indexPath)
     }
     let footer: LoadingCollectionViewFooter = collectionView.dequeueFooter(forIndexPath: indexPath)
+    footer.accessibilityIdentifier = AccessibilityId.PokemonList.statusView
     footer.update(with: state.loading)
     footer.tapHandler = { [weak self] in
       self?.viewModel.retry()

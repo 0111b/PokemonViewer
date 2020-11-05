@@ -17,8 +17,7 @@ public final class AppTestConfiguration {
   public func toRawValue() -> [String: String] {
     var env = [String: String]()
     imageService.encode(to: &env)
-    pokemonService.detailsConfig.encode(to: &env)
-    pokemonService.listConfig.encode(to: &env)
+    pokemonService.encode(to: &env)
     return env
   }
 
