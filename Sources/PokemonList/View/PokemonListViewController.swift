@@ -107,6 +107,7 @@ final class PokemonListViewController: UIViewController {
     collectionView.backgroundColor = Constants.backgroundColor
     collectionView.translatesAutoresizingMaskIntoConstraints = false
     collectionView.alwaysBounceVertical = true
+    collectionView.contentInset = Constants.contentInset
     return collectionView
   }()
 
@@ -128,6 +129,7 @@ final class PokemonListViewController: UIViewController {
     static let selectedItemStyle = PokemonListItemView.Style(titleColor: Colors.primaryText,
                                                              titleFont: Fonts.title,
                                                              backgroundColor: Colors.accent)
+    static let contentInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
   }
 }
 
