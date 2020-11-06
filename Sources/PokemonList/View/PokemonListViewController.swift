@@ -185,7 +185,7 @@ extension PokemonListViewController: UICollectionViewDataSource {
 
 }
 
-extension PokemonListViewController: UICollectionViewDelegate {
+extension PokemonListViewController: UICollectionViewDelegate, UIScrollViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     itemViewModel(at: indexPath).map(viewModel.didSelect(item:))
     if let cell = collectionView.cellForItem(at: indexPath) as? PokemonListItemCell {
@@ -217,6 +217,10 @@ extension PokemonListViewController: UICollectionViewDelegate {
                       at indexPath: IndexPath) {
     guard view is LoadingCollectionViewFooter else { return }
     viewModel.askForNextPage()
+  }
+
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    searchController.searchBar.endEditing(true)
   }
 }
 
