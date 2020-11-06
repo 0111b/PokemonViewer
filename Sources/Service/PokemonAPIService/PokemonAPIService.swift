@@ -30,7 +30,7 @@ final class PokemonAPIServiceImp: APIService, PokemonAPIService {
                        cachePolicy: cachePolicy) { (result: PokemonAPI.DTO.PokemonList) -> Void in
       completion(result.map { dto in
         PokemonAPI.PokemonPage(count: dto.count,
-                               items: dto.results.map { .init(rawValue: $0.name) })
+                               items: dto.results)
       })
     }
   }
@@ -81,17 +81,17 @@ private extension Pokemon {
     stats = dto.stats.map { PokemonStat(dto: $0) }
     abilities = dto.abilities
       .sorted { $0.slot < $1.slot }
-      .map { PokemonAbility(id: .init(rawValue: $0.ability.name)) }
+      .map { PokemonAbility(id: $0.ability.name) }
     types = dto.types
       .sorted { $0.slot < $1.slot }
-      .map { PokemonType(id: .init(rawValue: $0.type.name)) }
+      .map { PokemonType(id: $0.type.name) }
   }
 }
 
 private extension PokemonStat {
   init(dto: PokemonAPI.DTO.PokemonStat) {
-    id = .init(rawValue: dto.stat.name)
-    kind = .init(rawValue: dto.stat.name)
+    id = dto.stat.name
+    kind = .init(rawValue: dto.stat.name.rawValue)
     baseStat = dto.baseStat
     effort = dto.effort
   }
