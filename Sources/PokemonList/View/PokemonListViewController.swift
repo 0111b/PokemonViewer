@@ -55,6 +55,9 @@ final class PokemonListViewController: UIViewController {
     collectionView.refreshControl = refreshControl
     collectionView.dataSource = self
     collectionView.delegate = self
+    definesPresentationContext = true
+    navigationItem.hidesSearchBarWhenScrolling = false
+    navigationItem.searchController = searchController
   }
 
   private func bind() {
@@ -95,7 +98,7 @@ final class PokemonListViewController: UIViewController {
   private lazy var refreshControl: UIRefreshControl = {
     let control = UIRefreshControl()
     control.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
-    control.tintColor = Colors.accent
+    control.tintColor = Constants.tintColor
     return control
   }()
 
@@ -111,6 +114,17 @@ final class PokemonListViewController: UIViewController {
     return collectionView
   }()
 
+  private lazy var searchController: UISearchController = {
+    let searchController = UISearchController(searchResultsController: nil)
+    searchController.searchResultsUpdater = self
+    searchController.obscuresBackgroundDuringPresentation = false
+    searchController.searchBar.placeholder = Strings.Screens.PokemonList.Search.placeholder
+    searchController.searchBar.tintColor = Constants.tintColor
+    return searchController
+  }()
+
+  private var updateSearchQeury: DispatchWorkItem?
+
   private func itemViewModel(at indexPath: IndexPath) -> PokemonListItemViewModel? {
     let index = indexPath.row
     return state.items.indices.contains(index) ? state.items[index] : nil
@@ -123,6 +137,7 @@ final class PokemonListViewController: UIViewController {
 
   private enum Constants {
     static let backgroundColor = Colors.background
+    static let tintColor = Colors.accent
     static let itemStyle = PokemonListItemView.Style(titleColor: Colors.primaryText,
                                                      titleFont: Fonts.title,
                                                      backgroundColor: Colors.sectionBackground)
@@ -197,6 +212,19 @@ extension PokemonListViewController: UICollectionViewDelegate {
                       didEndDisplaying cell: UICollectionViewCell,
                       forItemAt indexPath: IndexPath) {
     itemViewModel(at: indexPath)?.didEndDisplaying()
+  }
+}
+
+extension PokemonListViewController: UISearchResultsUpdating {
+  func updateSearchResults(for searchController: UISearchController) {
+    guard let searchText = searchController.searchBar.text?
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+    else { return }
+    updateSearchQeury?.cancel()
+    let task = DispatchWorkItem {
+    }
+    updateSearchQeury = task
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: task)
   }
 }
 
