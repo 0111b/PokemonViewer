@@ -203,15 +203,20 @@ extension PokemonListViewController: UICollectionViewDelegate {
                       willDisplay cell: UICollectionViewCell,
                       forItemAt indexPath: IndexPath) {
     itemViewModel(at: indexPath)?.willDisplay()
-    if indexPath.row > state.items.count - 4 {
-      viewModel.askForNextPage()
-    }
   }
 
   func collectionView(_ collectionView: UICollectionView,
                       didEndDisplaying cell: UICollectionViewCell,
                       forItemAt indexPath: IndexPath) {
     itemViewModel(at: indexPath)?.didEndDisplaying()
+  }
+
+  func collectionView(_ collectionView: UICollectionView,
+                      willDisplaySupplementaryView view: UICollectionReusableView,
+                      forElementKind elementKind: String,
+                      at indexPath: IndexPath) {
+    guard view is LoadingCollectionViewFooter else { return }
+    viewModel.askForNextPage()
   }
 }
 
@@ -221,7 +226,8 @@ extension PokemonListViewController: UISearchResultsUpdating {
             .trimmingCharacters(in: .whitespacesAndNewlines)
     else { return }
     updateSearchQeury?.cancel()
-    let task = DispatchWorkItem {
+    let task = DispatchWorkItem { [weak self] in
+      self?.viewModel.didChangeNameFilter(name: searchText)
     }
     updateSearchQeury = task
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: task)

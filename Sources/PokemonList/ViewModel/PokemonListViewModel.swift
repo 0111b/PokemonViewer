@@ -98,6 +98,12 @@ final class PokemonListViewModel {
     }
   }
 
+  func didChangeNameFilter(name: String) {
+    self.update { state in
+      state = state.with(nameFilter: name)
+    }
+  }
+
   // MARK: - Output -
 
   private let viewStateRelay = MutableObservable<PokemonListViewState>(value: .empty)

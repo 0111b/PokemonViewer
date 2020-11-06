@@ -4,6 +4,7 @@
 "PokemonList.Error.transport" = "Errore di connessione\n Premi per riprovare";
 "PokemonList.Error.default" = "Qualcosa è andato storto\n Premi per riprovare";
 "PokemonList.Search.placeholder" = "Filtra per nome";
+"PokemonList.Search.noMatch" = "Non abbiamo trovato nulla";
 "PokemonDetails.Error.transport" = "Errore di connessione";
 "PokemonDetails.Error.default" = "Qualcosa è andato storto";
 "PokemonDetails.Error.cta" = "Riprova";

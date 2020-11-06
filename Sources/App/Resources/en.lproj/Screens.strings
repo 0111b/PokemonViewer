@@ -4,6 +4,7 @@
 "PokemonList.Error.transport" = "Connection error\n Tap to retry";
 "PokemonList.Error.default" = "Something went wrong\n Tap to retry";
 "PokemonList.Search.placeholder" = "Filter by name";
+"PokemonList.Search.noMatch" = "Nothing found";
 "PokemonDetails.Error.transport" = "Connection error";
 "PokemonDetails.Error.default" = "Something went wrong";
 "PokemonDetails.Error.cta" = "Try again";
