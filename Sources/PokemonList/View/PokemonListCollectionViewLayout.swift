@@ -40,7 +40,7 @@ final class PokemonListCollectionViewLayout: UICollectionViewFlowLayout {
     let shouldUpdate = abs(currentSize.width - proposedSize.width) > Constants.layoutUpdateTreshold
       || abs(currentSize.height - proposedSize.height) > Constants.layoutUpdateTreshold
     if shouldUpdate {
-      os_log("PokemonListCollectionViewLayout itemSize %@", log: Log.general,
+      os_log("PokemonListCollectionViewLayout itemSize %{public}@", log: Log.general,
              type: .debug, String(describing: proposedSize))
       itemSize = proposedSize
       footerReferenceSize = CGSize(width: contentWidth, height: Constants.footerHeight)

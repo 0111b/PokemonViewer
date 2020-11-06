@@ -26,7 +26,7 @@ final class PokemonListItemViewModel {
       guard let self = self else { return }
       switch result {
       case .failure(let error):
-        os_log("PokemonListItemViewModel details %@ error %@", log: Log.general,
+        os_log("PokemonListItemViewModel details %{public}@ error %@", log: Log.general,
                type: .error, self.identifier.rawValue, String(describing: error))
         self.state = .idle
       case .success(let pokemon):
@@ -46,7 +46,7 @@ final class PokemonListItemViewModel {
       guard let self = self else { return }
       switch result {
       case .failure(let error):
-        os_log("PokemonListItemViewModel image %@ error %@", log: Log.general,
+        os_log("PokemonListItemViewModel image %{public}@ error %@", log: Log.general,
                type: .error, self.identifier.rawValue, String(describing: error))
         self.state = .idle
       case .success(let image):
