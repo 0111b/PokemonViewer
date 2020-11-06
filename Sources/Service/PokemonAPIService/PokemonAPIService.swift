@@ -30,7 +30,7 @@ final class PokemonAPIServiceImp: APIService, PokemonAPIService {
                        cachePolicy: cachePolicy) { (result: PokemonAPI.DTO.PokemonList) -> Void in
       completion(result.map { dto in
         PokemonAPI.PokemonPage(count: dto.count,
-                               items: dto.results)
+                               items: dto.results.map(\.name))
       })
     }
   }

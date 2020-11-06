@@ -18,7 +18,7 @@ enum PokemonAPI {
       let name: Value
     }
 
-    typealias PokemonList = NetworkResult<PageResponse<Identifier<Pokemon>>>
+    typealias PokemonList = NetworkResult<PageResponse<Named<Identifier<Pokemon>>>>
 
     struct PokemonDetails: Decodable {
       let name: String
