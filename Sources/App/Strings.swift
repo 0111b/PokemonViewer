@@ -20,6 +20,11 @@ enum Strings {
         static let `default` = Strings.tr("Screens", "PokemonList.Error.default")
       }
 
+      enum Search {
+        static let placeholder = Strings.tr("Screens", "PokemonList.Search.placeholder")
+        static let noMatch = Strings.tr("Screens", "PokemonList.Search.noMatch")
+      }
+
     }
 
     enum EmptyPokemonDetails {
