@@ -3,6 +3,7 @@
 ![Build](https://github.com/0111b/PokemonViewer/workflows/Build/badge.svg)
 ![Swift](https://img.shields.io/badge/Swift-5.3-orange.svg)
 ![iOS](https://img.shields.io/badge/iOS-11-yellow.svg)
+![License](https://img.shields.io/badge/license-MIT-ff69b4.svg)
 
 Demo app showing Pokemons stats using [pokeapi](https://pokeapi.co)
 
