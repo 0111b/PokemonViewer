@@ -26,6 +26,7 @@ final class PokemonListCoordinator {
     let listViewModel = PokemonListViewModel(dependency: dependency, coordinator: self)
     let listViewController = PokemonListViewController(viewModel: listViewModel)
     let listNavigation = UINavigationController(rootViewController: listViewController)
+    listNavigation.navigationBar.prefersLargeTitles = true
     let emptyViewModel = EmptyPokemonDetailsViewModel(hint: .noItemSelected)
     let emptyViewController = EmptyPokemonDetailsViewController(viewModel: emptyViewModel)
     let emptyNavigation = UINavigationController(rootViewController: emptyViewController)
@@ -38,6 +39,7 @@ extension PokemonListCoordinator: PokemonListViewModelCoordinating {
     let detailsViewModel = PokemonDetailsViewModel(dependency: dependency, identifier: identifier)
     let detailsViewController = PokemonDetailsViewController(viewModel: detailsViewModel)
     let detailsNavigation = UINavigationController(rootViewController: detailsViewController)
+    detailsNavigation.navigationBar.prefersLargeTitles = true
     splitViewController.showDetailViewController(detailsNavigation, sender: nil)
   }
 }

@@ -20,7 +20,7 @@ final class PokemonDetailsTests: UITestCase {
     launch(with: AppTestConfiguration(pokemonService: PokemonServiceConfig(listConfig: .sampleValue,
                                                                            detailsConfig: .sampleValue)))
     let screen = app.pokemonListScreen.openDetails()
-    XCTAssertTrue(screen.pokemonName.exists)
+    XCTAssertTrue(screen.contentView.exists)
   }
 
 }

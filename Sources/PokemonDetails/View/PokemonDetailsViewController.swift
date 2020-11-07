@@ -35,7 +35,6 @@ final class PokemonDetailsViewController: UIViewController {
     contentContainerView.addSubview(mainStackView)
     let readableGuide = contentContainerView.readableContentGuide
     mainStackView.addArrangedSubviews([
-      nameLabel,
       heightView,
       weightView,
       makeHeader(title: Strings.Screens.PokemonDetails.Header.sprites),
@@ -79,7 +78,6 @@ final class PokemonDetailsViewController: UIViewController {
     }
     guard let details = state.details else { return }
     let pokemon = details.pokemon
-    nameLabel.text = pokemon.name
     heightView.set(title: Strings.Screens.PokemonDetails.Content.height,
                    value: LengthFormatter.default.string(fromDecimetres: pokemon.height))
     weightView.set(title: Strings.Screens.PokemonDetails.Content.weight,
@@ -166,17 +164,6 @@ final class PokemonDetailsViewController: UIViewController {
     stackView.alignment = .fill
     stackView.spacing = Constants.contentSpacing
     return stackView
-  }()
-
-  private lazy var nameLabel: UILabel = {
-    let label = UILabel()
-    label.accessibilityIdentifier = AccessibilityId.PokemonDetails.pokemonName
-    label.translatesAutoresizingMaskIntoConstraints = false
-    label.adjustsFontForContentSizeCategory = true
-    label.textAlignment = .left
-    label.textColor = Constants.primaryColor
-    label.font = Constants.nameFont
-    return label
   }()
 
   private lazy var heightView = TitledValueView(style: Constants.titledValueStyle)
