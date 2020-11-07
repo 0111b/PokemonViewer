@@ -29,7 +29,7 @@ final class ImageServiceImp: ImageService {
              completion: @escaping (NetworkResult<UIImage>) -> Void) -> Disposable {
     let request = URLRequest(url: url)
     let processingQueue = imageTransformQueue
-    let token = self.network.fetch(request: request, cachePolicy: .cacheFirst) { result in
+    let token = self.network.fetch(request: request, cachePolicy: cachePolicy) { result in
       switch result {
       case .failure(let error):
         completion(.failure(error))
