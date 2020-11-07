@@ -86,7 +86,7 @@ final class PokemonDetailsViewController: UIViewController {
       .map(\.id.rawValue)
       .joined(separator: Strings.Screens.PokemonDetails.Content.listSeparator)
     typesLabel.text = pokemon.types
-      .map(\.id.rawValue)
+      .map(\.name)
       .joined(separator: Strings.Screens.PokemonDetails.Content.listSeparator)
     statsStackView.removeArrangedSubviews()
     statsStackView.addArrangedSubviews(pokemon.stats.map(makeStatView(from:)))
@@ -228,5 +228,11 @@ private extension PokemonStat.Kind {
     case .specialDefense: return Strings.Screens.PokemonDetails.Content.specialDefense
     case .speed: return Strings.Screens.PokemonDetails.Content.speed
     }
+  }
+}
+
+private extension PokemonType {
+  var name: String {
+    rawValue.capitalized
   }
 }
