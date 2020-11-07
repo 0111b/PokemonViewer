@@ -170,7 +170,7 @@ final class PokemonDetailsViewController: UIViewController {
 
   private lazy var weightView = TitledValueView(style: Constants.titledValueStyle)
 
-  private lazy var spritesView = PokemonSpriteView()
+  private lazy var spritesView = SpritesView()
 
   private lazy var abilitiesLabel = makeContentLabel()
 
