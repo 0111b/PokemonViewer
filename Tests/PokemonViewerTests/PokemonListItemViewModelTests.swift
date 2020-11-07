@@ -12,7 +12,7 @@ final class PokemonListItemViewModelTests: XCTestCase {
 
   var viewModel: PokemonListItemViewModel!
   var dependency: MockDependency!
-  var collector: ObservableCollector<UIImage?>!
+  var collector: ObservableCollector<RemoteImageViewState>!
 
   override func setUpWithError() throws {
     dependency = MockDependency()
@@ -23,7 +23,7 @@ final class PokemonListItemViewModelTests: XCTestCase {
   }
 
   func testInitialValues() {
-    XCTAssertNil(viewModel.image.value)
+    XCTAssertEqual(viewModel.image.value, .empty)
   }
 
   func testDetailsError() {
@@ -31,7 +31,7 @@ final class PokemonListItemViewModelTests: XCTestCase {
 
     viewModel.willDisplay()
 
-    assertViewState(image: [])
+    assertViewState(image: [.image(UIImage())])
   }
 
   func testNoSprites() {
@@ -59,13 +59,26 @@ final class PokemonListItemViewModelTests: XCTestCase {
 
     viewModel.willDisplay()
 
-    assertViewState(image: [image])
+    assertViewState(image: [.image(image)])
   }
 
-  func assertViewState(image: [UIImage?]) {
+  func assertViewState(image: [RemoteImageViewState]) {
     let expectation = self.expectation(with: collector, keyPath: \.values, toBe: image)
     wait(for: [expectation], timeout: Stubs.assertInterval)
     collector.reset()
   }
 
+}
+
+extension RemoteImageViewState: Equatable {
+  public static func == (lhs: RemoteImageViewState, rhs: RemoteImageViewState) -> Bool {
+    switch (lhs, rhs) {
+    case (.loading, .loading),
+         (.image(_?), image(_?)),
+         (.image(nil), image(nil)):
+      return true
+    default:
+      return false
+    }
+  }
 }
