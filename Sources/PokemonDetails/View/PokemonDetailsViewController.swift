@@ -37,7 +37,7 @@ final class PokemonDetailsViewController: UIViewController {
     mainStackView.addArrangedSubviews([
       heightView,
       weightView,
-      makeHeader(title: Strings.Screens.PokemonDetails.Header.sprites),
+      spritesHeaderView,
       spritesView,
       makeHeader(title: Strings.Screens.PokemonDetails.Header.stats),
       statsStackView,
@@ -91,6 +91,9 @@ final class PokemonDetailsViewController: UIViewController {
     statsStackView.removeArrangedSubviews()
     statsStackView.addArrangedSubviews(pokemon.stats.map(makeStatView(from:)))
     spritesView.set(sprites: details.sprites)
+    let isSpritesHidden = details.sprites.isEmpty
+    spritesHeaderView.isHidden = isSpritesHidden
+    spritesView.isHidden = isSpritesHidden
   }
 
   private func makeHeader(title: String) -> UIView {
@@ -169,6 +172,8 @@ final class PokemonDetailsViewController: UIViewController {
   private lazy var heightView = TitledValueView(style: Constants.titledValueStyle)
 
   private lazy var weightView = TitledValueView(style: Constants.titledValueStyle)
+
+  private lazy var spritesHeaderView = makeHeader(title: Strings.Screens.PokemonDetails.Header.sprites)
 
   private lazy var spritesView = SpritesView()
 
