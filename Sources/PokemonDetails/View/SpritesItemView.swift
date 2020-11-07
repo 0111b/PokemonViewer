@@ -69,8 +69,6 @@ final class SpritesItemView: UIView, Resetable {
     let label = UILabel()
     label.translatesAutoresizingMaskIntoConstraints = false
     label.setContentCompressionResistancePriority(.required, for: .vertical)
-    label.setContentCompressionResistancePriority(.required, for: .horizontal)
-    label.setContentHuggingPriority(.required, for: .horizontal)
     label.setContentHuggingPriority(.required, for: .vertical)
     label.adjustsFontForContentSizeCategory = true
     label.textAlignment = .center

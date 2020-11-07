@@ -31,7 +31,7 @@ final class PokemonListCollectionViewLayout: UICollectionViewFlowLayout {
       let spacing = minimumInteritemSpacing * CGFloat(Constants.gridMaxItemsPerRow)
       let maxSide = (availableWidth - spacing) / CGFloat(Constants.gridMaxItemsPerRow)
       let side = max(maxSide, Constants.girMinWidth)
-      itemSize = CGSize(width: side, height: side + Constants.girHeightDelta)
+      itemSize = CGSize(width: side, height: side)
     case .list:
       itemSize = CGSize(width: availableWidth, height: Constants.listLayoutItemHeight)
     }
@@ -42,7 +42,6 @@ final class PokemonListCollectionViewLayout: UICollectionViewFlowLayout {
     static let listLayoutItemHeight: CGFloat = 80
     static let gridMaxItemsPerRow = 4
     static let girMinWidth: CGFloat = 100
-    static let girHeightDelta: CGFloat = 20
     static let footerHeight: CGFloat = 60
   }
 }

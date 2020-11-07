@@ -160,7 +160,7 @@ extension PokemonListViewController: UICollectionViewDataSource {
     cell.accessibilityIdentifier = AccessibilityId.PokemonList.pokemon(at: indexPath.row)
     cell.view.apply(style: cell.isSelected ? Constants.selectedItemStyle : Constants.itemStyle)
     if let viewModel = itemViewModel(at: indexPath) {
-      cell.view.set(title: viewModel.title, image: viewModel.image, axis: state.layout.itemAxis)
+      cell.view.set(title: viewModel.title, image: viewModel.image, layout: state.layout)
     } else {
       cell.view.resetToEmptyState()
     }
@@ -256,13 +256,6 @@ private extension PokemonListLayout {
     switch self {
     case .grid: return Images.gridIcon
     case .list: return Images.listIcon
-    }
-  }
-
-  var itemAxis: NSLayoutConstraint.Axis {
-    switch self {
-    case .grid: return .vertical
-    case .list: return .horizontal
     }
   }
 

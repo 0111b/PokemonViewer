@@ -41,16 +41,15 @@ final class PokemonListItemView: UIView, Resetable {
     stackView.addArrangedSubview(titleLabel)
   }
 
-  func set(title: String, image: Observable<UIImage?>, axis: NSLayoutConstraint.Axis) {
+  func set(title: String, image: Observable<UIImage?>, layout: PokemonListLayout) {
     titleLabel.text = title
-    stackView.axis = axis
-    switch axis {
-    case .horizontal:
-      titleLabel.textAlignment = .left
-    case .vertical:
-      titleLabel.textAlignment = .center
-    @unknown default:
-      titleLabel.textAlignment = .center
+    switch layout {
+    case .list:
+      stackView.axis = .horizontal
+      titleLabel.isHidden = false
+    case .grid:
+      stackView.axis = .vertical
+      titleLabel.isHidden = true
     }
     imageSubscription = image.observe(on: .main) { [weak imageView] image in
       guard let imageView = imageView else { return }
@@ -82,7 +81,10 @@ final class PokemonListItemView: UIView, Resetable {
     label.setContentHuggingPriority(.required, for: .horizontal)
     label.setContentHuggingPriority(.required, for: .vertical)
     label.adjustsFontForContentSizeCategory = true
-    label.numberOfLines = 0
+    label.textAlignment = .left
+    label.numberOfLines = 1
+    label.adjustsFontSizeToFitWidth = true
+    label.minimumScaleFactor = 0.7
     return label
   }()
 
