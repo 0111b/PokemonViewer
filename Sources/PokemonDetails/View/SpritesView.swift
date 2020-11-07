@@ -1,5 +1,5 @@
 //
-//  PokemonSpriteView.swift
+//  SpritesView.swift
 //  PokemonViewer
 //
 //  Created by Alexandr Goncharov on 03.11.2020.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class PokemonSpriteView: UIView {
+final class SpritesView: UIView {
 
   func set(sprites: [PokemonSpriteViewModel]) {
     items = sprites
@@ -31,7 +31,7 @@ final class PokemonSpriteView: UIView {
     translatesAutoresizingMaskIntoConstraints = false
     addStretchedToBounds(subview: collectionView)
     collectionView.heightAnchor.constraint(equalToConstant: Constants.itemSize).isActive = true
-    collectionView.register(PokemonListItemCell.self)
+    collectionView.register(SpritesItemCell.self)
     collectionView.dataSource = self
   }
 
@@ -48,24 +48,23 @@ final class PokemonSpriteView: UIView {
 
   private enum Constants {
     static let itemSize: CGFloat = 200
-    static let itemStyle = PokemonListItemView.Style(titleColor: Colors.primaryText,
-                                                     titleFont: Fonts.title,
-                                                     backgroundColor: Colors.sectionBackground)
+    static let itemStyle = SpritesItemView.Style(titleColor: Colors.primaryText,
+                                                        titleFont: Fonts.title,
+                                                        backgroundColor: Colors.sectionBackground)
   }
 }
 
-extension PokemonSpriteView: UICollectionViewDataSource {
+extension SpritesView: UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     return items.count
   }
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell: PokemonListItemCell = collectionView.dequeue(forIndexPath: indexPath)
+    let cell: SpritesItemCell = collectionView.dequeue(forIndexPath: indexPath)
     cell.view.apply(style: Constants.itemStyle)
     let viewModel = items[indexPath.row]
     cell.view.set(title: viewModel.kind.legend,
-                  image: viewModel.image,
-                  axis: .vertical)
+                  image: viewModel.image)
     viewModel.fetchImage()
     return cell
   }

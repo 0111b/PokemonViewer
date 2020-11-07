@@ -1,15 +1,15 @@
 //
-//  PokemonListItemView.swift
+//  SpritesItemView.swift
 //  PokemonViewer
 //
-//  Created by Alexandr Goncharov on 31.10.2020.
+//  Created by Alexandr Goncharov on 07.11.2020.
 //
 
 import UIKit
 
-typealias PokemonListItemCell = UICollectionViewContainerCell<PokemonListItemView>
+typealias SpritesItemCell = UICollectionViewContainerCell<SpritesItemView>
 
-final class PokemonListItemView: UIView, Resetable {
+final class SpritesItemView: UIView, Resetable {
   struct Style {
     internal init(titleColor: UIColor, titleFont: UIFont, backgroundColor: UIColor, cornerRadius: CGFloat = 10) {
       self.titleColor = titleColor
@@ -41,16 +41,8 @@ final class PokemonListItemView: UIView, Resetable {
     stackView.addArrangedSubview(titleLabel)
   }
 
-  func set(title: String, image: Observable<UIImage?>, layout: PokemonListLayout) {
+  func set(title: String, image: Observable<UIImage?>) {
     titleLabel.text = title
-    switch layout {
-    case .list:
-      stackView.axis = .horizontal
-      titleLabel.isHidden = false
-    case .grid:
-      stackView.axis = .vertical
-      titleLabel.isHidden = true
-    }
     imageSubscription = image.observe(on: .main) { [weak imageView] image in
       guard let imageView = imageView else { return }
       UIView.transition(with: imageView,
@@ -77,14 +69,10 @@ final class PokemonListItemView: UIView, Resetable {
     let label = UILabel()
     label.translatesAutoresizingMaskIntoConstraints = false
     label.setContentCompressionResistancePriority(.required, for: .vertical)
-    label.setContentCompressionResistancePriority(.required, for: .horizontal)
-    label.setContentHuggingPriority(.required, for: .horizontal)
     label.setContentHuggingPriority(.required, for: .vertical)
     label.adjustsFontForContentSizeCategory = true
-    label.textAlignment = .left
+    label.textAlignment = .center
     label.numberOfLines = 1
-    label.adjustsFontSizeToFitWidth = true
-    label.minimumScaleFactor = 0.7
     return label
   }()
 
@@ -112,4 +100,5 @@ final class PokemonListItemView: UIView, Resetable {
   private enum Constants {
     static let contentInset = NSDirectionalEdgeInsets(top: 6, leading: 6, bottom: 6, trailing: 6)
   }
+
 }

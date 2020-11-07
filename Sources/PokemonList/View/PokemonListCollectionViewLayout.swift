@@ -12,47 +12,36 @@ final class PokemonListCollectionViewLayout: UICollectionViewFlowLayout {
 
   var layout: PokemonListLayout = .list {
     didSet {
-      updateItemSize()
+      if layout != oldValue { invalidateLayout() }
     }
   }
 
-  override func finalizeAnimatedBoundsChange() {
-    super.finalizeAnimatedBoundsChange()
-    updateItemSize()
-  }
-
-  private func updateItemSize() {
+  override func prepare() {
+    super.prepare()
     guard let collectionView = self.collectionView else { return }
-    let sectionPadding = sectionInset.left + sectionInset.right
-    let contentPadding = collectionView.contentInset.left + collectionView.contentInset.right
-    let contentWidth = collectionView.bounds.width - sectionPadding - contentPadding
-    let proposedSize: CGSize
+    minimumInteritemSpacing = 5
+    sectionInset = UIEdgeInsets(top: minimumInteritemSpacing, left: 0.0, bottom: 0.0, right: 0.0)
+    sectionInsetReference = .fromSafeArea
+    let availableWidth = collectionView.bounds
+      .inset(by: collectionView.contentInset)
+      .inset(by: sectionInset)
+      .width
     switch layout {
-    case .list:
-      proposedSize = CGSize(width: contentWidth, height: Constants.listLayoutItemHeight)
     case .grid:
-      let spacing = minimumInteritemSpacing * CGFloat(Constants.maxItemsPerRow + 2)
-      let side = max(Constants.girLayoutMinSide,
-                     (contentWidth - spacing) / CGFloat(Constants.maxItemsPerRow))
-      proposedSize = CGSize(width: side, height: side)
+      let spacing = minimumInteritemSpacing * CGFloat(Constants.gridMaxItemsPerRow)
+      let maxSide = (availableWidth - spacing) / CGFloat(Constants.gridMaxItemsPerRow)
+      let side = max(maxSide, Constants.girMinWidth)
+      itemSize = CGSize(width: side, height: side)
+    case .list:
+      itemSize = CGSize(width: availableWidth, height: Constants.listLayoutItemHeight)
     }
-    let currentSize = self.itemSize
-    let shouldUpdate = abs(currentSize.width - proposedSize.width) > Constants.layoutUpdateTreshold
-      || abs(currentSize.height - proposedSize.height) > Constants.layoutUpdateTreshold
-    if shouldUpdate {
-      os_log("PokemonListCollectionViewLayout itemSize %{public}@", log: Log.general,
-             type: .debug, String(describing: proposedSize))
-      itemSize = proposedSize
-      footerReferenceSize = CGSize(width: contentWidth, height: Constants.footerHeight)
-      collectionView.reloadData()
-    }
+    footerReferenceSize = CGSize(width: availableWidth, height: Constants.footerHeight)
   }
 
   private enum Constants {
-    static let maxItemsPerRow = 4
-    static let girLayoutMinSide: CGFloat = 150
     static let listLayoutItemHeight: CGFloat = 80
-    static let layoutUpdateTreshold: CGFloat = 10
+    static let gridMaxItemsPerRow = 4
+    static let girMinWidth: CGFloat = 100
     static let footerHeight: CGFloat = 60
   }
 }
