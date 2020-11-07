@@ -34,13 +34,6 @@ final class PokemonListItemView: UIView, Resetable {
     commonInit()
   }
 
-  private func commonInit() {
-    layer.masksToBounds = true
-    addStretchedToBounds(subview: stackView, insets: Constants.contentInset)
-    stackView.addArrangedSubview(imageView)
-    stackView.addArrangedSubview(titleLabel)
-  }
-
   func set(title: String, image: Observable<RemoteImageViewState>, layout: PokemonListLayout) {
     titleLabel.text = title
     switch layout {
@@ -52,6 +45,7 @@ final class PokemonListItemView: UIView, Resetable {
       titleLabel.isHidden = true
     }
     imageView.bind(to: image, on: .main)
+    pokemonTypeColors = title.count % 2 == 0 ? [.systemBlue, .systemYellow] : [.systemTeal]
   }
 
   func apply(style: Style) {
@@ -64,6 +58,27 @@ final class PokemonListItemView: UIView, Resetable {
   func resetToEmptyState() {
     titleLabel.text = nil
     imageView.resetToEmptyState()
+  }
+
+  var pokemonTypeColors = [UIColor]() {
+    didSet { didUpdatePokemonTypeColors() }
+  }
+
+  override func layoutSublayers(of layer: CALayer) {
+    super.layoutSublayers(of: layer)
+    pokemonTypesLayer.frame = bounds
+  }
+
+  private func didUpdatePokemonTypeColors() {
+    pokemonTypesLayer.colors = (pokemonTypeColors + [.clear]).map(\.cgColor)
+  }
+
+  private func commonInit() {
+    layer.masksToBounds = true
+    addStretchedToBounds(subview: stackView, insets: Constants.contentInset)
+    stackView.addArrangedSubview(imageView)
+    stackView.addArrangedSubview(titleLabel)
+    layer.insertSublayer(pokemonTypesLayer, at: 0)
   }
 
   private lazy var titleLabel: UILabel = {
@@ -98,6 +113,13 @@ final class PokemonListItemView: UIView, Resetable {
     stackView.alignment = .center
     stackView.spacing = 12
     return stackView
+  }()
+
+  private lazy var pokemonTypesLayer: CAGradientLayer = {
+    let gradientLayer = CAGradientLayer()
+    gradientLayer.startPoint = CGPoint(x: 1.0, y: 0.0)
+    gradientLayer.endPoint = CGPoint(x: 0.0, y: 1.0)
+    return gradientLayer
   }()
 
   private enum Constants {
