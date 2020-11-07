@@ -53,6 +53,10 @@ final class RemoteImageView: UIImageView, Resetable {
     }
   }
 
+  override var tintColor: UIColor! {
+    didSet { activityIndicator.color = tintColor }
+  }
+
   private func commonInit() {
     addSubview(activityIndicator)
     NSLayoutConstraint.activate([
@@ -61,14 +65,9 @@ final class RemoteImageView: UIImageView, Resetable {
     ])
   }
 
-  override var tintColor: UIColor! {
-    didSet { activityIndicator.color = tintColor }
-  }
-
   private lazy var activityIndicator: UIActivityIndicatorView = {
     let indicator = UIActivityIndicatorView(style: .gray)
     indicator.translatesAutoresizingMaskIntoConstraints = false
-    indicator.color = Colors.accent
     indicator.hidesWhenStopped = true
     return indicator
   }()

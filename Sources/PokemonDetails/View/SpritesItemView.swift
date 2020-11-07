@@ -41,15 +41,9 @@ final class SpritesItemView: UIView, Resetable {
     stackView.addArrangedSubview(titleLabel)
   }
 
-  func set(title: String, image: Observable<UIImage?>) {
+  func set(title: String, image: Observable<RemoteImageViewState>) {
     titleLabel.text = title
-    imageSubscription = image.observe(on: .main) { [weak imageView] image in
-      guard let imageView = imageView else { return }
-      UIView.transition(with: imageView,
-                        duration: 0.5, options: .curveEaseIn) {
-        imageView.image = image ?? Images.defaultPlaceholder?.withRenderingMode(.alwaysTemplate)
-      }
-    }
+    imageView.bind(to: image, on: .main)
   }
 
   func apply(style: Style) {
@@ -61,8 +55,7 @@ final class SpritesItemView: UIView, Resetable {
 
   func resetToEmptyState() {
     titleLabel.text = nil
-    imageView.image = nil
-    imageSubscription = nil
+    imageView.resetToEmptyState()
   }
 
   private lazy var titleLabel: UILabel = {
@@ -76,8 +69,8 @@ final class SpritesItemView: UIView, Resetable {
     return label
   }()
 
-  private lazy var imageView: UIImageView = {
-    let image = UIImageView()
+  private lazy var imageView: RemoteImageView = {
+    let image = RemoteImageView(frame: .zero)
     image.translatesAutoresizingMaskIntoConstraints = false
     image.contentMode = .scaleAspectFit
     image.widthAnchor.constraint(equalTo: image.heightAnchor).isActive = true
@@ -94,8 +87,6 @@ final class SpritesItemView: UIView, Resetable {
     stackView.spacing = 12
     return stackView
   }()
-
-  private var imageSubscription: Disposable?
 
   private enum Constants {
     static let contentInset = NSDirectionalEdgeInsets(top: 6, leading: 6, bottom: 6, trailing: 6)
