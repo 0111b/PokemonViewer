@@ -108,6 +108,6 @@ final class PokemonListItemView: UIView, Resetable {
   private var imageSubscription: Disposable?
 
   private enum Constants {
-    static let contentInset = UIEdgeInsets(top: 6, left: 6, bottom: 6, right: 6)
+    static let contentInset = NSDirectionalEdgeInsets(top: 6, leading: 6, bottom: 6, trailing: 6)
   }
 }
