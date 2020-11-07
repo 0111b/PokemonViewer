@@ -104,6 +104,14 @@ final class PokemonListViewModel {
     }
   }
 
+  func didReceiveMemoryWarning(visibleIdentifiers: [Identifier<Pokemon>]) {
+    os_log("PokemonListViewModel didReceiveMemoryWarning", log: Log.general, type: .error)
+    let visibleIdentifiers = Set(visibleIdentifiers)
+    state.items
+      .filter { !visibleIdentifiers.contains($0.identifier) }
+      .forEach { $0.flushMemory() }
+  }
+
   // MARK: - Output -
 
   private let viewStateRelay = MutableObservable<PokemonListViewState>(value: .empty)

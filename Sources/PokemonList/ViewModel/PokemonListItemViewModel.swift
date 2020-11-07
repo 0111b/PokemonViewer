@@ -79,6 +79,13 @@ final class PokemonListItemViewModel {
     }
   }
 
+  func flushMemory() {
+    $state.write { state in
+      imageRelay.value = .empty
+      state = .idle
+    }
+  }
+
   // MARK: - Output -
 
   let identifier: Identifier<Pokemon>

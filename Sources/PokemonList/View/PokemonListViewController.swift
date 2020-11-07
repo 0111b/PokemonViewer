@@ -39,6 +39,16 @@ final class PokemonListViewController: UIViewController {
     collectionViewLayout.layout = state.layout
   }
 
+  override func didReceiveMemoryWarning() {
+    super.didReceiveMemoryWarning()
+    let visibleIdentifiers = collectionView.indexPathsForVisibleItems
+      .compactMap(itemViewModel(at:))
+      .map(\.identifier)
+    viewModel.didReceiveMemoryWarning(visibleIdentifiers: visibleIdentifiers)
+  }
+
+  // MARK: - Private -
+
   private func setupUI() {
     view.accessibilityIdentifier = AccessibilityId.PokemonList.screen
     view.backgroundColor = Constants.backgroundColor
@@ -149,6 +159,7 @@ final class PokemonListViewController: UIViewController {
   }
 }
 
+// MARK: - UICollectionViewDataSource -
 extension PokemonListViewController: UICollectionViewDataSource {
 
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -186,6 +197,7 @@ extension PokemonListViewController: UICollectionViewDataSource {
 
 }
 
+// MARK: - UICollectionViewDelegate -
 extension PokemonListViewController: UICollectionViewDelegate, UIScrollViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     itemViewModel(at: indexPath).map(viewModel.didSelect(item:))
@@ -225,6 +237,7 @@ extension PokemonListViewController: UICollectionViewDelegate, UIScrollViewDeleg
   }
 }
 
+// MARK: - UISearchControllerDelegate -
 extension PokemonListViewController: UISearchControllerDelegate {
   func willPresentSearchController(_ searchController: UISearchController) {
     collectionView.setContentOffset(CGPoint(x: -Constants.contentInset.left, y: -Constants.contentInset.right),
@@ -237,6 +250,7 @@ extension PokemonListViewController: UISearchControllerDelegate {
   }
 }
 
+// MARK: - UISearchResultsUpdating -
 extension PokemonListViewController: UISearchResultsUpdating {
   func updateSearchResults(for searchController: UISearchController) {
     guard let searchText = searchController.searchBar.text?
@@ -250,6 +264,8 @@ extension PokemonListViewController: UISearchResultsUpdating {
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: task)
   }
 }
+
+// MARK: - Extensions -
 
 private extension PokemonListLayout {
   var icon: UIImage? {
