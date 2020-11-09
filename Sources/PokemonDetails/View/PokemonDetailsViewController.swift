@@ -30,6 +30,7 @@ final class PokemonDetailsViewController: UIViewController {
     view.backgroundColor = Constants.backgroundColor
     view.accessibilityIdentifier = AccessibilityId.PokemonDetails.screen
     title = viewModel.identifier.rawValue.capitalized
+    navigationItem.largeTitleDisplayMode = traitCollection.userInterfaceIdiom == .pad ? .automatic : .never
     view.addSubview(scrollView)
     scrollView.addStretchedToBounds(subview: contentContainerView)
     contentContainerView.addSubview(mainStackView)
