@@ -40,7 +40,7 @@ final class PokemonListItemView: UIView, Resetable {
       self.titleLabel.text = state.title
       self.imageView.set(state: state.image)
       self.update(layout: layout, hasNoImage: state.hasNoImage)
-      self.didUpdatePokemonType(colors: state.typeColors)
+      self.update(colors: state.typeColors)
     }
     update(layout: layout, hasNoImage: false)
   }
@@ -55,23 +55,13 @@ final class PokemonListItemView: UIView, Resetable {
   func resetToEmptyState() {
     stateSubscription = nil
     titleLabel.text = nil
-    didUpdatePokemonType(colors: [])
+    update(colors: [])
     imageView.resetToEmptyState()
   }
 
   override func layoutSublayers(of layer: CALayer) {
     super.layoutSublayers(of: layer)
-    pokemonTypesLayer.frame = bounds
-  }
-
-  private func didUpdatePokemonType(colors: [UIColor]) {
-    let colorsCount = colors.isEmpty ? 1 : Double(colors.count)
-    let gradientStop = 0.3
-    pokemonTypesLayer.locations = stride(from: 0.0,
-                                         through: gradientStop,
-                                         by: gradientStop / colorsCount)
-      .map { NSNumber(value: $0) }
-    pokemonTypesLayer.colors = (colors + [.clear]).map(\.cgColor)
+    markLayer.frame = bounds
   }
 
   private func commonInit() {
@@ -79,7 +69,17 @@ final class PokemonListItemView: UIView, Resetable {
     addStretchedToBounds(subview: stackView, insets: Constants.contentInset)
     stackView.addArrangedSubview(imageView)
     stackView.addArrangedSubview(titleLabel)
-    layer.insertSublayer(pokemonTypesLayer, at: 0)
+    layer.insertSublayer(markLayer, at: 0)
+  }
+
+  private func update(colors: [UIColor]) {
+    let colorsCount = colors.isEmpty ? 1 : Double(colors.count)
+    let gradientStop = 0.3
+    markLayer.locations = stride(from: 0.0,
+                                         through: gradientStop,
+                                         by: gradientStop / colorsCount)
+      .map { NSNumber(value: $0) }
+    markLayer.colors = (colors + [.clear]).map(\.cgColor)
   }
 
   private func update(layout: PokemonListLayout, hasNoImage: Bool) {
@@ -136,7 +136,7 @@ final class PokemonListItemView: UIView, Resetable {
     return stackView
   }()
 
-  private lazy var pokemonTypesLayer: CAGradientLayer = {
+  private lazy var markLayer: CAGradientLayer = {
     let gradientLayer = CAGradientLayer()
     gradientLayer.startPoint = CGPoint(x: 1.0, y: 0.0)
     gradientLayer.endPoint = CGPoint(x: 0.0, y: 1.0)
