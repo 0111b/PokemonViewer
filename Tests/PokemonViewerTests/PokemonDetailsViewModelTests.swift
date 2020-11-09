@@ -13,11 +13,15 @@ final class PokemonDetailsViewModelTests: XCTestCase {
   var viewModel: PokemonDetailsViewModel!
   var dependency: MockDependency!
   var collector: ObservableCollector<PokemonDetailsViewState>!
+  var coordinator: MockDetailsViewModelCoordinator!
 
 
   override func setUpWithError() throws {
     dependency = MockDependency()
-    viewModel = PokemonDetailsViewModel(dependency: dependency, identifier: .init(rawValue: "pokemon"))
+    coordinator = MockDetailsViewModelCoordinator()
+    viewModel = PokemonDetailsViewModel(dependency: dependency,
+                                        coordinator: coordinator,
+                                        identifier: .init(rawValue: "pokemon"))
     dependency.mockPokemonAPIService.detailsMock.returns(Disposable.empty)
     collector = ObservableCollector(observable: viewModel.pokemon, skipCurrent: true)
   }
@@ -58,6 +62,12 @@ final class PokemonDetailsViewModelTests: XCTestCase {
     assertView(state: [.loading, .data(details)])
   }
 
+  func testSpriteLegend() {
+    viewModel.showSpriteLegend()
+
+    XCTAssertTrue(coordinator.showSpriteLegendMock.called)
+  }
+
   func assertView(state: [PokemonDetailsViewState]) {
     let expectation = self.expectation(with: collector, keyPath: \.values, toBe: state)
     wait(for: [expectation], timeout: Stubs.assertInterval)
@@ -76,4 +86,13 @@ extension PokemonDetailsViewState: Equatable {
       return false
     }
   }
+}
+
+final class MockDetailsViewModelCoordinator: PokemonDetailsViewModelCoordinating {
+
+  public lazy var showSpriteLegendMock = MockFunc.mock(for: self.showSpriteLegend)
+  func showSpriteLegend() {
+    showSpriteLegendMock.call()
+  }
+
 }
