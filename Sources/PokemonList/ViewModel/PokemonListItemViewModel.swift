@@ -12,30 +12,39 @@ final class PokemonListItemViewModel {
   typealias Dependency = PokemonAPIServiceProvider & ImageServiceProvider
 
   init(dependency: Dependency, id: Identifier<Pokemon>) {
-   identifier = id
+    state = PokemonListItemState(id: id)
     self.dependency = dependency
   }
 
   private let dependency: Dependency
 
   @Protected
-  private var state: PokemonListItemState = .idle
+  private var state: PokemonListItemState
 
-  private func fetchDetails() -> Disposable {
+  private func update(_ closure: (inout PokemonListItemState) -> Void) {
+    $state.write { state in
+      var updatedState = state
+      closure(&updatedState)
+      viewStateRelay.value = updatedState.viewState
+      state = updatedState
+    }
+  }
+
+  private func fetchDetails(identifier: Identifier<Pokemon>) -> Disposable {
     dependency.pokemonAPIService.details(for: identifier, cachePolicy: .cacheFirst) { [weak self] result in
       guard let self = self else { return }
-      switch result {
-      case .failure(let error):
-        os_log("PokemonListItemViewModel details %{public}@ error %@", log: Log.general,
-               type: .error, self.identifier.rawValue, String(describing: error))
-        self.didFailToFetchImage()
-        self.state = .idle
-      case .success(let pokemon):
-        if let url = pokemon.sprites.first?.url {
-          self.state = .imageRequest(self.fetchImage(url: url))
-        } else {
-          self.didFailToFetchImage()
-          self.state = .done
+      self.update { state in
+        switch result {
+        case .failure(let error):
+          os_log("PokemonListItemViewModel details %{public}@ error %@", log: Log.general,
+                 type: .error, state.identifier.rawValue, String(describing: error))
+          state = state.with(detailsError: error)
+        case .success(let pokemon):
+          if let url = pokemon.sprites.first?.url {
+            state = state.with(imageRequest: self.fetchImage(url: url), types: pokemon.types)
+          } else {
+            state = state.with(detailsError: .decodingError(nil))
+          }
         }
       }
     }
@@ -45,63 +54,49 @@ final class PokemonListItemViewModel {
     dependency.imageService.image(url: url,
                                   cachePolicy: .cacheFirst,
                                   adapter: RequestAdapter()) { [weak self] result in
-      guard let self = self else { return }
-      switch result {
-      case .failure(let error):
-        os_log("PokemonListItemViewModel image %{public}@ error %@", log: Log.general,
-               type: .error, self.identifier.rawValue, String(describing: error))
-        self.didFailToFetchImage()
-        self.state = .idle
-      case .success(let image):
-        self.imageRelay.value = .image(image)
-        self.state = .done
+      self?.update { state in
+        switch result {
+        case .failure(let error):
+          os_log("PokemonListItemViewModel image %{public}@ error %@", log: Log.general,
+                 type: .error, state.identifier.rawValue, String(describing: error))
+          state = state.with(imageError: error)
+        case .success(let image):
+          state = state.withImage(image: image)
+        }
       }
     }
   }
 
-  private func didFailToFetchImage() {
-    self.imageRelay.value = .image(Images.defaultPlaceholder)
-  }
 
   // MARK: - Input -
 
   func willDisplay() {
-    $state.write { state in
-      guard state.canStartRequest else { return }
-      imageRelay.value = .loading
-      state = .detailsRequest(fetchDetails())
+    update { state in
+      guard state.canStartRequest() else { return }
+      state = state.with(detailsRequest: fetchDetails(identifier: state.identifier))
     }
   }
 
   func didEndDisplaying() {
-    $state.write { state in
+    update { state in
       state = state.canceled()
     }
   }
 
   func flushMemory() {
-    $state.write { state in
-      imageRelay.value = .empty
-      state = .idle
+    update { state in
+      state = state.flushMemory()
     }
   }
 
   // MARK: - Output -
-
-  let identifier: Identifier<Pokemon>
-  var title: String { identifier.rawValue.capitalized }
-  private let imageRelay = MutableObservable<RemoteImageViewState>(value: .empty)
-  var image: Observable<RemoteImageViewState> { imageRelay }
+  var identifier: Identifier<Pokemon> { state.identifier }
+  private let viewStateRelay = MutableObservable<PokemonListItemViewState>(value: .empty)
+  var viewState: Observable<PokemonListItemViewState> { viewStateRelay }
 }
 
 extension PokemonListItemViewModel: Equatable {
   static func == (lhs: PokemonListItemViewModel, rhs: PokemonListItemViewModel) -> Bool {
-    lhs.identifier == rhs.identifier
-  }
-}
-
-extension PokemonListItemViewModel: Hashable {
-  func hash(into hasher: inout Hasher) {
-    hasher.combine(identifier)
+    lhs.state.identifier == rhs.state.identifier
   }
 }

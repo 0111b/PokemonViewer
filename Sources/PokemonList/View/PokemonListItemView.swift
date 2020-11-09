@@ -34,18 +34,16 @@ final class PokemonListItemView: UIView, Resetable {
     commonInit()
   }
 
-  func set(title: String, image: Observable<RemoteImageViewState>, layout: PokemonListLayout) {
-    titleLabel.text = title
-    switch layout {
-    case .list:
-      stackView.axis = .horizontal
-      titleLabel.isHidden = false
-    case .grid:
-      stackView.axis = .vertical
-      titleLabel.isHidden = true
+  func set(state: Observable<PokemonListItemViewState>, layout: PokemonListLayout) {
+    stateSubscription = state.observe(on: .main) { [weak self] state in
+      guard let self = self else { return }
+      self.titleLabel.text = state.title
+      self.imageView.set(state: state.image)
+      self.update(layout: layout, hasNoImage: state.hasNoImage)
+      let colors: [UIColor] = state.title.count % 2 == 0 ? [.systemBlue] : [.systemPink, .systemYellow]
+      self.didUpdatePokemonType(colors: colors)
     }
-    imageView.bind(to: image, on: .main)
-    pokemonTypeColors = title.count % 2 == 0 ? [.systemBlue, .systemYellow] : [.systemTeal]
+    update(layout: layout, hasNoImage: false)
   }
 
   func apply(style: Style) {
@@ -56,12 +54,9 @@ final class PokemonListItemView: UIView, Resetable {
   }
 
   func resetToEmptyState() {
+    stateSubscription = nil
     titleLabel.text = nil
     imageView.resetToEmptyState()
-  }
-
-  var pokemonTypeColors = [UIColor]() {
-    didSet { didUpdatePokemonTypeColors() }
   }
 
   override func layoutSublayers(of layer: CALayer) {
@@ -69,8 +64,8 @@ final class PokemonListItemView: UIView, Resetable {
     pokemonTypesLayer.frame = bounds
   }
 
-  private func didUpdatePokemonTypeColors() {
-    pokemonTypesLayer.colors = (pokemonTypeColors + [.clear]).map(\.cgColor)
+  private func didUpdatePokemonType(colors: [UIColor]) {
+    pokemonTypesLayer.colors = (colors + [.clear]).map(\.cgColor)
   }
 
   private func commonInit() {
@@ -81,6 +76,26 @@ final class PokemonListItemView: UIView, Resetable {
     layer.insertSublayer(pokemonTypesLayer, at: 0)
   }
 
+  private func update(layout: PokemonListLayout, hasNoImage: Bool) {
+    imageView.isHidden = false
+    switch layout {
+    case .list:
+      stackView.axis = .horizontal
+      titleLabel.isHidden = false
+      imageView.isHidden = false
+    case .grid where hasNoImage == true:
+      stackView.axis = .vertical
+      titleLabel.isHidden = false
+      imageView.isHidden = true
+    case .grid:
+      stackView.axis = .vertical
+      titleLabel.isHidden = true
+      imageView.isHidden = false
+    }
+  }
+
+  private var stateSubscription: Disposable?
+
   private lazy var titleLabel: UILabel = {
     let label = UILabel()
     label.translatesAutoresizingMaskIntoConstraints = false
@@ -90,7 +105,7 @@ final class PokemonListItemView: UIView, Resetable {
     label.setContentHuggingPriority(.required, for: .vertical)
     label.adjustsFontForContentSizeCategory = true
     label.textAlignment = .left
-    label.numberOfLines = 1
+    label.numberOfLines = 0
     label.adjustsFontSizeToFitWidth = true
     label.minimumScaleFactor = 0.7
     return label
