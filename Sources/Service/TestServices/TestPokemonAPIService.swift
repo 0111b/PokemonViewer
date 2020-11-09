@@ -48,11 +48,11 @@ final class TestPokemonAPIService: PokemonAPIService {
   }
 
   private func page(_ pageNumber: UInt) -> PokemonAPI.PokemonPage {
-    PokemonAPI.PokemonPage(count: 100,
-                           items: [
-                            .init(rawValue: "1"),
-                            .init(rawValue: "2")
-                           ])
+    let items = stride(from: 0, to: 5, by: 1)
+      .map(AccessibilityId.PokemonList.pokemon(at:))
+      .map(Identifier<Pokemon>.init(rawValue:))
+    return PokemonAPI.PokemonPage(count: 100,
+                                  items: items)
   }
 
   private func pokemon(_ id: Identifier<Pokemon>) -> Pokemon {
