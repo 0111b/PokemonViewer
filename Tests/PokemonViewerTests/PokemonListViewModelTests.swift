@@ -203,6 +203,24 @@ final class PokemonListViewModelTests: XCTestCase {
     assert(pages: [PokemonListState.firstPage, PokemonListState.firstPage.next()])
   }
 
+  func testNameFilter() {
+    let responses = responseIterator(count: 5)
+    dependency.mockPokemonAPIService.$listResult.thenReturns(responses())
+    dependency.mockPokemonAPIService.$listResult.thenReturns(responses())
+    dependency.mockPokemonAPIService.$listResult.thenReturns(responses())
+
+    viewModel.viewDidLoad()
+    assertViewState(loading: [.loading, .clear])
+    viewModel.askForNextPage()
+    assertViewState(loading: [.loading, .clear],
+                    items: [["1"], ["1", "2"]])
+
+    viewModel.didChangeNameFilter(name: "2")
+    assertViewState(loading: [.clear],
+                    items: [["2"]])
+
+  }
+
   // MARK: - Asserts
 
   func failedResponse() -> NetworkResult<PokemonAPI.PokemonPage> {

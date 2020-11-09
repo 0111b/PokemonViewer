@@ -3,6 +3,8 @@
 "EmptyPokemonDetails.Hint.noItemSelected" = "Пожалуйста, выберите покемона";
 "PokemonList.Error.transport" = "Ошибка сети\nНажмите, чтобы повторить";
 "PokemonList.Error.default" = "Что-то пошло не так\nНажмите, чтобы повторить";
+"PokemonList.Search.placeholder" = "Фильтровать по имени";
+"PokemonList.Search.noMatch" = "Ничего не найдено";
 "PokemonDetails.Error.transport" = "Ошибка сети";
 "PokemonDetails.Error.default" = "Что-то пошло не так";
 "PokemonDetails.Error.cta" = "Попробовать еще раз";
@@ -20,3 +22,16 @@
 "PokemonDetails.Content.specialAttack" = "Спец-атака";
 "PokemonDetails.Content.specialDefense" = "Спец-защита";
 "PokemonDetails.Content.speed" = "Скорость";
+"SpriteLegend.title" = "Легенда";
+"SpriteLegend.PokemonSprite.Male.legend" = "👦";
+"SpriteLegend.PokemonSprite.Male.kind" = "Мужской";
+"SpriteLegend.PokemonSprite.Female.legend" = "👩";
+"SpriteLegend.PokemonSprite.Female.kind" = "Женский";
+"SpriteLegend.PokemonSprite.Front.legend" = "⭕️";
+"SpriteLegend.PokemonSprite.Front.kind" = "Лицо";
+"SpriteLegend.PokemonSprite.Back.legend" = "🚫";
+"SpriteLegend.PokemonSprite.Back.kind" = "Спина";
+"SpriteLegend.PokemonSprite.Default.legend" = "🌎";
+"SpriteLegend.PokemonSprite.Default.kind" = "По умолчанию";
+"SpriteLegend.PokemonSprite.Shiny.legend" = "☀️";
+"SpriteLegend.PokemonSprite.Shiny.kind" = "Блестящий";

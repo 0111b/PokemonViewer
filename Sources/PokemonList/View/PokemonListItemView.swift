@@ -25,7 +25,7 @@ final class PokemonListItemView: UIView, Resetable {
   }
 
   override init(frame: CGRect) {
-    super.init(frame: .zero)
+    super.init(frame: frame)
     commonInit()
   }
 
@@ -34,31 +34,15 @@ final class PokemonListItemView: UIView, Resetable {
     commonInit()
   }
 
-  private func commonInit() {
-    layer.masksToBounds = true
-    addStretchedToBounds(subview: stackView, insets: Constants.contentInset)
-    stackView.addArrangedSubview(imageView)
-    stackView.addArrangedSubview(titleLabel)
-  }
-
-  func set(title: String, image: Observable<UIImage?>, axis: NSLayoutConstraint.Axis) {
-    titleLabel.text = title
-    stackView.axis = axis
-    switch axis {
-    case .horizontal:
-      titleLabel.textAlignment = .left
-    case .vertical:
-      titleLabel.textAlignment = .center
-    @unknown default:
-      titleLabel.textAlignment = .center
+  func set(state: Observable<PokemonListItemViewState>, layout: PokemonListLayout) {
+    stateSubscription = state.observe(on: .main) { [weak self] state in
+      guard let self = self else { return }
+      self.titleLabel.attributedText = state.title
+      self.imageView.set(state: state.image)
+      self.update(layout: layout, hasNoImage: state.hasNoImage)
+      self.update(colors: state.typeColors)
     }
-    imageSubscription = image.observe(on: .main) { [weak imageView] image in
-      guard let imageView = imageView else { return }
-      UIView.transition(with: imageView,
-                        duration: 0.5, options: .curveEaseIn) {
-        imageView.image = image ?? Images.defaultPlaceholder?.withRenderingMode(.alwaysTemplate)
-      }
-    }
+    update(layout: layout, hasNoImage: false)
   }
 
   func apply(style: Style) {
@@ -69,10 +53,62 @@ final class PokemonListItemView: UIView, Resetable {
   }
 
   func resetToEmptyState() {
+    stateSubscription = nil
     titleLabel.text = nil
-    imageView.image = nil
-    imageSubscription = nil
+    update(colors: [])
+    imageView.resetToEmptyState()
   }
+
+  override func layoutSublayers(of layer: CALayer) {
+    super.layoutSublayers(of: layer)
+    markLayer.frame = bounds
+  }
+
+  override var backgroundColor: UIColor? {
+    didSet {
+      guard let currentColors = markLayer.colors as? [CGColor] else { return }
+      update(colors: currentColors.dropLast().map(UIColor.init(cgColor:)))
+    }
+  }
+
+  private func commonInit() {
+    layer.masksToBounds = true
+    addStretchedToBounds(subview: stackView, insets: Constants.contentInset)
+    stackView.addArrangedSubview(imageView)
+    stackView.addArrangedSubview(titleLabel)
+    layer.insertSublayer(markLayer, at: 0)
+  }
+
+  private func update(colors: [UIColor]) {
+    let colorsCount = colors.isEmpty ? 1 : Double(colors.count)
+    let gradientStop = 0.3
+    markLayer.locations = stride(from: 0.0,
+                                         through: gradientStop,
+                                         by: gradientStop / colorsCount)
+      .map { NSNumber(value: $0) }
+    let lastColor = self.backgroundColor ?? .clear
+    markLayer.colors = (colors + [lastColor]).map(\.cgColor)
+  }
+
+  private func update(layout: PokemonListLayout, hasNoImage: Bool) {
+    imageView.isHidden = false
+    switch layout {
+    case .list:
+      stackView.axis = .horizontal
+      titleLabel.isHidden = false
+      imageView.isHidden = false
+    case .grid where hasNoImage == true:
+      stackView.axis = .vertical
+      titleLabel.isHidden = false
+      imageView.isHidden = true
+    case .grid:
+      stackView.axis = .vertical
+      titleLabel.isHidden = true
+      imageView.isHidden = false
+    }
+  }
+
+  private var stateSubscription: Disposable?
 
   private lazy var titleLabel: UILabel = {
     let label = UILabel()
@@ -82,12 +118,15 @@ final class PokemonListItemView: UIView, Resetable {
     label.setContentHuggingPriority(.required, for: .horizontal)
     label.setContentHuggingPriority(.required, for: .vertical)
     label.adjustsFontForContentSizeCategory = true
+    label.textAlignment = .left
     label.numberOfLines = 0
+    label.adjustsFontSizeToFitWidth = true
+    label.minimumScaleFactor = 0.7
     return label
   }()
 
-  private lazy var imageView: UIImageView = {
-    let image = UIImageView()
+  private lazy var imageView: RemoteImageView = {
+    let image = RemoteImageView(frame: .zero)
     image.translatesAutoresizingMaskIntoConstraints = false
     image.contentMode = .scaleAspectFit
     image.widthAnchor.constraint(equalTo: image.heightAnchor).isActive = true
@@ -105,9 +144,20 @@ final class PokemonListItemView: UIView, Resetable {
     return stackView
   }()
 
-  private var imageSubscription: Disposable?
+  private lazy var markLayer: CAGradientLayer = {
+    let gradientLayer = CAGradientLayer()
+    gradientLayer.startPoint = CGPoint(x: 1.0, y: 0.0)
+    gradientLayer.endPoint = CGPoint(x: 0.0, y: 1.0)
+    return gradientLayer
+  }()
 
   private enum Constants {
-    static let contentInset = UIEdgeInsets(top: 6, left: 6, bottom: 6, right: 6)
+    static let contentInset = NSDirectionalEdgeInsets(top: 6, leading: 6, bottom: 6, trailing: 6)
+  }
+}
+
+extension PokemonListItemView: Highlightable {
+  func set(highlighted: Bool) {
+    layer.transform = highlighted ? CATransform3DMakeScale(0.95, 0.95, 1.0) : CATransform3DIdentity
   }
 }

@@ -22,5 +22,4 @@ struct PokemonDetailsScreen {
 
   var errorView: XCUIElement { app.otherElements[Screen.errorView] }
   var contentView: XCUIElement { app.otherElements[Screen.contentView] }
-  var pokemonName: XCUIElement { contentView.staticTexts[Screen.pokemonName] }
 }

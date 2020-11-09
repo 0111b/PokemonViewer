@@ -14,11 +14,11 @@ enum PokemonAPI {
       let results: [Value]
     }
 
-    struct Named: Decodable {
-      let name: String
+    struct Named<Value: Decodable>: Decodable {
+      let name: Value
     }
 
-    typealias PokemonList = NetworkResult<PageResponse<Named>>
+    typealias PokemonList = NetworkResult<PageResponse<Named<Identifier<Pokemon>>>>
 
     struct PokemonDetails: Decodable {
       let name: String
@@ -44,17 +44,17 @@ enum PokemonAPI {
     struct PokemonStat: Decodable {
       let baseStat: Int
       let effort: Int
-      let stat: Named
+      let stat: Named<Identifier<PokemonViewer.PokemonStat>>
     }
 
     struct PokemonAbility: Decodable {
       let slot: Int
-      let ability: Named
+      let ability: Named<Identifier<PokemonViewer.PokemonAbility>>
     }
 
     struct PokemonType: Decodable {
       let slot: Int
-      let type: Named
+      let type: Named<String>
     }
   }
 

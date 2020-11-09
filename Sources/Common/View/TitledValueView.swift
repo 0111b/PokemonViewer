@@ -22,7 +22,7 @@ final class TitledValueView: UIView {
   }
 
   override init(frame: CGRect) {
-    super.init(frame: .zero)
+    super.init(frame: frame)
     commonInit()
   }
 
@@ -38,8 +38,13 @@ final class TitledValueView: UIView {
   }
 
   func set(title: String, value: String?) {
-    titleLabel.text = title
-    valueLabel.text = value
+    set(title: NSAttributedString(string: title),
+        value: value.map(NSAttributedString.init(string:)))
+  }
+
+  func set(title: NSAttributedString, value: NSAttributedString?) {
+    titleLabel.attributedText = title
+    valueLabel.attributedText = value
   }
 
   func apply(style: Style) {
@@ -65,7 +70,7 @@ final class TitledValueView: UIView {
     label.translatesAutoresizingMaskIntoConstraints = false
     label.adjustsFontForContentSizeCategory = true
     label.setContentCompressionResistancePriority(.required, for: .horizontal)
-    label.setContentHuggingPriority(.required, for: .horizontal)
+    label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
     label.textAlignment = .left
     label.numberOfLines = 0
     return label

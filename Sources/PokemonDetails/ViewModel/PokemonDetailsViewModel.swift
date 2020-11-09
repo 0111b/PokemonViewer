@@ -7,14 +7,20 @@
 
 import Foundation
 
+protocol PokemonDetailsViewModelCoordinating: AnyObject {
+  func showSpriteLegend()
+}
+
 final class PokemonDetailsViewModel {
   typealias Dependency = PokemonAPIServiceProvider & ImageServiceProvider
 
-  init(dependency: Dependency, identifier: Identifier<Pokemon>) {
+  init(dependency: Dependency, coordinator: PokemonDetailsViewModelCoordinating, identifier: Identifier<Pokemon>) {
     self.dependency = dependency
+    self.coordinator = coordinator
     self.identifier = identifier
   }
 
+  private weak var coordinator: PokemonDetailsViewModelCoordinating?
   private let dependency: Dependency
 
   @Protected
@@ -52,6 +58,10 @@ final class PokemonDetailsViewModel {
 
   func viewDidLoad() {
     fetch()
+  }
+
+  func showSpriteLegend() {
+    coordinator?.showSpriteLegend()
   }
 
   // MARK: - Output -

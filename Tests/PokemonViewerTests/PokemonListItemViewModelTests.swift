@@ -12,18 +12,18 @@ final class PokemonListItemViewModelTests: XCTestCase {
 
   var viewModel: PokemonListItemViewModel!
   var dependency: MockDependency!
-  var collector: ObservableCollector<UIImage?>!
+  var collector: ObservableCollector<PokemonListItemViewState>!
 
   override func setUpWithError() throws {
     dependency = MockDependency()
     viewModel = PokemonListItemViewModel(dependency: dependency, id: .init(rawValue: "pokemon"))
     dependency.mockPokemonAPIService.detailsMock.returns(Disposable.empty)
     dependency.mockImageService.imageMock.returns(Disposable.empty)
-    collector = ObservableCollector(observable: viewModel.image, skipCurrent: true)
+    collector = ObservableCollector(observable: viewModel.viewState, skipCurrent: true)
   }
 
   func testInitialValues() {
-    XCTAssertNil(viewModel.image.value)
+    XCTAssertEqual(viewModel.viewState.value, .empty)
   }
 
   func testDetailsError() {
@@ -31,7 +31,10 @@ final class PokemonListItemViewModelTests: XCTestCase {
 
     viewModel.willDisplay()
 
-    assertViewState(image: [])
+    assert(states: [
+      state(typeColors: [], hasNoImage: false, image: .loading),
+      state(typeColors: [], hasNoImage: true, image: .image(UIImage()))
+    ])
   }
 
   func testNoSprites() {
@@ -40,7 +43,10 @@ final class PokemonListItemViewModelTests: XCTestCase {
 
     viewModel.willDisplay()
 
-    assertViewState(image: [])
+    assert(states: [
+      state(typeColors: [], hasNoImage: false, image: .loading),
+      state(typeColors: [], hasNoImage: true, image: .image(UIImage()))
+    ])
   }
 
   func testImageError() {
@@ -49,7 +55,11 @@ final class PokemonListItemViewModelTests: XCTestCase {
 
     viewModel.willDisplay()
 
-    assertViewState(image: [])
+    assert(states: [
+      state(typeColors: [], hasNoImage: false, image: .loading),
+      state(typeColors: [], hasNoImage: false, image: .loading),
+      state(typeColors: [], hasNoImage: true, image: .image(UIImage()))
+    ])
   }
 
   func testSuccess() {
@@ -59,13 +69,89 @@ final class PokemonListItemViewModelTests: XCTestCase {
 
     viewModel.willDisplay()
 
-    assertViewState(image: [image])
+    assert(states: [
+      state(typeColors: [], hasNoImage: false, image: .loading),
+      state(typeColors: [], hasNoImage: false, image: .loading),
+      state(typeColors: [], hasNoImage: false, image: .image(image))
+    ])
   }
 
-  func assertViewState(image: [UIImage?]) {
-    let expectation = self.expectation(with: collector, keyPath: \.values, toBe: image)
+  func testFlushMemory() {
+    let image = UIImage()
+    dependency.mockPokemonAPIService.$detailsResult.thenReturns(.success(Stubs.pokemon(sprites: [Stubs.sprite()])))
+    dependency.mockImageService.$imageResult.thenReturns(.success(image))
+    viewModel.willDisplay()
+    assert(states: [
+      state(typeColors: [], hasNoImage: false, image: .loading),
+      state(typeColors: [], hasNoImage: false, image: .loading),
+      state(typeColors: [], hasNoImage: false, image: .image(image))
+    ])
+
+
+    viewModel.flushMemory()
+
+    assert(states: [
+      state(typeColors: [], hasNoImage: false, image: .empty)
+    ])
+  }
+
+  func testColors() {
+    let image = UIImage()
+    dependency.mockPokemonAPIService.$detailsResult.thenReturns(.success(Stubs.pokemon(sprites: [],
+                                                                                       types: [.fire])))
+    dependency.mockImageService.$imageResult.thenReturns(.success(image))
+
+    viewModel.willDisplay()
+
+    assert(states: [
+      state(typeColors: [], hasNoImage: false, image: .loading),
+      state(typeColors: [.red], hasNoImage: true, image: .image(UIImage()))
+    ])
+  }
+
+  func testNameFilter() {
+    viewModel = PokemonListItemViewModel(dependency: dependency, id: .init(rawValue: "pokemon"))
+    XCTAssertNotNil(viewModel.applying(filter: PokemonListFilter()))
+
+    viewModel = PokemonListItemViewModel(dependency: dependency, id: .init(rawValue: "pokemon"))
+    XCTAssertNotNil(viewModel.applying(filter: PokemonListFilter(name: "oke")))
+
+    viewModel = PokemonListItemViewModel(dependency: dependency, id: .init(rawValue: "pokemon"))
+    XCTAssertNil(viewModel.applying(filter: PokemonListFilter(name: "transformer")))
+  }
+
+  private func state(typeColors: [UIColor], hasNoImage: Bool, image: RemoteImageViewState) -> PokemonListItemViewState {
+    PokemonListItemViewState(title: NSAttributedString(string: "Pokemon"), typeColors: typeColors,
+                             hasNoImage: hasNoImage, image: image)
+  }
+
+  func assert(states: [PokemonListItemViewState]) {
+    let expectation = self.expectation(with: collector, keyPath: \.values, toBe: states)
     wait(for: [expectation], timeout: Stubs.assertInterval)
     collector.reset()
+  }
+
+}
+
+extension RemoteImageViewState: Equatable {
+  public static func == (lhs: RemoteImageViewState, rhs: RemoteImageViewState) -> Bool {
+    switch (lhs, rhs) {
+    case (.loading, .loading),
+         (.image(_?), image(_?)),
+         (.image(nil), image(nil)):
+      return true
+    default:
+      return false
+    }
+  }
+}
+
+extension PokemonListItemViewState: Equatable {
+  public static func == (lhs: PokemonListItemViewState, rhs: PokemonListItemViewState) -> Bool {
+    lhs.title == rhs.title
+      && lhs.typeColors.count == rhs.typeColors.count
+      && lhs.hasNoImage == rhs.hasNoImage
+      && lhs.image == rhs.image
   }
 
 }

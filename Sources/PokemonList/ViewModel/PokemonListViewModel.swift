@@ -8,7 +8,7 @@
 import Foundation
 import os.log
 
-protocol PokemonListViewModelCoordinating: class {
+protocol PokemonListViewModelCoordinating: AnyObject {
   func showDetails(for identifier: Identifier<Pokemon>)
 }
 
@@ -42,7 +42,7 @@ final class PokemonListViewModel {
       guard state.canStartRequest(forced: userInitiated) else { return }
       guard let page = reload ? PokemonListState.firstPage : state.nextPage else { return }
       let cachePolicy: RequestCachePolicy = userInitiated ? .networkFirst : .cacheFirst
-      os_log("PokemonListViewModel fetch %@ %@", log: Log.general, type: .info,
+      os_log("PokemonListViewModel fetch %{public}@ %{public}@", log: Log.general, type: .info,
              String(describing: page), String(describing: cachePolicy))
       let pageRequest = dependency.pokemonAPIService
         .list(page: page, cachePolicy: cachePolicy, completion: didLoad(page: page))
@@ -88,7 +88,7 @@ final class PokemonListViewModel {
   }
 
   func didSelect(item: PokemonListItemViewModel) {
-    os_log("PokemonListViewModel didSelect %@", log: Log.general, type: .info, item.identifier.rawValue)
+    os_log("PokemonListViewModel didSelect %{public}@", log: Log.general, type: .info, item.identifier.rawValue)
     coordinator?.showDetails(for: item.identifier)
   }
 
@@ -96,6 +96,21 @@ final class PokemonListViewModel {
     self.update { state in
       state = state.with(layout: state.layout.toggle())
     }
+  }
+
+  func didChangeNameFilter(name: String) {
+    os_log("PokemonListViewModel Filter: name <%@>", log: Log.general, type: .info, name)
+    self.update { state in
+      state = state.with(nameFilter: name)
+    }
+  }
+
+  func didReceiveMemoryWarning(visibleIdentifiers: [Identifier<Pokemon>]) {
+    os_log("PokemonListViewModel didReceiveMemoryWarning", log: Log.general, type: .error)
+    let visibleIdentifiers = Set(visibleIdentifiers)
+    state.items
+      .filter { !visibleIdentifiers.contains($0.identifier) }
+      .forEach { $0.flushMemory() }
   }
 
   // MARK: - Output -

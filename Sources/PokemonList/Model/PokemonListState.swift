@@ -9,6 +9,7 @@ import Foundation
 
 struct PokemonListState: Equatable {
   let layout: PokemonListLayout
+  let filter: PokemonListFilter
   let list: ListData?
   let pageRequest: PageRequestState
 
@@ -28,34 +29,45 @@ struct PokemonListState: Equatable {
   }
 
   var viewState: PokemonListViewState {
-    let loading: PageLoadingViewState
-    switch pageRequest {
-    case .pending:
-      loading = .loading
-    case .error(let error):
-      loading = .hint(error.recoveryOptions)
-    case .idle:
-      loading = nextPage == nil ? .hint(Strings.Screens.PokemonList.noMoreItems) : .clear
-    }
+    let items: [PokemonListItemViewModel] = self.items.compactMap { $0.applying(filter: filter) }
+    let loading: PageLoadingViewState = {
+      switch pageRequest {
+      case .pending:
+        return .loading
+      case .error(let error):
+        return .hint(error.recoveryOptions)
+      case .idle:
+        guard nextPage == nil else { return .clear }
+        if filter.hasConditions {
+          return items.isEmpty ? .hint(Strings.Screens.PokemonList.Search.noMatch) : .clear
+        } else {
+          return .hint(Strings.Screens.PokemonList.noMoreItems)
+        }
+      }
+    }()
     return PokemonListViewState(items: items,
                                 loading: loading,
                                 layout: layout)
   }
 
   func with(layout updatedLayout: PokemonListLayout) -> PokemonListState {
-    PokemonListState(layout: updatedLayout, list: list, pageRequest: pageRequest)
+    PokemonListState(layout: updatedLayout, filter: filter, list: list, pageRequest: pageRequest)
   }
 
   func with(error: NetworkError) -> PokemonListState {
-    PokemonListState(layout: layout, list: list, pageRequest: .error(error))
+    PokemonListState(layout: layout, filter: filter, list: list, pageRequest: .error(error))
   }
 
   func with(pageRequest request: Disposable) -> PokemonListState {
-    PokemonListState(layout: layout, list: list, pageRequest: .pending(request))
+    PokemonListState(layout: layout, filter: filter, list: list, pageRequest: .pending(request))
   }
 
   func with(list data: ListData) -> PokemonListState {
-    PokemonListState(layout: layout, list: data, pageRequest: .idle)
+    PokemonListState(layout: layout, filter: filter, list: data, pageRequest: .idle)
+  }
+
+  func with(nameFilter name: String) -> PokemonListState {
+    PokemonListState(layout: layout, filter: PokemonListFilter(name: name), list: list, pageRequest: pageRequest)
   }
 
   func canStartRequest(forced: Bool) -> Bool {
@@ -66,9 +78,9 @@ struct PokemonListState: Equatable {
     }
   }
 
-  static let empty = PokemonListState(layout: .list, list: nil, pageRequest: .idle)
+  static let empty = PokemonListState(layout: .list, filter: PokemonListFilter(), list: nil, pageRequest: .idle)
 
-  static var firstPage: Page { Page(limit: 10) }
+  static var firstPage: Page { Page(limit: 100) }
 }
 
 private extension NetworkError {

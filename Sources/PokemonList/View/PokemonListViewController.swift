@@ -39,6 +39,16 @@ final class PokemonListViewController: UIViewController {
     collectionViewLayout.layout = state.layout
   }
 
+  override func didReceiveMemoryWarning() {
+    super.didReceiveMemoryWarning()
+    let visibleIdentifiers = collectionView.indexPathsForVisibleItems
+      .compactMap(itemViewModel(at:))
+      .map(\.identifier)
+    viewModel.didReceiveMemoryWarning(visibleIdentifiers: visibleIdentifiers)
+  }
+
+  // MARK: - Private -
+
   private func setupUI() {
     view.accessibilityIdentifier = AccessibilityId.PokemonList.screen
     view.backgroundColor = Constants.backgroundColor
@@ -55,6 +65,9 @@ final class PokemonListViewController: UIViewController {
     collectionView.refreshControl = refreshControl
     collectionView.dataSource = self
     collectionView.delegate = self
+    definesPresentationContext = true
+    navigationItem.hidesSearchBarWhenScrolling = false
+    navigationItem.searchController = searchController
   }
 
   private func bind() {
@@ -95,7 +108,7 @@ final class PokemonListViewController: UIViewController {
   private lazy var refreshControl: UIRefreshControl = {
     let control = UIRefreshControl()
     control.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
-    control.tintColor = Colors.accent
+    control.tintColor = Constants.tintColor
     return control
   }()
 
@@ -107,8 +120,21 @@ final class PokemonListViewController: UIViewController {
     collectionView.backgroundColor = Constants.backgroundColor
     collectionView.translatesAutoresizingMaskIntoConstraints = false
     collectionView.alwaysBounceVertical = true
+    collectionView.contentInset = Constants.contentInset
     return collectionView
   }()
+
+  private lazy var searchController: UISearchController = {
+    let searchController = UISearchController(searchResultsController: nil)
+    searchController.searchResultsUpdater = self
+    searchController.delegate = self
+    searchController.obscuresBackgroundDuringPresentation = false
+    searchController.searchBar.placeholder = Strings.Screens.PokemonList.Search.placeholder
+    searchController.searchBar.tintColor = Constants.tintColor
+    return searchController
+  }()
+
+  private var updateSearchQeury: DispatchWorkItem?
 
   private func itemViewModel(at indexPath: IndexPath) -> PokemonListItemViewModel? {
     let index = indexPath.row
@@ -122,15 +148,18 @@ final class PokemonListViewController: UIViewController {
 
   private enum Constants {
     static let backgroundColor = Colors.background
+    static let tintColor = Colors.accent
     static let itemStyle = PokemonListItemView.Style(titleColor: Colors.primaryText,
                                                      titleFont: Fonts.title,
                                                      backgroundColor: Colors.sectionBackground)
     static let selectedItemStyle = PokemonListItemView.Style(titleColor: Colors.primaryText,
                                                              titleFont: Fonts.title,
                                                              backgroundColor: Colors.accent)
+    static let contentInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
   }
 }
 
+// MARK: - UICollectionViewDataSource -
 extension PokemonListViewController: UICollectionViewDataSource {
 
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -142,7 +171,7 @@ extension PokemonListViewController: UICollectionViewDataSource {
     cell.accessibilityIdentifier = AccessibilityId.PokemonList.pokemon(at: indexPath.row)
     cell.view.apply(style: cell.isSelected ? Constants.selectedItemStyle : Constants.itemStyle)
     if let viewModel = itemViewModel(at: indexPath) {
-      cell.view.set(title: viewModel.title, image: viewModel.image, axis: state.layout.itemAxis)
+      cell.view.set(state: viewModel.viewState, layout: state.layout)
     } else {
       cell.view.resetToEmptyState()
     }
@@ -168,7 +197,8 @@ extension PokemonListViewController: UICollectionViewDataSource {
 
 }
 
-extension PokemonListViewController: UICollectionViewDelegate {
+// MARK: - UICollectionViewDelegate -
+extension PokemonListViewController: UICollectionViewDelegate, UIScrollViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     itemViewModel(at: indexPath).map(viewModel.didSelect(item:))
     if let cell = collectionView.cellForItem(at: indexPath) as? PokemonListItemCell {
@@ -186,9 +216,6 @@ extension PokemonListViewController: UICollectionViewDelegate {
                       willDisplay cell: UICollectionViewCell,
                       forItemAt indexPath: IndexPath) {
     itemViewModel(at: indexPath)?.willDisplay()
-    if indexPath.row > state.items.count - 4 {
-      viewModel.askForNextPage()
-    }
   }
 
   func collectionView(_ collectionView: UICollectionView,
@@ -196,20 +223,55 @@ extension PokemonListViewController: UICollectionViewDelegate {
                       forItemAt indexPath: IndexPath) {
     itemViewModel(at: indexPath)?.didEndDisplaying()
   }
+
+  func collectionView(_ collectionView: UICollectionView,
+                      willDisplaySupplementaryView view: UICollectionReusableView,
+                      forElementKind elementKind: String,
+                      at indexPath: IndexPath) {
+    guard view is LoadingCollectionViewFooter else { return }
+    viewModel.askForNextPage()
+  }
+
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    searchController.searchBar.endEditing(true)
+  }
 }
+
+// MARK: - UISearchControllerDelegate -
+extension PokemonListViewController: UISearchControllerDelegate {
+  func willPresentSearchController(_ searchController: UISearchController) {
+    collectionView.setContentOffset(CGPoint(x: -Constants.contentInset.left, y: -Constants.contentInset.right),
+                                    animated: true)
+  }
+
+  func willDismissSearchController(_ searchController: UISearchController) {
+    collectionView.setContentOffset(CGPoint(x: -Constants.contentInset.left, y: -Constants.contentInset.right),
+                                    animated: true)
+  }
+}
+
+// MARK: - UISearchResultsUpdating -
+extension PokemonListViewController: UISearchResultsUpdating {
+  func updateSearchResults(for searchController: UISearchController) {
+    guard let searchText = searchController.searchBar.text?
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+    else { return }
+    updateSearchQeury?.cancel()
+    let task = DispatchWorkItem { [weak self] in
+      self?.viewModel.didChangeNameFilter(name: searchText)
+    }
+    updateSearchQeury = task
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: task)
+  }
+}
+
+// MARK: - Extensions -
 
 private extension PokemonListLayout {
   var icon: UIImage? {
     switch self {
     case .grid: return Images.gridIcon
     case .list: return Images.listIcon
-    }
-  }
-
-  var itemAxis: NSLayoutConstraint.Axis {
-    switch self {
-    case .grid: return .vertical
-    case .list: return .horizontal
     }
   }
 

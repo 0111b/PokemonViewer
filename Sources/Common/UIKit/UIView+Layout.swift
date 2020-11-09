@@ -8,13 +8,13 @@
 import UIKit
 
 extension UIView {
-  public func addStretchedToBounds(subview: UIView, insets: UIEdgeInsets = .zero) {
+  public func addStretchedToBounds(subview: UIView, insets: NSDirectionalEdgeInsets = .zero) {
     subview.translatesAutoresizingMaskIntoConstraints = false
     addSubview(subview)
     NSLayoutConstraint.activate([
-      subview.leadingAnchor.constraint(equalTo: leadingAnchor, constant: insets.left),
+      subview.leadingAnchor.constraint(equalTo: leadingAnchor, constant: insets.leading),
       subview.topAnchor.constraint(equalTo: topAnchor, constant: insets.top),
-      trailingAnchor.constraint(equalTo: subview.trailingAnchor, constant: insets.right),
+      trailingAnchor.constraint(equalTo: subview.trailingAnchor, constant: insets.trailing),
       bottomAnchor.constraint(equalTo: subview.bottomAnchor, constant: insets.bottom)
     ])
   }

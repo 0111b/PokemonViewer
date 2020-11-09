@@ -15,6 +15,8 @@ struct Pokemon: Identifiable {
   let stats: [PokemonStat]
   let abilities: [PokemonAbility]
   let types: [PokemonType]
+
+  var name: String { id.rawValue.capitalized }
 }
 
 struct PokemonStat: Identifiable {
@@ -33,10 +35,6 @@ struct PokemonAbility: Identifiable {
   let id: Identifier<PokemonAbility>
 }
 
-struct PokemonType: Identifiable {
-  let id: Identifier<PokemonType>
-}
-
 struct PokemonSprite {
   let url: URL
   let kind: Kind
@@ -45,4 +43,49 @@ struct PokemonSprite {
     case frontDefault, backDefault, frontFemale, backFemale, frontShiny, backShiny, frontShinyFemale, backShinyFemale
   }
 
+}
+
+extension PokemonSprite.Kind {
+  // swiftlint:disable colon
+  var legend: String {
+    typealias LocalStrings = Strings.Screens.SpriteLegend.PokemonSprite
+    return [
+      isFront ? LocalStrings.Front.legend : LocalStrings.Back.legend,
+      isDefault ? LocalStrings.Default.legend : LocalStrings.Shiny.legend,
+      isMale ? LocalStrings.Male.legend : LocalStrings.Female.legend
+    ].joined()
+  }
+
+  var isFront: Bool {
+    switch self {
+    case .frontDefault, .frontShiny, .frontFemale, .frontShinyFemale:
+      return true
+    default:
+      return false
+    }
+  }
+
+  var isBack: Bool { !isFront }
+
+  var isMale: Bool {
+    switch self {
+    case .frontDefault, .backDefault, .frontShiny, .backShiny:
+      return true
+    default:
+      return false
+    }
+  }
+
+  var isFemale: Bool { !isMale }
+
+  var isDefault: Bool {
+    switch self {
+    case .frontDefault, .backDefault, .frontFemale, .backFemale:
+      return true
+    default:
+      return false
+    }
+  }
+
+  var isShiny: Bool { !isDefault }
 }
