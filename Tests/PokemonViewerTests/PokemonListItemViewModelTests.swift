@@ -76,6 +76,39 @@ final class PokemonListItemViewModelTests: XCTestCase {
     ])
   }
 
+  func testFlushMemory() {
+    let image = UIImage()
+    dependency.mockPokemonAPIService.$detailsResult.thenReturns(.success(Stubs.pokemon(sprites: [Stubs.sprite()])))
+    dependency.mockImageService.$imageResult.thenReturns(.success(image))
+    viewModel.willDisplay()
+    assert(states: [
+      state(typeColors: [], hasNoImage: false, image: .loading),
+      state(typeColors: [], hasNoImage: false, image: .loading),
+      state(typeColors: [], hasNoImage: false, image: .image(image))
+    ])
+
+
+    viewModel.flushMemory()
+
+    assert(states: [
+      state(typeColors: [], hasNoImage: false, image: .empty)
+    ])
+  }
+
+  func testColors() {
+    let image = UIImage()
+    dependency.mockPokemonAPIService.$detailsResult.thenReturns(.success(Stubs.pokemon(sprites: [],
+                                                                                       types: [.fire])))
+    dependency.mockImageService.$imageResult.thenReturns(.success(image))
+
+    viewModel.willDisplay()
+
+    assert(states: [
+      state(typeColors: [], hasNoImage: false, image: .loading),
+      state(typeColors: [.red], hasNoImage: true, image: .image(UIImage()))
+    ])
+  }
+
   private func state(typeColors: [UIColor], hasNoImage: Bool, image: RemoteImageViewState) -> PokemonListItemViewState {
     PokemonListItemViewState(title: "Pokemon", typeColors: typeColors, hasNoImage: hasNoImage, image: image)
   }
@@ -104,7 +137,7 @@ extension RemoteImageViewState: Equatable {
 extension PokemonListItemViewState: Equatable {
   public static func == (lhs: PokemonListItemViewState, rhs: PokemonListItemViewState) -> Bool {
     lhs.title == rhs.title
-      && lhs.typeColors == rhs.typeColors
+      && lhs.typeColors.count == rhs.typeColors.count
       && lhs.hasNoImage == rhs.hasNoImage
       && lhs.image == rhs.image
   }

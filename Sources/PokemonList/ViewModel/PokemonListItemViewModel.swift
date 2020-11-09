@@ -38,12 +38,12 @@ final class PokemonListItemViewModel {
         case .failure(let error):
           os_log("PokemonListItemViewModel details %{public}@ error %@", log: Log.general,
                  type: .error, state.identifier.rawValue, String(describing: error))
-          state = state.with(detailsError: error)
+          state = state.with(detailsError: error, types: [])
         case .success(let pokemon):
           if let url = pokemon.sprites.first?.url {
             state = state.with(imageRequest: self.fetchImage(url: url), types: pokemon.types)
           } else {
-            state = state.with(detailsError: .decodingError(nil))
+            state = state.with(detailsError: .decodingError(nil), types: pokemon.types)
           }
         }
       }

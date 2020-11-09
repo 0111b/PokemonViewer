@@ -46,14 +46,14 @@ public enum Stubs {
     return try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
   }
 
-  public static func pokemon(id: String = "123", sprites: [PokemonSprite]) -> Pokemon {
+  public static func pokemon(id: String = "123", sprites: [PokemonSprite], types: [PokemonType] = []) -> Pokemon {
     Pokemon(id: .init(rawValue: id),
             height: 1,
             weight: 1,
             sprites: sprites,
             stats: [],
             abilities: [],
-            types: [])
+            types: types)
   }
 
   public static func sprite() -> PokemonSprite {

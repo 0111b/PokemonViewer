@@ -42,7 +42,7 @@ struct PokemonListItemState {
                          error: nil, loading: .detailsRequest(detailsRequest))
   }
 
-  func with(detailsError: NetworkError) -> PokemonListItemState {
+  func with(detailsError: NetworkError, types: [PokemonType]) -> PokemonListItemState {
     PokemonListItemState(id: identifier, types: types, image: image,
                          error: detailsError, loading: .idle)
   }
@@ -116,6 +116,11 @@ struct PokemonListItemState {
 private extension PokemonType {
   var color: UIColor? {
     switch self {
+    case .fire: return Colors.pokemonTypeFire
+    case .electric: return Colors.pokemonTypeElectric
+    case .poison: return Colors.pokemonTypePoison
+    case .ground: return Colors.pokemonTypeGround
+    case .water: return Colors.pokemonTypeWater
     default:
       return nil
     }
