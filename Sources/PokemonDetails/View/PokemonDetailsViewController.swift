@@ -85,15 +85,27 @@ final class PokemonDetailsViewController: UIViewController {
     abilitiesLabel.text = pokemon.abilities
       .map(\.id.rawValue)
       .joined(separator: Strings.Screens.PokemonDetails.Content.listSeparator)
-    typesLabel.text = pokemon.types
-      .map(\.name)
-      .joined(separator: Strings.Screens.PokemonDetails.Content.listSeparator)
+    typesLabel.attributedText = makeTypesString(from: pokemon.types)
     statsStackView.removeArrangedSubviews()
     statsStackView.addArrangedSubviews(pokemon.stats.map(makeStatView(from:)))
     spritesView.set(sprites: details.sprites)
     let isSpritesHidden = details.sprites.isEmpty
     spritesHeaderView.isHidden = isSpritesHidden
     spritesView.isHidden = isSpritesHidden
+  }
+
+  private func makeTypesString(from types: [PokemonType]) -> NSAttributedString {
+    let rawString = types
+      .map(\.name)
+      .joined(separator: Strings.Screens.PokemonDetails.Content.listSeparator)
+    let attributedString = NSMutableAttributedString(string: rawString)
+    for type in types {
+      guard let color = type.color,
+            let range = rawString.range(of: type.name)
+      else { continue }
+      attributedString.addAttribute(.foregroundColor, value: color, range: NSRange(range, in: rawString))
+    }
+    return attributedString
   }
 
   private func makeHeader(title: String) -> UIView {

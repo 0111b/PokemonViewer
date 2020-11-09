@@ -5,7 +5,7 @@
 //  Created by Alexandr Goncharov on 08.11.2020.
 //
 
-import Foundation
+import UIKit
 
 enum PokemonType: String {
   case normal
@@ -33,5 +33,19 @@ enum PokemonType: String {
 extension PokemonType: Identifiable {
   var id: Identifier<PokemonType> {
     Identifier(rawValue: rawValue)
+  }
+}
+
+extension PokemonType {
+  var color: UIColor? {
+    switch self {
+    case .fire: return Colors.pokemonTypeFire
+    case .electric: return Colors.pokemonTypeElectric
+    case .poison: return Colors.pokemonTypePoison
+    case .ground: return Colors.pokemonTypeGround
+    case .water: return Colors.pokemonTypeWater
+    default:
+      return nil
+    }
   }
 }

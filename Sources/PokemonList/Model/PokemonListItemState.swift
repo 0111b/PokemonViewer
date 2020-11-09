@@ -111,18 +111,3 @@ struct PokemonListItemState {
     return error == nil ? .empty : .image(Images.defaultPlaceholder)
   }
 }
-
-
-private extension PokemonType {
-  var color: UIColor? {
-    switch self {
-    case .fire: return Colors.pokemonTypeFire
-    case .electric: return Colors.pokemonTypeElectric
-    case .poison: return Colors.pokemonTypePoison
-    case .ground: return Colors.pokemonTypeGround
-    case .water: return Colors.pokemonTypeWater
-    default:
-      return nil
-    }
-  }
-}
