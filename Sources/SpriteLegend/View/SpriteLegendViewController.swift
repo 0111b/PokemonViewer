@@ -42,19 +42,7 @@ final class SpriteLegendViewController: UIViewController {
     collectionView.reloadData()
   }
 
-  override func viewDidLayoutSubviews() {
-    super.viewDidLayoutSubviews()
-    let availableSize = collectionView.bounds
-      .inset(by: collectionView.contentInset)
-      .inset(by: collectionLayout.sectionInset)
-      .width
-    let proposedSize = CGSize(width: availableSize, height: Constants.itemHeight)
-    if proposedSize != collectionLayout.itemSize {
-      collectionLayout.itemSize = proposedSize
-    }
-  }
-
-  private lazy var collectionLayout = UICollectionViewFlowLayout()
+  private lazy var collectionLayout = PokemonListCollectionViewLayout()
 
   private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionLayout)
 
