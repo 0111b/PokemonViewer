@@ -22,3 +22,16 @@
 "PokemonDetails.Content.specialAttack" = "Special attack";
 "PokemonDetails.Content.specialDefense" = "Special defense";
 "PokemonDetails.Content.speed" = "Speed";
+"SpriteLegend.title" = "Legend";
+"SpriteLegend.PokemonSprite.Male.legend" = "👦";
+"SpriteLegend.PokemonSprite.Male.kind" = "Male";
+"SpriteLegend.PokemonSprite.Female.legend" = "👩";
+"SpriteLegend.PokemonSprite.Female.kind" = "Female";
+"SpriteLegend.PokemonSprite.Front.legend" = "⭕️";
+"SpriteLegend.PokemonSprite.Front.kind" = "Front";
+"SpriteLegend.PokemonSprite.Back.legend" = "🚫";
+"SpriteLegend.PokemonSprite.Back.kind" = "Back";
+"SpriteLegend.PokemonSprite.Default.legend" = "🌎";
+"SpriteLegend.PokemonSprite.Default.kind" = "Default";
+"SpriteLegend.PokemonSprite.Shiny.legend" = "☀️";
+"SpriteLegend.PokemonSprite.Shiny.kind" = "Shiny";

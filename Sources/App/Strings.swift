@@ -67,6 +67,46 @@ enum Strings {
       }
     }
 
+    enum SpriteLegend {
+
+      static let title = Strings.tr("Screens", "SpriteLegend.title")
+
+      enum PokemonSprite {
+
+        enum Male {
+          static let legend = Strings.tr("Screens", "SpriteLegend.PokemonSprite.Male.legend")
+          static let kind = Strings.tr("Screens", "SpriteLegend.PokemonSprite.Male.kind")
+        }
+
+        enum Female {
+          static let legend = Strings.tr("Screens", "SpriteLegend.PokemonSprite.Female.legend")
+          static let kind = Strings.tr("Screens", "SpriteLegend.PokemonSprite.Female.kind")
+        }
+
+        enum Front {
+          static let legend = Strings.tr("Screens", "SpriteLegend.PokemonSprite.Front.legend")
+          static let kind = Strings.tr("Screens", "SpriteLegend.PokemonSprite.Front.kind")
+        }
+
+        enum Back {
+          static let legend = Strings.tr("Screens", "SpriteLegend.PokemonSprite.Back.legend")
+          static let kind = Strings.tr("Screens", "SpriteLegend.PokemonSprite.Back.kind")
+        }
+
+        enum Default {
+          static let legend = Strings.tr("Screens", "SpriteLegend.PokemonSprite.Default.legend")
+          static let kind = Strings.tr("Screens", "SpriteLegend.PokemonSprite.Default.kind")
+        }
+
+        enum Shiny {
+          static let legend = Strings.tr("Screens", "SpriteLegend.PokemonSprite.Shiny.legend")
+          static let kind = Strings.tr("Screens", "SpriteLegend.PokemonSprite.Shiny.kind")
+        }
+
+      }
+
+    }
+
   }
 }
 

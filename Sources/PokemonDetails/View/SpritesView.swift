@@ -69,26 +69,3 @@ extension SpritesView: UICollectionViewDataSource {
     return cell
   }
 }
-
-private extension PokemonSprite.Kind {
-  var legend: String {
-    switch self {
-    case .backDefault:
-      return "🚫🌎👦"
-    case .backFemale:
-      return "🚫🌎👩"
-    case .backShiny:
-      return "🚫☀️👦"
-    case .backShinyFemale:
-      return "🚫☀️👩"
-    case .frontDefault:
-      return "⭕️🌎👦"
-    case .frontFemale:
-      return "⭕️🌎👩"
-    case .frontShiny:
-      return "⭕️☀️👦"
-    case .frontShinyFemale:
-      return "⭕️☀️👩"
-    }
-  }
-}

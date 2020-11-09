@@ -22,3 +22,16 @@
 "PokemonDetails.Content.specialAttack" = "Спец-атака";
 "PokemonDetails.Content.specialDefense" = "Спец-защита";
 "PokemonDetails.Content.speed" = "Скорость";
+"SpriteLegend.title" = "Легенда";
+"SpriteLegend.PokemonSprite.Male.legend" = "👦";
+"SpriteLegend.PokemonSprite.Male.kind" = "Мужской";
+"SpriteLegend.PokemonSprite.Female.legend" = "👩";
+"SpriteLegend.PokemonSprite.Female.kind" = "Женский";
+"SpriteLegend.PokemonSprite.Front.legend" = "⭕️";
+"SpriteLegend.PokemonSprite.Front.kind" = "Лицо";
+"SpriteLegend.PokemonSprite.Back.legend" = "🚫";
+"SpriteLegend.PokemonSprite.Back.kind" = "Спина";
+"SpriteLegend.PokemonSprite.Default.legend" = "🌎";
+"SpriteLegend.PokemonSprite.Default.kind" = "По умолчанию";
+"SpriteLegend.PokemonSprite.Shiny.legend" = "☀️";
+"SpriteLegend.PokemonSprite.Shiny.kind" = "Блестящий";
