@@ -60,7 +60,7 @@ public enum Stubs {
     PokemonSprite(url: Stubs.url(), kind: .frontDefault)
   }
 
-  static let assertInterval: TimeInterval = 2
+  static let assertInterval: TimeInterval = 3
 
 }
 
