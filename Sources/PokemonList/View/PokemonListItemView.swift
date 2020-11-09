@@ -41,17 +41,14 @@ final class PokemonListItemView: UIView, Resetable {
     stackView.addArrangedSubview(titleLabel)
   }
 
-  func set(title: String, image: Observable<RemoteImageViewState>, layout: PokemonListLayout) {
-    titleLabel.text = title
-    switch layout {
-    case .list:
-      stackView.axis = .horizontal
-      titleLabel.isHidden = false
-    case .grid:
-      stackView.axis = .vertical
-      titleLabel.isHidden = true
+  func set(state: Observable<PokemonListItemViewState>, layout: PokemonListLayout) {
+    stateSubscription = state.observe(on: .main) { [weak self] state in
+      guard let self = self else { return }
+      self.titleLabel.text = state.title
+      self.imageView.set(state: state.image)
+      self.update(layout: layout, hasNoImage: state.hasNoImage)
     }
-    imageView.bind(to: image, on: .main)
+    update(layout: layout, hasNoImage: false)
   }
 
   func apply(style: Style) {
@@ -62,9 +59,30 @@ final class PokemonListItemView: UIView, Resetable {
   }
 
   func resetToEmptyState() {
+    stateSubscription = nil
     titleLabel.text = nil
     imageView.resetToEmptyState()
   }
+
+  private func update(layout: PokemonListLayout, hasNoImage: Bool) {
+    imageView.isHidden = false
+    switch layout {
+    case .list:
+      stackView.axis = .horizontal
+      titleLabel.isHidden = false
+      imageView.isHidden = false
+    case .grid where hasNoImage == true:
+      stackView.axis = .vertical
+      titleLabel.isHidden = false
+      imageView.isHidden = true
+    case .grid:
+      stackView.axis = .vertical
+      titleLabel.isHidden = true
+      imageView.isHidden = false
+    }
+  }
+
+  private var stateSubscription: Disposable?
 
   private lazy var titleLabel: UILabel = {
     let label = UILabel()
@@ -75,7 +93,7 @@ final class PokemonListItemView: UIView, Resetable {
     label.setContentHuggingPriority(.required, for: .vertical)
     label.adjustsFontForContentSizeCategory = true
     label.textAlignment = .left
-    label.numberOfLines = 1
+    label.numberOfLines = 0
     label.adjustsFontSizeToFitWidth = true
     label.minimumScaleFactor = 0.7
     return label

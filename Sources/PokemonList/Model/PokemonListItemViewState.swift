@@ -8,9 +8,10 @@
 import UIKit
 
 struct PokemonListItemViewState {
-  let name: String
+  let title: String
   let typeColors: [UIColor]
-  let isLoading: Bool
-  let isError: Bool
-  let image: UIImage?
+  let hasNoImage: Bool
+  let image: RemoteImageViewState
+
+  static let empty = PokemonListItemViewState(title: "", typeColors: [], hasNoImage: false, image: .empty)
 }
