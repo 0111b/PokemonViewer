@@ -17,7 +17,7 @@ final class PokemonDetailErrorView: UIView {
   var action: () -> Void = {}
 
   override init(frame: CGRect) {
-    super.init(frame: .zero)
+    super.init(frame: frame)
     commonInit()
   }
 

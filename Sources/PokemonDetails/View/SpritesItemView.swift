@@ -25,7 +25,7 @@ final class SpritesItemView: UIView, Resetable {
   }
 
   override init(frame: CGRect) {
-    super.init(frame: .zero)
+    super.init(frame: frame)
     commonInit()
   }
 

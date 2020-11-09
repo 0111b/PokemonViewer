@@ -39,11 +39,11 @@ final class PokemonDetailsViewController: UIViewController {
       weightView,
       spritesHeaderView,
       spritesView,
-      makeHeader(title: Strings.Screens.PokemonDetails.Header.stats),
+      PokemonDetailsHeaderView(title: Strings.Screens.PokemonDetails.Header.stats),
       statsStackView,
-      makeHeader(title: Strings.Screens.PokemonDetails.Header.abilities),
+      PokemonDetailsHeaderView(title: Strings.Screens.PokemonDetails.Header.abilities),
       abilitiesLabel,
-      makeHeader(title: Strings.Screens.PokemonDetails.Header.types),
+      PokemonDetailsHeaderView(title: Strings.Screens.PokemonDetails.Header.types),
       typesLabel
     ])
     NSLayoutConstraint.activate([
@@ -105,18 +105,6 @@ final class PokemonDetailsViewController: UIViewController {
       attributedString.highlight(substring: $0.name, with: $0.color)
     }
     return attributedString
-  }
-
-  private func makeHeader(title: String) -> UIView {
-    let label = UILabel()
-    label.translatesAutoresizingMaskIntoConstraints = false
-    label.adjustsFontForContentSizeCategory = true
-    label.textAlignment = .left
-    label.backgroundColor = Constants.headerBackgroundColor
-    label.textColor = Constants.headerColor
-    label.font = Constants.headerFont
-    label.text = title
-    return label
   }
 
   private func makeContentLabel() -> UILabel {
@@ -189,7 +177,7 @@ final class PokemonDetailsViewController: UIViewController {
 
   private lazy var weightView = TitledValueView(style: Constants.titledValueStyle)
 
-  private lazy var spritesHeaderView = makeHeader(title: Strings.Screens.PokemonDetails.Header.sprites)
+  private lazy var spritesHeaderView = PokemonDetailsHeaderView(title: Strings.Screens.PokemonDetails.Header.sprites)
 
   private lazy var spritesView = SpritesView()
 
@@ -212,13 +200,11 @@ final class PokemonDetailsViewController: UIViewController {
   private var stateUpdateToken: Disposable?
 
   private enum Constants {
-    static let contentInset = NSDirectionalEdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12)
+    static let contentInset = NSDirectionalEdgeInsets(top: 20, leading: 12, bottom: 12, trailing: 12)
     static let contentSpacing: CGFloat = 12
 
     static let backgroundColor = Colors.background
-    static let headerBackgroundColor = Colors.sectionBackground
     static let primaryColor = Colors.primaryText
-    static let headerColor = Colors.secondaryText
     static let statBonusColor = Colors.accent
 
     static let nameFont = Fonts.caption
