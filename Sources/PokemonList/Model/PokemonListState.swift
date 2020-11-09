@@ -29,7 +29,7 @@ struct PokemonListState: Equatable {
   }
 
   var viewState: PokemonListViewState {
-    let items: [PokemonListItemViewModel] = filter.hasConditions ? self.items.filter(filter.matching(_:)) : self.items
+    let items: [PokemonListItemViewModel] = self.items.compactMap { $0.applying(filter: filter) }
     let loading: PageLoadingViewState = {
       switch pageRequest {
       case .pending:

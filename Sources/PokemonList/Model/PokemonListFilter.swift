@@ -13,11 +13,6 @@ struct PokemonListFilter: Equatable {
   var hasConditions: Bool {
     !name.isEmpty
   }
-
-  func matching(_ item: PokemonListItemViewModel) -> Bool {
-    guard !name.isEmpty else { return true }
-    return item.identifier.rawValue.range(of: name, options: .caseInsensitive) != nil
-  }
 }
 
 extension PokemonListFilter {

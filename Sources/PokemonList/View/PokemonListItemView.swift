@@ -37,7 +37,7 @@ final class PokemonListItemView: UIView, Resetable {
   func set(state: Observable<PokemonListItemViewState>, layout: PokemonListLayout) {
     stateSubscription = state.observe(on: .main) { [weak self] state in
       guard let self = self else { return }
-      self.titleLabel.text = state.title
+      self.titleLabel.attributedText = state.title
       self.imageView.set(state: state.image)
       self.update(layout: layout, hasNoImage: state.hasNoImage)
       self.update(colors: state.typeColors)

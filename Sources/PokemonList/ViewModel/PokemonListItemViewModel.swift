@@ -21,12 +21,13 @@ final class PokemonListItemViewModel {
   @Protected
   private var state: PokemonListItemState
 
-  private func update(_ closure: (inout PokemonListItemState) -> Void) {
+  private func update<Value>(_ closure: (inout PokemonListItemState) -> Value) -> Value {
     $state.write { state in
       var updatedState = state
-      closure(&updatedState)
+      let value = closure(&updatedState)
       viewStateRelay.value = updatedState.viewState
       state = updatedState
+      return value
     }
   }
 
@@ -86,6 +87,16 @@ final class PokemonListItemViewModel {
   func flushMemory() {
     update { state in
       state = state.flushMemory()
+    }
+  }
+
+  func applying(filter: PokemonListFilter) -> PokemonListItemViewModel? {
+    update { state in
+      if let updated = state.applying(filter: filter) {
+        state = updated
+        return self
+      }
+      return nil
     }
   }
 

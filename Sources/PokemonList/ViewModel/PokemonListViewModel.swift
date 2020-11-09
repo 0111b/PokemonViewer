@@ -99,6 +99,7 @@ final class PokemonListViewModel {
   }
 
   func didChangeNameFilter(name: String) {
+    os_log("PokemonListViewModel Filter: name <%@>", log: Log.general, type: .info, name)
     self.update { state in
       state = state.with(nameFilter: name)
     }

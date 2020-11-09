@@ -109,8 +109,20 @@ final class PokemonListItemViewModelTests: XCTestCase {
     ])
   }
 
+  func testNameFilter() {
+    viewModel = PokemonListItemViewModel(dependency: dependency, id: .init(rawValue: "pokemon"))
+    XCTAssertNotNil(viewModel.applying(filter: PokemonListFilter()))
+
+    viewModel = PokemonListItemViewModel(dependency: dependency, id: .init(rawValue: "pokemon"))
+    XCTAssertNotNil(viewModel.applying(filter: PokemonListFilter(name: "oke")))
+
+    viewModel = PokemonListItemViewModel(dependency: dependency, id: .init(rawValue: "pokemon"))
+    XCTAssertNil(viewModel.applying(filter: PokemonListFilter(name: "transformer")))
+  }
+
   private func state(typeColors: [UIColor], hasNoImage: Bool, image: RemoteImageViewState) -> PokemonListItemViewState {
-    PokemonListItemViewState(title: "Pokemon", typeColors: typeColors, hasNoImage: hasNoImage, image: image)
+    PokemonListItemViewState(title: NSAttributedString(string: "Pokemon"), typeColors: typeColors,
+                             hasNoImage: hasNoImage, image: image)
   }
 
   func assert(states: [PokemonListItemViewState]) {

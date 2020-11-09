@@ -8,10 +8,11 @@
 import UIKit
 
 struct PokemonListItemViewState {
-  let title: String
+  let title: NSAttributedString
   let typeColors: [UIColor]
   let hasNoImage: Bool
   let image: RemoteImageViewState
 
-  static let empty = PokemonListItemViewState(title: "", typeColors: [], hasNoImage: false, image: .empty)
+  static let empty = PokemonListItemViewState(title: NSAttributedString(), typeColors: [],
+                                              hasNoImage: false, image: .empty)
 }

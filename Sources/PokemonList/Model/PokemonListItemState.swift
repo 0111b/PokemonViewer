@@ -14,6 +14,7 @@ struct PokemonListItemState {
   let image: UIImage?
   let error: NetworkError?
   let loading: LoadingState
+  let highlightedRange: NSRange?
 
   enum LoadingState {
     case idle
@@ -23,7 +24,7 @@ struct PokemonListItemState {
   }
 
   var viewState: PokemonListItemViewState {
-    PokemonListItemViewState(title: identifier.rawValue.capitalized,
+    PokemonListItemViewState(title: attributedTitle,
                              typeColors: types.compactMap(\.color),
                              hasNoImage: hasNoImage,
                              image: imageState)
@@ -35,31 +36,45 @@ struct PokemonListItemState {
     loading = .idle
     error = nil
     image = nil
+    highlightedRange = nil
   }
 
   func with(detailsRequest: Disposable) -> PokemonListItemState {
     PokemonListItemState(id: identifier, types: types, image: image,
-                         error: nil, loading: .detailsRequest(detailsRequest))
+                         error: nil, loading: .detailsRequest(detailsRequest), highlightedRange: highlightedRange)
   }
 
   func with(detailsError: NetworkError, types: [PokemonType]) -> PokemonListItemState {
     PokemonListItemState(id: identifier, types: types, image: image,
-                         error: detailsError, loading: .idle)
+                         error: detailsError, loading: .idle, highlightedRange: highlightedRange)
   }
 
   func with(imageRequest: Disposable, types: [PokemonType]) -> PokemonListItemState {
     PokemonListItemState(id: identifier, types: types, image: image,
-                         error: nil, loading: .imageRequest(imageRequest))
+                         error: nil, loading: .imageRequest(imageRequest), highlightedRange: highlightedRange)
   }
 
   func with(imageError: NetworkError) -> PokemonListItemState {
     PokemonListItemState(id: identifier, types: types, image: image,
-                         error: imageError, loading: .idle)
+                         error: imageError, loading: .idle, highlightedRange: highlightedRange)
   }
 
   func withImage(image: UIImage) -> PokemonListItemState {
     PokemonListItemState(id: identifier, types: types, image: image,
-                         error: nil, loading: .done)
+                         error: nil, loading: .done, highlightedRange: highlightedRange)
+  }
+
+  func applying(filter: PokemonListFilter) -> PokemonListItemState? {
+    guard filter.hasConditions else {
+      return PokemonListItemState(id: identifier, types: types, image: image,
+                                  error: error, loading: loading, highlightedRange: nil)
+    }
+    if let range = title.range(of: filter.name, options: .caseInsensitive) {
+      let nsRange = NSRange(range, in: title)
+      return PokemonListItemState(id: identifier, types: types, image: image,
+                                  error: error, loading: loading, highlightedRange: nsRange)
+    }
+    return nil
   }
 
   func canStartRequest() -> Bool {
@@ -72,24 +87,40 @@ struct PokemonListItemState {
   func canceled() -> PokemonListItemState {
     switch loading {
     case .done: return self
-    default: return PokemonListItemState(id: identifier, types: types, image: image, error: nil, loading: .idle)
+    default: return PokemonListItemState(id: identifier, types: types, image: image,
+                                         error: nil, loading: .idle, highlightedRange: highlightedRange)
     }
   }
 
   func flushMemory() -> PokemonListItemState {
-    PokemonListItemState(id: identifier, types: types, image: nil, error: nil, loading: .idle)
+    PokemonListItemState(id: identifier, types: types, image: nil,
+                         error: nil, loading: .idle, highlightedRange: highlightedRange)
   }
 
   private init(id: Identifier<Pokemon>,
                types: [PokemonType],
                image: UIImage?,
                error: NetworkError?,
-               loading: PokemonListItemState.LoadingState) {
+               loading: PokemonListItemState.LoadingState,
+               highlightedRange: NSRange?) {
     self.identifier = id
     self.types = types
     self.image = image
     self.error = error
     self.loading = loading
+    self.highlightedRange = highlightedRange
+  }
+
+  private var title: String {
+    identifier.rawValue
+  }
+
+  private var attributedTitle: NSAttributedString {
+    let title = NSMutableAttributedString(string: self.title.capitalized)
+    if let highlightedRange = self.highlightedRange {
+      title.addAttribute(.backgroundColor, value: Colors.accent, range: highlightedRange)
+    }
+    return title
   }
 
   private var isLoading: Bool {
