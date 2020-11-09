@@ -40,8 +40,7 @@ final class PokemonListItemView: UIView, Resetable {
       self.titleLabel.text = state.title
       self.imageView.set(state: state.image)
       self.update(layout: layout, hasNoImage: state.hasNoImage)
-      let colors: [UIColor] = state.title.count % 2 == 0 ? [.systemBlue] : [.systemPink, .systemYellow]
-      self.didUpdatePokemonType(colors: colors)
+      self.didUpdatePokemonType(colors: state.typeColors)
     }
     update(layout: layout, hasNoImage: false)
   }
@@ -56,6 +55,7 @@ final class PokemonListItemView: UIView, Resetable {
   func resetToEmptyState() {
     stateSubscription = nil
     titleLabel.text = nil
+    didUpdatePokemonType(colors: [])
     imageView.resetToEmptyState()
   }
 
@@ -65,6 +65,12 @@ final class PokemonListItemView: UIView, Resetable {
   }
 
   private func didUpdatePokemonType(colors: [UIColor]) {
+    let colorsCount = colors.isEmpty ? 1 : Double(colors.count)
+    let gradientStop = 0.3
+    pokemonTypesLayer.locations = stride(from: 0.0,
+                                         through: gradientStop,
+                                         by: gradientStop / colorsCount)
+      .map { NSNumber(value: $0) }
     pokemonTypesLayer.colors = (colors + [.clear]).map(\.cgColor)
   }
 
