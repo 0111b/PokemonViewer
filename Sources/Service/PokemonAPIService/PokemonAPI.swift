@@ -54,7 +54,7 @@ enum PokemonAPI {
 
     struct PokemonType: Decodable {
       let slot: Int
-      let type: Named<Identifier<PokemonViewer.PokemonType>>
+      let type: Named<String>
     }
   }
 

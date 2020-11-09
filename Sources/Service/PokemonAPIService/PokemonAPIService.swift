@@ -84,7 +84,7 @@ private extension Pokemon {
       .map { PokemonAbility(id: $0.ability.name) }
     types = dto.types
       .sorted { $0.slot < $1.slot }
-      .map { PokemonType(id: $0.type.name) }
+      .map { PokemonType(rawValue: $0.type.name) ?? .unknown }
   }
 }
 

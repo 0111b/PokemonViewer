@@ -34,24 +34,15 @@ final class PokemonListItemView: UIView, Resetable {
     commonInit()
   }
 
-  private func commonInit() {
-    layer.masksToBounds = true
-    addStretchedToBounds(subview: stackView, insets: Constants.contentInset)
-    stackView.addArrangedSubview(imageView)
-    stackView.addArrangedSubview(titleLabel)
-  }
-
-  func set(title: String, image: Observable<RemoteImageViewState>, layout: PokemonListLayout) {
-    titleLabel.text = title
-    switch layout {
-    case .list:
-      stackView.axis = .horizontal
-      titleLabel.isHidden = false
-    case .grid:
-      stackView.axis = .vertical
-      titleLabel.isHidden = true
+  func set(state: Observable<PokemonListItemViewState>, layout: PokemonListLayout) {
+    stateSubscription = state.observe(on: .main) { [weak self] state in
+      guard let self = self else { return }
+      self.titleLabel.text = state.title
+      self.imageView.set(state: state.image)
+      self.update(layout: layout, hasNoImage: state.hasNoImage)
+      self.didUpdatePokemonType(colors: state.typeColors)
     }
-    imageView.bind(to: image, on: .main)
+    update(layout: layout, hasNoImage: false)
   }
 
   func apply(style: Style) {
@@ -62,9 +53,54 @@ final class PokemonListItemView: UIView, Resetable {
   }
 
   func resetToEmptyState() {
+    stateSubscription = nil
     titleLabel.text = nil
+    didUpdatePokemonType(colors: [])
     imageView.resetToEmptyState()
   }
+
+  override func layoutSublayers(of layer: CALayer) {
+    super.layoutSublayers(of: layer)
+    pokemonTypesLayer.frame = bounds
+  }
+
+  private func didUpdatePokemonType(colors: [UIColor]) {
+    let colorsCount = colors.isEmpty ? 1 : Double(colors.count)
+    let gradientStop = 0.3
+    pokemonTypesLayer.locations = stride(from: 0.0,
+                                         through: gradientStop,
+                                         by: gradientStop / colorsCount)
+      .map { NSNumber(value: $0) }
+    pokemonTypesLayer.colors = (colors + [.clear]).map(\.cgColor)
+  }
+
+  private func commonInit() {
+    layer.masksToBounds = true
+    addStretchedToBounds(subview: stackView, insets: Constants.contentInset)
+    stackView.addArrangedSubview(imageView)
+    stackView.addArrangedSubview(titleLabel)
+    layer.insertSublayer(pokemonTypesLayer, at: 0)
+  }
+
+  private func update(layout: PokemonListLayout, hasNoImage: Bool) {
+    imageView.isHidden = false
+    switch layout {
+    case .list:
+      stackView.axis = .horizontal
+      titleLabel.isHidden = false
+      imageView.isHidden = false
+    case .grid where hasNoImage == true:
+      stackView.axis = .vertical
+      titleLabel.isHidden = false
+      imageView.isHidden = true
+    case .grid:
+      stackView.axis = .vertical
+      titleLabel.isHidden = true
+      imageView.isHidden = false
+    }
+  }
+
+  private var stateSubscription: Disposable?
 
   private lazy var titleLabel: UILabel = {
     let label = UILabel()
@@ -75,7 +111,7 @@ final class PokemonListItemView: UIView, Resetable {
     label.setContentHuggingPriority(.required, for: .vertical)
     label.adjustsFontForContentSizeCategory = true
     label.textAlignment = .left
-    label.numberOfLines = 1
+    label.numberOfLines = 0
     label.adjustsFontSizeToFitWidth = true
     label.minimumScaleFactor = 0.7
     return label
@@ -98,6 +134,13 @@ final class PokemonListItemView: UIView, Resetable {
     stackView.alignment = .center
     stackView.spacing = 12
     return stackView
+  }()
+
+  private lazy var pokemonTypesLayer: CAGradientLayer = {
+    let gradientLayer = CAGradientLayer()
+    gradientLayer.startPoint = CGPoint(x: 1.0, y: 0.0)
+    gradientLayer.endPoint = CGPoint(x: 0.0, y: 1.0)
+    return gradientLayer
   }()
 
   private enum Constants {

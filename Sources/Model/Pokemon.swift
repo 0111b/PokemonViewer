@@ -35,10 +35,6 @@ struct PokemonAbility: Identifiable {
   let id: Identifier<PokemonAbility>
 }
 
-struct PokemonType: Identifiable {
-  let id: Identifier<PokemonType>
-}
-
 struct PokemonSprite {
   let url: URL
   let kind: Kind
