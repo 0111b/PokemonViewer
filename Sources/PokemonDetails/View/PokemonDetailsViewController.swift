@@ -99,11 +99,10 @@ final class PokemonDetailsViewController: UIViewController {
       .map(\.name)
       .joined(separator: Strings.Screens.PokemonDetails.Content.listSeparator)
     let attributedString = NSMutableAttributedString(string: rawString)
-    for type in types {
-      guard let color = type.color,
-            let range = rawString.range(of: type.name)
-      else { continue }
-      attributedString.addAttribute(.foregroundColor, value: color, range: NSRange(range, in: rawString))
+    types.compactMap { type in
+      type.color.map { (name: type.name, color: $0) }
+    }.forEach {
+      attributedString.highlight(substring: $0.name, with: $0.color)
     }
     return attributedString
   }
@@ -134,9 +133,14 @@ final class PokemonDetailsViewController: UIViewController {
 
   private func makeStatView(from stat: PokemonStat) -> UIView {
     let view = TitledValueView(style: Constants.titledValueStyle)
-    view.set(title: Strings.Screens.PokemonDetails.Content.statTitleFormat(name: stat.kind.name,
-                                                                           level: stat.effort),
-             value: String(stat.baseStat))
+    let rawTitle = Strings.Screens.PokemonDetails.Content.statTitleFormat(name: stat.kind.name,
+                                                                          level: stat.effort)
+    let title = NSMutableAttributedString(string: rawTitle)
+    if stat.effort > 0 {
+      title.highlight(substring: String(describing: stat.effort), with: Constants.statBonusColor)
+    }
+    let value = NSAttributedString(string: String(stat.baseStat))
+    view.set(title: title, value: value)
     return view
   }
 
@@ -215,6 +219,7 @@ final class PokemonDetailsViewController: UIViewController {
     static let headerBackgroundColor = Colors.sectionBackground
     static let primaryColor = Colors.primaryText
     static let headerColor = Colors.secondaryText
+    static let statBonusColor = Colors.accent
 
     static let nameFont = Fonts.caption
     static let headerFont = Fonts.header

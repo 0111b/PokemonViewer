@@ -38,8 +38,13 @@ final class TitledValueView: UIView {
   }
 
   func set(title: String, value: String?) {
-    titleLabel.text = title
-    valueLabel.text = value
+    set(title: NSAttributedString(string: title),
+        value: value.map(NSAttributedString.init(string:)))
+  }
+
+  func set(title: NSAttributedString, value: NSAttributedString?) {
+    titleLabel.attributedText = title
+    valueLabel.attributedText = value
   }
 
   func apply(style: Style) {
