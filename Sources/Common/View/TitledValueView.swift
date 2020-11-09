@@ -70,7 +70,7 @@ final class TitledValueView: UIView {
     label.translatesAutoresizingMaskIntoConstraints = false
     label.adjustsFontForContentSizeCategory = true
     label.setContentCompressionResistancePriority(.required, for: .horizontal)
-    label.setContentHuggingPriority(.required, for: .horizontal)
+    label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
     label.textAlignment = .left
     label.numberOfLines = 0
     return label

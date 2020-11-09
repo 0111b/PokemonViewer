@@ -41,10 +41,10 @@ final class PokemonDetailsViewController: UIViewController {
       spritesView,
       PokemonDetailsHeaderView(title: Strings.Screens.PokemonDetails.Header.stats),
       statsStackView,
-      PokemonDetailsHeaderView(title: Strings.Screens.PokemonDetails.Header.abilities),
-      abilitiesLabel,
       PokemonDetailsHeaderView(title: Strings.Screens.PokemonDetails.Header.types),
-      typesLabel
+      typesLabel,
+      PokemonDetailsHeaderView(title: Strings.Screens.PokemonDetails.Header.abilities),
+      abilitiesLabel
     ])
     NSLayoutConstraint.activate([
       scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -92,6 +92,10 @@ final class PokemonDetailsViewController: UIViewController {
     let isSpritesHidden = details.sprites.isEmpty
     spritesHeaderView.isHidden = isSpritesHidden
     spritesView.isHidden = isSpritesHidden
+  }
+
+  @objc private func didTapSpriteLegend() {
+    viewModel.showSpriteLegend()
   }
 
   private func makeTypesString(from types: [PokemonType]) -> NSAttributedString {
@@ -177,7 +181,13 @@ final class PokemonDetailsViewController: UIViewController {
 
   private lazy var weightView = TitledValueView(style: Constants.titledValueStyle)
 
-  private lazy var spritesHeaderView = PokemonDetailsHeaderView(title: Strings.Screens.PokemonDetails.Header.sprites)
+  private lazy var spritesHeaderView: UIView = {
+    let legendButton = UIButton(type: .infoLight)
+    legendButton.addTarget(self, action: #selector(didTapSpriteLegend), for: .touchUpInside)
+    let header = PokemonDetailsHeaderView(title: Strings.Screens.PokemonDetails.Header.sprites,
+                                          rightView: legendButton)
+    return header
+  }()
 
   private lazy var spritesView = SpritesView()
 

@@ -9,19 +9,29 @@ import UIKit
 
 final class PokemonDetailsHeaderView: UIView {
 
-  convenience init(title: String) {
-    self.init(frame: .zero)
-    self.title = title
-  }
-
-  override init(frame: CGRect) {
-    super.init(frame: frame)
-    commonInit()
-  }
-
+  @available(*, unavailable, message: "Use `init(title:rightView)` instead")
   required init?(coder: NSCoder) {
-    super.init(coder: coder)
-    commonInit()
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  init(title: String, rightView: UIView = UIView()) {
+    super.init(frame: .zero)
+    translatesAutoresizingMaskIntoConstraints = false
+    backgroundColor = Constants.backgroundColor
+    addSubview(titleLabel)
+    rightView.translatesAutoresizingMaskIntoConstraints = false
+    addSubview(rightView)
+    layer.insertSublayer(bottomLineLayer, at: 0)
+    layer.mask = maskLayer
+    self.title = title
+    NSLayoutConstraint.activate([
+      titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.contentInset.leading),
+      titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: Constants.contentInset.top),
+      bottomAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Constants.contentInset.bottom),
+      rightView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+      rightView.leadingAnchor.constraint(equalToSystemSpacingAfter: titleLabel.trailingAnchor, multiplier: 1.0),
+      trailingAnchor.constraint(equalTo: rightView.trailingAnchor, constant: Constants.contentInset.trailing)
+    ])
   }
 
   var title: String? {
@@ -31,19 +41,12 @@ final class PokemonDetailsHeaderView: UIView {
 
   override func layoutSublayers(of layer: CALayer) {
     super.layoutSublayers(of: layer)
-    let lineHeight: CGFloat = 2
+    let lineHeight: CGFloat = 1
     bottomLineLayer.frame = CGRect(x: 0, y: bounds.height - lineHeight,
                                    width: bounds.width, height: lineHeight)
     maskLayer.path = UIBezierPath(roundedRect: bounds,
                                   byRoundingCorners: [.topLeft, .topRight],
                                   cornerRadii: CGSize(width: 10, height: 10)).cgPath
-  }
-
-  private func commonInit() {
-    backgroundColor = Constants.backgroundColor
-    addStretchedToBounds(subview: titleLabel, insets: Constants.contentInset)
-    layer.insertSublayer(bottomLineLayer, at: 0)
-    layer.mask = maskLayer
   }
 
   private lazy var titleLabel: UILabel = {

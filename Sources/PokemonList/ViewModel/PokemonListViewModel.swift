@@ -8,7 +8,7 @@
 import Foundation
 import os.log
 
-protocol PokemonListViewModelCoordinating: class {
+protocol PokemonListViewModelCoordinating: AnyObject {
   func showDetails(for identifier: Identifier<Pokemon>)
 }
 
