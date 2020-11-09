@@ -183,6 +183,7 @@ final class PokemonDetailsViewController: UIViewController {
 
   private lazy var spritesHeaderView: UIView = {
     let legendButton = UIButton(type: .infoLight)
+    legendButton.accessibilityIdentifier = AccessibilityId.PokemonDetails.spriteLegendButton
     legendButton.addTarget(self, action: #selector(didTapSpriteLegend), for: .touchUpInside)
     let header = PokemonDetailsHeaderView(title: Strings.Screens.PokemonDetails.Header.sprites,
                                           rightView: legendButton)

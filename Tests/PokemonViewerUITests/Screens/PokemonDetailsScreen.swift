@@ -22,4 +22,13 @@ struct PokemonDetailsScreen {
 
   var errorView: XCUIElement { app.otherElements[Screen.errorView] }
   var contentView: XCUIElement { app.otherElements[Screen.contentView] }
+  var spriteLegendButton: XCUIElement { contentView.buttons[Screen.spriteLegendButton] }
+
+  func showLegend() -> SpriteLegendScreen {
+    XCTAssertTrue(self.exists)
+    spriteLegendButton.tap()
+    let screen = app.spriteLegendScreen
+    XCTAssertTrue(screen.exists)
+    return screen
+  }
 }

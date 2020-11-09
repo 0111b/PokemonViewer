@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import UITeststingSupport
 
 final class SpriteLegendViewController: UIViewController {
 
@@ -24,6 +25,7 @@ final class SpriteLegendViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = Constants.backgroundColor
+    view.accessibilityIdentifier = AccessibilityId.SpriteLegend.screen
     collectionView.backgroundColor = Constants.backgroundColor
     view.tintColor = Constants.tintColor
     title = viewModel.title

@@ -25,5 +25,10 @@ public enum AccessibilityId {
     public static let errorView = "errorView"
     public static let contentView = "contentView"
     public static let pokemonName = "pokemonName"
+    public static let spriteLegendButton = "spriteLegendButton"
+  }
+
+  public enum SpriteLegend {
+    public static let screen = "SpriteLegend"
   }
 }

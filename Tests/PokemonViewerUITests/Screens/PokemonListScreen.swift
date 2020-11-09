@@ -29,9 +29,9 @@ struct PokemonListScreen {
   var pokemonFilter: XCUIElement { navigationBar.searchFields.firstMatch }
   func pokemon(at index: Int) -> XCUIElement { pokemonList.cells[Screen.pokemon(at: index)] }
 
-  func openDetails() -> PokemonDetailsScreen {
+  func openDetails(at index: Int = 1) -> PokemonDetailsScreen {
     XCTAssertTrue(self.exists)
-    pokemon(at: 1).tap()
+    pokemon(at: index).tap()
     let screen = app.pokemonDetailsScreen
     XCTAssertTrue(screen.exists)
     return screen

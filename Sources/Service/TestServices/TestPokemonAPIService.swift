@@ -56,6 +56,10 @@ final class TestPokemonAPIService: PokemonAPIService {
   }
 
   private func pokemon(_ id: Identifier<Pokemon>) -> Pokemon {
-    Pokemon(id: id, height: 1, weight: 1, sprites: [], stats: [], abilities: [], types: [])
+    Pokemon(id: id, height: 1, weight: 1, sprites: [sprite()], stats: [], abilities: [], types: [])
+  }
+
+  private func sprite() -> PokemonSprite {
+    PokemonSprite(url: URL(string: "https://google.com")!, kind: .frontShiny)
   }
 }
