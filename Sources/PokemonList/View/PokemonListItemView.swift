@@ -64,6 +64,13 @@ final class PokemonListItemView: UIView, Resetable {
     markLayer.frame = bounds
   }
 
+  override var backgroundColor: UIColor? {
+    didSet {
+      guard let currentColors = markLayer.colors as? [CGColor] else { return }
+      update(colors: currentColors.dropLast().map(UIColor.init(cgColor:)))
+    }
+  }
+
   private func commonInit() {
     layer.masksToBounds = true
     addStretchedToBounds(subview: stackView, insets: Constants.contentInset)
@@ -79,7 +86,8 @@ final class PokemonListItemView: UIView, Resetable {
                                          through: gradientStop,
                                          by: gradientStop / colorsCount)
       .map { NSNumber(value: $0) }
-    markLayer.colors = (colors + [.clear]).map(\.cgColor)
+    let lastColor = self.backgroundColor ?? .clear
+    markLayer.colors = (colors + [lastColor]).map(\.cgColor)
   }
 
   private func update(layout: PokemonListLayout, hasNoImage: Bool) {
