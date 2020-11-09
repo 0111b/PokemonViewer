@@ -147,3 +147,9 @@ final class PokemonListItemView: UIView, Resetable {
     static let contentInset = NSDirectionalEdgeInsets(top: 6, leading: 6, bottom: 6, trailing: 6)
   }
 }
+
+extension PokemonListItemView: Highlightable {
+  func set(highlighted: Bool) {
+    layer.transform = highlighted ? CATransform3DMakeScale(0.95, 0.95, 1.0) : CATransform3DIdentity
+  }
+}

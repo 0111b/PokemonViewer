@@ -42,6 +42,14 @@ where Content: UIView {
     }
   }
 
+  open override var isHighlighted: Bool {
+    didSet {
+      if let highlightable = view as? Highlightable {
+        highlightable.set(highlighted: isHighlighted)
+      }
+    }
+  }
+
   /// Override this method in subClasses for setup during init() time. It's not necessary to call super when overriding
   open func initialSetup() {}
 
