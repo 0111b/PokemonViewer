@@ -18,8 +18,17 @@ struct PokemonDetailsScreen {
 
   typealias Screen = AccessibilityId.PokemonDetails
 
-  var exists: Bool { app.otherElements[Screen.screen].waitForExistence(timeout: 1) }
+  var exists: Bool { app.otherElements[Screen.screen].waitForExistence(timeout: UITestCase.waitTimeout) }
 
   var errorView: XCUIElement { app.otherElements[Screen.errorView] }
   var contentView: XCUIElement { app.otherElements[Screen.contentView] }
+  var spriteLegendButton: XCUIElement { contentView.buttons[Screen.spriteLegendButton] }
+
+  func showLegend() -> SpriteLegendScreen {
+    XCTAssertTrue(self.exists)
+    spriteLegendButton.tap()
+    let screen = app.spriteLegendScreen
+    XCTAssertTrue(screen.exists)
+    return screen
+  }
 }

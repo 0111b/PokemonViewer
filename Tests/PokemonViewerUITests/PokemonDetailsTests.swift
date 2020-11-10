@@ -23,4 +23,11 @@ final class PokemonDetailsTests: UITestCase {
     XCTAssertTrue(screen.contentView.exists)
   }
 
+  func testShowLegend() {
+    launch(with: AppTestConfiguration(pokemonService: PokemonServiceConfig(listConfig: .sampleValue,
+                                                                           detailsConfig: .sampleValue)))
+    _ = app.pokemonListScreen
+      .openDetails()
+      .showLegend()
+  }
 }

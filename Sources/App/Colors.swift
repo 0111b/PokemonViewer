@@ -7,9 +7,9 @@ enum Colors {
   static let primaryText = UIColor(named: "primaryTextColor")!
   static let secondaryText = UIColor(named: "secondaryTextColor")!
 
-  static let pokemonTypeFire = UIColor.red
-  static let pokemonTypeElectric = UIColor.blue
-  static let pokemonTypePoison = UIColor.green
-  static let pokemonTypeGround = UIColor.brown
-  static let pokemonTypeWater = UIColor.systemTeal
+  static let pokemonTypeFire = UIColor(named: "pokemonTypeFire")!
+  static let pokemonTypeElectric = UIColor(named: "pokemonTypeElectric")!
+  static let pokemonTypePoison = UIColor(named: "pokemonTypePoison")!
+  static let pokemonTypeGround = UIColor(named: "pokemonTypeGround")!
+  static let pokemonTypeWater = UIColor(named: "pokemonTypeWater")!
 }

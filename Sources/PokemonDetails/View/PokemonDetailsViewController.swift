@@ -30,6 +30,7 @@ final class PokemonDetailsViewController: UIViewController {
     view.backgroundColor = Constants.backgroundColor
     view.accessibilityIdentifier = AccessibilityId.PokemonDetails.screen
     title = viewModel.identifier.rawValue.capitalized
+    navigationItem.largeTitleDisplayMode = traitCollection.userInterfaceIdiom == .pad ? .automatic : .never
     view.addSubview(scrollView)
     scrollView.addStretchedToBounds(subview: contentContainerView)
     contentContainerView.addSubview(mainStackView)
@@ -183,6 +184,7 @@ final class PokemonDetailsViewController: UIViewController {
 
   private lazy var spritesHeaderView: UIView = {
     let legendButton = UIButton(type: .infoLight)
+    legendButton.accessibilityIdentifier = AccessibilityId.PokemonDetails.spriteLegendButton
     legendButton.addTarget(self, action: #selector(didTapSpriteLegend), for: .touchUpInside)
     let header = PokemonDetailsHeaderView(title: Strings.Screens.PokemonDetails.Header.sprites,
                                           rightView: legendButton)

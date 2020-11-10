@@ -16,6 +16,7 @@ public enum AccessibilityId {
     public static let statusView = "statusView"
     public static let statusHint = "statusHint"
     public static let statusActivity = "statusActivity"
+    public static let pokemonFilter = "pokemonFilter"
     public static func pokemon(at index: Int) -> String { "Pokemon-\(index)" }
   }
 
@@ -24,5 +25,10 @@ public enum AccessibilityId {
     public static let errorView = "errorView"
     public static let contentView = "contentView"
     public static let pokemonName = "pokemonName"
+    public static let spriteLegendButton = "spriteLegendButton"
+  }
+
+  public enum SpriteLegend {
+    public static let screen = "SpriteLegend"
   }
 }

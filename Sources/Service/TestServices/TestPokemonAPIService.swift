@@ -48,14 +48,18 @@ final class TestPokemonAPIService: PokemonAPIService {
   }
 
   private func page(_ pageNumber: UInt) -> PokemonAPI.PokemonPage {
-    PokemonAPI.PokemonPage(count: 100,
-                           items: [
-                            .init(rawValue: "1"),
-                            .init(rawValue: "2")
-                           ])
+    let items = stride(from: 0, to: 5, by: 1)
+      .map(AccessibilityId.PokemonList.pokemon(at:))
+      .map(Identifier<Pokemon>.init(rawValue:))
+    return PokemonAPI.PokemonPage(count: 100,
+                                  items: items)
   }
 
   private func pokemon(_ id: Identifier<Pokemon>) -> Pokemon {
-    Pokemon(id: id, height: 1, weight: 1, sprites: [], stats: [], abilities: [], types: [])
+    Pokemon(id: id, height: 1, weight: 1, sprites: [sprite()], stats: [], abilities: [], types: [])
+  }
+
+  private func sprite() -> PokemonSprite {
+    PokemonSprite(url: URL(string: "https://google.com")!, kind: .frontShiny)
   }
 }

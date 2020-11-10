@@ -21,4 +21,6 @@ class UITestCase: XCTestCase {
     app.launchEnvironment = config.toRawValue()
     app.launch()
   }
+
+  static let waitTimeout: TimeInterval = 3
 }

@@ -35,4 +35,23 @@ final class PokemonListTests: UITestCase {
     let screen = app.pokemonListScreen
     _ = screen.openDetails()
   }
+
+  func testNameFilterNoMatch() {
+    launch(with: AppTestConfiguration(pokemonService: PokemonServiceConfig(listConfig: .sampleValue)))
+    let screen = app.pokemonListScreen
+    XCTAssertTrue(screen.pokemon(at: 0).exists)
+    XCTAssertTrue(screen.pokemon(at: 1).exists)
+    screen.search(name: "Invalid search")
+    XCTAssertFalse(screen.pokemon(at: 0).waitForExistence(timeout: UITestCase.waitTimeout))
+    XCTAssertFalse(screen.pokemon(at: 1).waitForExistence(timeout: UITestCase.waitTimeout))
+    XCTAssertTrue(screen.statusHint.exists)
+  }
+
+  func testNameFilterPartialMatch() {
+    launch(with: AppTestConfiguration(pokemonService: PokemonServiceConfig(listConfig: .sampleValue)))
+    let screen = app.pokemonListScreen
+    screen.search(name: "2")
+    XCTAssertTrue(screen.pokemon(at: 0).waitForExistence(timeout: UITestCase.waitTimeout))
+    XCTAssertFalse(screen.pokemon(at: 1).waitForExistence(timeout: UITestCase.waitTimeout))
+  }
 }

@@ -7,7 +7,33 @@
 
 Demo app showing Pokemons stats using [pokeapi](https://pokeapi.co)
 
-[TOC]
+# TOC
+
+- [Functionality](#Functionality)
+- [Screenshots](#Screenshots)
+- [Requirements](#Requirements)
+- [Details and rationale](#Details-and-rationale)
+  - [General info](#General-info)
+    - [User interface](#User-interface)
+    - [Persistence](#Persistence)
+    - [Third party](#Third-party)
+    - [Architecture overview](#Architecture-overview)
+    - [Localisation](#Localisation)
+  - [How to build](#How-to-build)
+  - [Common](#Common)
+  - [App](#App)
+  - [Model](#Model)
+  - [Service](#Service)
+  - [Screens](#Screens)
+    - [Empty pokemon details](#Empty-pokemon-details)
+    - [Pokemon list](#Pokemon-list)
+    - [Pokemon details](#Pokemon-details)
+    - [Sprite legend](#Sprite-legend)
+  - [Tests](#Tests)
+    - [Unit tests](#Unit-tests)
+    - [UI tests](#UI-tests)
+    - [UITeststingSupport](#UITeststingSupport)
+- [Possible way for improvements](#Possible-way-for-improvements)
 
 # Functionality
 
@@ -15,15 +41,18 @@ Displays a list of Pokemons with the ability to see more detailed info about cho
 
 # Screenshots
 
-![iPhone-portrait](Screenshots/iPhone-portrait.png?raw=true)
-![iPhone-landscape.png](Screenshots/iPhone-landscape.png?raw=true)
-![iPad-landscape](Screenshots/iPad-landscape.png?raw=true)
+![iPhone-portrait](Screenshots/iPad-1.png?raw=true)
+![iPhone-landscape.png](Screenshots/iPhone-1.png?raw=true)
+![iPhone-landscape.png](Screenshots/iPhone-2.png?raw=true)
+![iPhone-landscape.png](Screenshots/iPhone-3.png?raw=true)
+![iPhone-landscape.png](Screenshots/iPhone-4.png?raw=true)
+![iPhone-landscape.png](Screenshots/iPhone-5.png?raw=true)
 
 # Requirements
 
 - iOS 11 deployment target
 - UI without Xib/Storyboard
-- No third-party
+- At most 1 third-party library
 - MVVM
 - offline mode
 
@@ -31,14 +60,17 @@ Displays a list of Pokemons with the ability to see more detailed info about cho
 
 ## General info
 
-### Layout
+### User interface
 
 The app launches with a list of Pokemons which can be viewed in 2 ways: list and grid.
 
-Item size in the grid mode is dynamic and depends on the available space.
-This results in 3-4 items per row on the iPhone in the landscape mode and 2 elements in other cases.
+Item size in the grid mode is dynamic and depends on the available space. This results in 2-4 items per row.
 
-On the iPad both, the list and the details can be viewed in parallel.
+The list can be filtered by Pokemon's name.
+
+If Pokemon has some specific type then it is highlighted in the cell corner with a color mark.
+
+Details and stats are available on the Pokemon screen. It is possible to see sprites legend by tapping the info button.
 
 ### Persistence
 
@@ -53,7 +85,22 @@ The app is using  *URLCache* as a default implementation, but it can be easily c
 
 There are also a few request policies implemented that affect the use of cache during execution (see *RequestCachePolicy*).
 
+The disadvantage of this approach is constant data decoding from raw data.
+
 If more complex tasks with domain objects will be required then another solution can be added on the higher level.
+
+### Third party
+
+[swift-snapshot-testing](https://github.com/pointfreeco/swift-snapshot-testing) is used as single
+third party dependency in the project.
+This is the library with helper functions for snapshot testing.
+
+Rationale:
+
+- Test code is not shipped to the App Store
+- The library is already maintained for a long term and timely updated
+- It's open-source. And because the code base is not so big I don't see the possibility of vendor lock.
+- The library is extensible and customizable; not relies on other dependencies
 
 ### Architecture overview
 
@@ -75,7 +122,8 @@ The preferable way of transferring data from the view model is an object with ex
 
 Most of the views support the separation of the data and style. Each of them can be applied separately.
 
-The app is trying to reduce network pressure by canceling requests for all items that are not visible on the screen
+The app is trying to reduce network pressure by canceling requests for all items that are not visible on the screen.
+The application also reacts to memory warnings by freeing images from memory.
 
 ### Localisation
 
@@ -175,6 +223,10 @@ Main pokemon list and related entities
 
 Pokemon stats and detailed info
 
+### Sprite legend
+
+Informational screen about possible sprite types
+
 ## Tests
 
 ### Unit tests
@@ -185,6 +237,8 @@ Besides common mocks, there is a *Stubs* object which provides all data types re
 
 To improve test quality it is possible to add randomization to the returned values of this object.
 
+UI of the views is covered with snapshot tests.
+
 ### UI tests
 
 UI tests are mostly used as integration tests.
@@ -192,7 +246,7 @@ UI tests are mostly used as integration tests.
 They are checking how all modules
 work together and cover the logic that is not handled by unit tests.
 
-Page Object pattern is used in the implementation.  It reduces code complexity, increases code reuse, and eliminate some class of errors.
+Page Object pattern is used in the implementation. It reduces code complexity, increases code reuse, and eliminate some class of errors.
 
 ### UITeststingSupport
 
@@ -207,46 +261,33 @@ It serves two main purposes:
 
 There are several things that can be improved or introduced
 
+## Compare Pokemon's
 
-- **Collection diffing**
+I believe that from the user perspective it will be useful to introduce
+the screen on which multiple Pokemons can be compared before the battle.
+
+## Collection diffing
 
 In the current implementation when the new portion of content arrive app is just call *reloadData* on the collection view.
 
-The better way will be to calculate the difference between the current values and apply them.
+The better way will be to calculate the difference between the current values and apply it.
 
-There are several options according to the deployment target.
-
+Nothing stops implement this manually but it is worth mentioning that it is implemented in the later iOS versions.
 
   - *UICollectionViewDiffableDataSource* is available on iOS 13.
 
-  - *Collection.difference(from:)* is available since Swift 5.1 but sadly, it shipped by Apple also with iOS 13
+  - *Collection.difference(from:)* is available since Swift 5.1 but it shipped by Apple also with iOS 13
 
-  - some third-party library exists that solving this problem
+Any effective LCS solving problem algorithm will work.
 
-  - nothing to stop implement this manually
+But in any case, this must be implemented as a separate generic data source.
 
-In any case, this must be implemented as a separate generic data source.
+## Managing dependency lifetime
 
-- **Memory pressure**
+With increasing complexity, it is worth considering to manage dependencies lifetime in the more smart way.
 
-It is good to subscribe and react appropriately where possible
-
-- **Managing dependency lifetime**
-
-With increasing complexity, it is worth considering to manage dependencies lifetime in the more smart way
-
-- **Snapshot testing**
-
-The remaining thing that is not covered by tests in the current solution is UI.
-
-I'm recommending to use [SnapshotTesting](https://github.com/pointfreeco/swift-snapshot-testing) from the Point-Free guys. It has proven quality and in any way, this code does not ship with the app. So, there will be no vendor lock.
-
-- **Swift UI previews**
+## Swift UI previews
 
 It is possible to use SwiftUI previews for rapid UI development even with UIKit views.
 
 Another option is to generate a complete catalog of all available views which can be used by UI/UX engineers for reference.
-
-- **CI/CD integration**
-
-just a must

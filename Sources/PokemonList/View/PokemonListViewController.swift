@@ -131,6 +131,7 @@ final class PokemonListViewController: UIViewController {
     searchController.obscuresBackgroundDuringPresentation = false
     searchController.searchBar.placeholder = Strings.Screens.PokemonList.Search.placeholder
     searchController.searchBar.tintColor = Constants.tintColor
+    searchController.searchBar.accessibilityIdentifier = AccessibilityId.PokemonList.pokemonFilter
     return searchController
   }()
 

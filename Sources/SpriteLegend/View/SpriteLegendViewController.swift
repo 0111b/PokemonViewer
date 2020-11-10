@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import UITeststingSupport
 
 final class SpriteLegendViewController: UIViewController {
 
@@ -24,6 +25,7 @@ final class SpriteLegendViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = Constants.backgroundColor
+    view.accessibilityIdentifier = AccessibilityId.SpriteLegend.screen
     collectionView.backgroundColor = Constants.backgroundColor
     view.tintColor = Constants.tintColor
     title = viewModel.title
@@ -40,19 +42,7 @@ final class SpriteLegendViewController: UIViewController {
     collectionView.reloadData()
   }
 
-  override func viewDidLayoutSubviews() {
-    super.viewDidLayoutSubviews()
-    let availableSize = collectionView.bounds
-      .inset(by: collectionView.contentInset)
-      .inset(by: collectionLayout.sectionInset)
-      .width
-    let proposedSize = CGSize(width: availableSize, height: Constants.itemHeight)
-    if proposedSize != collectionLayout.itemSize {
-      collectionLayout.itemSize = proposedSize
-    }
-  }
-
-  private lazy var collectionLayout = UICollectionViewFlowLayout()
+  private lazy var collectionLayout = PokemonListCollectionViewLayout()
 
   private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionLayout)
 
