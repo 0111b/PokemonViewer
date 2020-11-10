@@ -46,21 +46,26 @@ extension UIViewController {
                       testName: String = #function,
                       line: UInt = #line) {
 
-    let configs: [String: ViewImageConfig] = [
-      "iPhoneXsMax.portrait.": .iPhoneXsMax(.portrait),
-      "iPhoneXsMax.portrait.": .iPhoneXsMax(.landscape),
-      "iPhone8Plus.portrait": .iPhone8Plus(.portrait),
-      "iPhone8Plus.landscape": .iPhone8Plus(.landscape),
-      "iPhoneX.portrait": .iPhoneX(.portrait),
-      "iPhoneX.landscape": .iPhoneX(.landscape),
-      "iPadPro12_9.portrait": .iPadPro12_9(.portrait),
-      "iPadPro12_9.landscape": .iPadPro12_9(.landscape)
+    let configs: [(deviceName: String, config: ViewImageConfig)] = [
+      ("iPhoneXsMax.portrait.", .iPhoneXsMax(.portrait)),
+      ("iPhoneXsMax.landscape.", .iPhoneXsMax(.landscape)),
+      ("iPhone8Plus.portrait", .iPhone8Plus(.portrait)),
+      ("iPhone8Plus.landscape", .iPhone8Plus(.landscape)),
+      ("iPhoneX.portrait", .iPhoneX(.portrait)),
+      ("iPhoneX.landscape", .iPhoneX(.landscape)),
+      ("iPadPro12_9.portrait", .iPadPro12_9(.portrait)),
+      ("iPadPro12_9.landscape", .iPadPro12_9(.landscape))
     ]
 
     func assert(_ viewController: UIViewController, label: String) {
-      configs.forEach { deviceName, config in
-        SnapshotTesting.assertSnapshot(matching: viewController, as: .image(on: config), named: deviceName + label,
-                                       file: file, testName: testName, line: line)
+      configs.forEach {
+        let name = $0.deviceName + label
+        SnapshotTesting.assertSnapshot(matching: viewController,
+                                       as: .image(on: $0.config),
+                                       named: name,
+                                       file: file,
+                                       testName: testName,
+                                       line: line)
       }
     }
 
