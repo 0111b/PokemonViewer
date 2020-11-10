@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -69,6 +69,9 @@
 		E64B8D212559BF46007840D4 /* SpriteLegendViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64B8D202559BF46007840D4 /* SpriteLegendViewModel.swift */; };
 		E64B8D272559BF60007840D4 /* SpriteLegendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64B8D262559BF60007840D4 /* SpriteLegendViewController.swift */; };
 		E64B8D352559E550007840D4 /* SpriteLegendScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64B8D342559E550007840D4 /* SpriteLegendScreen.swift */; };
+		E64B8D3C255A0B03007840D4 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = E64B8D3B255A0B03007840D4 /* SnapshotTesting */; };
+		E64B8D43255A0B77007840D4 /* TitledValueViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64B8D42255A0B77007840D4 /* TitledValueViewTests.swift */; };
+		E64B8D56255A0E3A007840D4 /* XCTestCase+Snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64B8D4C255A0D50007840D4 /* XCTestCase+Snapshot.swift */; };
 		E65C0E6E254F478100385576 /* Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C0E6D254F478100385576 /* Identifier.swift */; };
 		E65C0E73254F4B0E00385576 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C0E72254F4B0E00385576 /* Page.swift */; };
 		E65C0E78254F4C3C00385576 /* Pokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C0E77254F4C3C00385576 /* Pokemon.swift */; };
@@ -223,6 +226,8 @@
 		E64B8D202559BF46007840D4 /* SpriteLegendViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteLegendViewModel.swift; sourceTree = "<group>"; };
 		E64B8D262559BF60007840D4 /* SpriteLegendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteLegendViewController.swift; sourceTree = "<group>"; };
 		E64B8D342559E550007840D4 /* SpriteLegendScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteLegendScreen.swift; sourceTree = "<group>"; };
+		E64B8D42255A0B77007840D4 /* TitledValueViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitledValueViewTests.swift; sourceTree = "<group>"; };
+		E64B8D4C255A0D50007840D4 /* XCTestCase+Snapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Snapshot.swift"; sourceTree = "<group>"; };
 		E65C0E6D254F478100385576 /* Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifier.swift; sourceTree = "<group>"; };
 		E65C0E72254F4B0E00385576 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
 		E65C0E77254F4C3C00385576 /* Pokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pokemon.swift; sourceTree = "<group>"; };
@@ -306,6 +311,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E64B8D3C255A0B03007840D4 /* SnapshotTesting in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,6 +463,15 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		E64B8D41255A0B45007840D4 /* SnapshotTests */ = {
+			isa = PBXGroup;
+			children = (
+				E64B8D4C255A0D50007840D4 /* XCTestCase+Snapshot.swift */,
+				E64B8D42255A0B77007840D4 /* TitledValueViewTests.swift */,
+			);
+			path = SnapshotTests;
+			sourceTree = "<group>";
+		};
 		E65C0E6C254F475100385576 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -605,6 +620,7 @@
 			isa = PBXGroup;
 			children = (
 				E607EFE1255224FA008A9ED5 /* Mocks */,
+				E64B8D41255A0B45007840D4 /* SnapshotTests */,
 				E6EE963A254D9D9B00AD6933 /* DisposableTests.swift */,
 				E6EE96CF254DD5D700AD6933 /* ObservableTests.swift */,
 				E6EE3F12254E34EF0002D155 /* HTTPLocationTests.swift */,
@@ -796,6 +812,9 @@
 				E6EE9638254D9D9B00AD6933 /* PBXTargetDependency */,
 			);
 			name = PokemonViewerTests;
+			packageProductDependencies = (
+				E64B8D3B255A0B03007840D4 /* SnapshotTesting */,
+			);
 			productName = PockemonViewerTests;
 			productReference = E6EE9636254D9D9B00AD6933 /* PokemonViewerTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -854,6 +873,9 @@
 				it,
 			);
 			mainGroup = E6EE9617254D9D9900AD6933;
+			packageReferences = (
+				E64B8D3A255A0B03007840D4 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
+			);
 			productRefGroup = E6EE9621254D9D9900AD6933 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1022,11 +1044,13 @@
 				E6EE96D0254DD5D700AD6933 /* ObservableTests.swift in Sources */,
 				E607F0222552E71D008A9ED5 /* MockHTTPTransport.swift in Sources */,
 				E607EFE725522526008A9ED5 /* ObservableCollector.swift in Sources */,
+				E64B8D43255A0B77007840D4 /* TitledValueViewTests.swift in Sources */,
 				E607F01B2552E718008A9ED5 /* Stubs.swift in Sources */,
 				E607F04F2552ECFE008A9ED5 /* MockNetworkCache.swift in Sources */,
 				E607F0292552E722008A9ED5 /* MockFunc.swift in Sources */,
 				E607F0952553160F008A9ED5 /* MockImageService.swift in Sources */,
 				E607F08D25531586008A9ED5 /* MockPokemonAPIService.swift in Sources */,
+				E64B8D56255A0E3A007840D4 /* XCTestCase+Snapshot.swift in Sources */,
 				E6EE3F13254E34EF0002D155 /* HTTPLocationTests.swift in Sources */,
 				E607F06B25530443008A9ED5 /* MockNetworkService.swift in Sources */,
 				E6EE963B254D9D9B00AD6933 /* DisposableTests.swift in Sources */,
@@ -1414,6 +1438,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E64B8D3A255A0B03007840D4 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.8.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E64B8D3B255A0B03007840D4 /* SnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E64B8D3A255A0B03007840D4 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTesting;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E6EE9618254D9D9900AD6933 /* Project object */;
 }
