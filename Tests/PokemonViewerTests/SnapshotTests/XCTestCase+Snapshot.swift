@@ -49,12 +49,12 @@ extension UIViewController {
     let configs: [(deviceName: String, config: ViewImageConfig)] = [
       ("iPhoneXsMax.portrait.", .iPhoneXsMax(.portrait)),
       ("iPhoneXsMax.landscape.", .iPhoneXsMax(.landscape)),
-      ("iPhone8Plus.portrait", .iPhone8Plus(.portrait)),
-      ("iPhone8Plus.landscape", .iPhone8Plus(.landscape)),
-      ("iPhoneX.portrait", .iPhoneX(.portrait)),
-      ("iPhoneX.landscape", .iPhoneX(.landscape)),
-      ("iPadPro12_9.portrait", .iPadPro12_9(.portrait)),
-      ("iPadPro12_9.landscape", .iPadPro12_9(.landscape))
+      ("iPhone8Plus.portrait.", .iPhone8Plus(.portrait)),
+      ("iPhone8Plus.landscape.", .iPhone8Plus(.landscape)),
+      ("iPhoneX.portrait.", .iPhoneX(.portrait)),
+      ("iPhoneX.landscape.", .iPhoneX(.landscape)),
+      ("iPadPro12_9.portrait.", .iPadPro12_9(.portrait)),
+      ("iPadPro12_9.landscape.", .iPadPro12_9(.landscape))
     ]
 
     func assert(_ viewController: UIViewController, label: String) {
